@@ -3,7 +3,8 @@
 
 # Ignore Gradle build output directory
 build
-
+!**/src/main/**
+!**/src/test/**
 HELP.md
 
 !gradle/wrapper/gradle-wrapper.jar
@@ -18,4 +19,22 @@ out/
 ### MAC OS  ###
 .DS_Store
 
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
 
