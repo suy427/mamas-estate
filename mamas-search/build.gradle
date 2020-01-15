@@ -8,7 +8,9 @@ dependencies {
 
     implementation 'org.locationtech.jts:jts-core:1.16.1'
     compile 'net.java.dev.jna:jna:4.2.2'
-    compile "org.elasticsearch.client:elasticsearch-rest-client:${elasticsearchVersion}"
-    compile "org.elasticsearch.client:elasticsearch-rest-high-level-client:${elasticsearchVersion}"
+    compile group: 'org.elasticsearch.client', name: 'elasticsearch-rest-client', version: "${elasticsearchVersion}"
+    compile group: 'org.elasticsearch.client', name: 'elasticsearch-rest-high-level-client', version:"${elasticsearchVersion}"
 
+    compile group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'
+    compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'
 }
