@@ -101,7 +101,23 @@ class EsDaoImpl extends RestHighLevelClientHelper implements EsDao {
     }
 
     @Override
-    String search(SearchOption searchOption) {
-        return null
+    SearchResponse search(SearchOption searchOption) {
+        SearchTemplateRequest searchTemplateRequest = new SearchTemplateRequest()
+        SearchRequest searchRequest = new SearchRequest(indexInfo.name)
+        searchRequest.searchType(SearchType.DFS_QUERY_THEN_FETCH)
+        searchRequest.allowPartialSearchResults(true)
+
+        searchTemplateRequest.setRequest(searchRequest)
+        searchTemplateRequest.setScriptType(ScriptType.STORED)
+        searchTemplateRequest.setScript('search-template-test1')
+
+        // this is why i make java library. i should make feature that set key of map more flexible
+        Map<String, Object> params = searchOption.toMap()
+        searchTemplateRequest.setScriptParams(params)
+
+        //SearchTemplateResponse VS SearchResponse 알아보기
+        SearchResponse response = client.searchTemplate(searchTemplateRequest, RequestOptions.DEFAULT).getResponse()
+
+        return response
     }
 }

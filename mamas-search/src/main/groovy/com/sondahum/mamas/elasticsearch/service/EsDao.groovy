@@ -9,5 +9,5 @@ interface EsDao {
     void save(List<EsDto> esDto) // Create
     void delete(List<EsDto> esDto) // Delete
     void update(List<EsDto> esDto) // Update
-    String search(SearchOption searchOption) // Retrieve
+    SearchResponse search(SearchOption searchOption) // Retrieve
 }
