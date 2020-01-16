@@ -1,0 +1,93 @@
+{
+  "index_patterns": "mamas-*",
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 1,
+    "analysis": {
+      "analyzer": {
+        "dahum_korean_analyzer": {
+          "type": "custom",
+          "tokenizer": "dahum_korean_tokenizer",
+          "filter": [
+            "nori_readingform",
+            "dahum_korean_posfilter",
+            "dahum_stop_filter",
+            "dahum_synonym_filter",
+            "lowercase"
+          ]
+        }
+      },
+      "tokenizer": {
+        "dahum_korean_tokenizer": {
+          "type": "nori_tokenizer",
+          "decompound_mode": "mixed",
+          "user_dictionary": "user_dictionary.txt"
+        }
+      },
+      "filter": {
+        "dahum_korean_posfilter": {
+          "type": "nori_part_of_speech",
+          "stoptags": [
+            "E", "IC", "J",
+            "MAJ", "MM", "NR",
+            "SC", "SE", "SF", "SP",
+            "SSC", "SSO", "SY",
+            "UNA", "UNKNOWN",
+            "VA", "VCN", "VCP", "VSV",
+            "XPN", "XR"
+          ]
+        },
+        "dahum_synonym_filter": {
+          "type": "synonym",
+          "synonyms_path": "user_synonyms.txt"
+        },
+        "dahum_stop_filter": {
+          "type": "stop",
+          "stopwords_path": "user_stop_filter.txt"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "keyword",
+        "fields": {
+          "for_search": {
+            "type": "text",
+            "analyzer": "dahum_korean_analyzer"
+          }
+        }
+      },
+      "name": {
+        "type": "keyword",
+        "fields": {
+          "for_search": {
+            "type": "text",
+            "analyzer": "dahum_korean_analyzer"
+          }
+        }
+      },
+      "description": {
+        "type": "keyword",
+        "fields": {
+          "for_search": {
+            "type": "text",
+            "analyzer": "dahum_korean_analyzer"
+          }
+        }
+      },
+      "createdDate": {
+        "type": "date",
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+      },
+      "modifiedDate": {
+        "type": "date",
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+      },
+      "isDeleted": {
+        "type": "keyword"
+      }
+    }
+  }
+}
