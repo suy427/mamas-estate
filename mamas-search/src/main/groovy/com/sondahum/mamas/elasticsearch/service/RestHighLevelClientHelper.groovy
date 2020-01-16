@@ -3,11 +3,18 @@ package com.sondahum.mamas.elasticsearch.service
 import org.apache.http.HttpHost
 import org.elasticsearch.client.RestClient
 import org.elasticsearch.client.RestHighLevelClient
+import org.springframework.beans.factory.annotation.Value
 
 abstract class RestHighLevelClientHelper {
-    private static final hostName = '127.0.0.1'
-    private static final port = '9200'
-    private static final scheme = 'http'
+
+    @Value('${elasticsearch.host}')
+    String hostName
+
+    @Value('${elasticsearch.port}')
+    Integer port
+
+    @Value('${elasticsearch.scheme}')
+    String scheme
 
     RestHighLevelClient createConnection() {
         RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(
