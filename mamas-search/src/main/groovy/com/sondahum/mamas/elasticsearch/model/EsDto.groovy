@@ -1,4 +1,5 @@
 package com.sondahum.mamas.elasticsearch.model
 
-class IndexingData {
+class EsDto {
+    String indexName
 }
