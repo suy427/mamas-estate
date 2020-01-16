@@ -1,12 +1,12 @@
 package com.sondahum.mamas.elasticsearch.service
 
-import com.sondahum.mamas.elasticsearch.model.IndexingData
+import com.sondahum.mamas.elasticsearch.model.EsDto
 import com.sondahum.mamas.elasticsearch.model.SearchOption;
 
 interface EsDao {
 
-    void save(IndexingData indexingData) // C
-    void delete(IndexingData indexingData) // D
-    void update(IndexingData indexingData) // U
-    String search(SearchOption searchOption) // R
+    void save(EsDto indexingData) // Create
+    void delete(EsDto indexingData) // Delete
+    void update(EsDto indexingData) // Update
+    String search(SearchOption searchOption) // Retrieve
 }

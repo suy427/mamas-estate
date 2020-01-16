@@ -1,20 +1,26 @@
 package com.sondahum.mamas.elasticsearch.service
 
-import com.sondahum.mamas.elasticsearch.model.IndexingData
+import com.sondahum.mamas.elasticsearch.model.EsDto
 import com.sondahum.mamas.elasticsearch.model.SearchOption
 import org.elasticsearch.action.bulk.BackoffPolicy
 import org.elasticsearch.action.bulk.BulkProcessor
 import org.elasticsearch.action.bulk.BulkRequest
 import org.codehaus.jackson.map.ObjectMapper
 import org.elasticsearch.action.bulk.BulkResponse
+import org.elasticsearch.action.index.IndexRequest
 import org.elasticsearch.client.RequestOptions
 import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.common.unit.TimeValue
+import org.elasticsearch.common.xcontent.XContentType
+import org.junit.platform.commons.logging.LoggerFactory
 
 import javax.annotation.PostConstruct
+import java.util.logging.Logger
 
 class EsDaoImpl extends RestHighLevelClientHelper implements EsDao {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName())
+    
     private ObjectMapper objectMapper
     private BulkProcessor bulkProcessor
     private RestHighLevelClient client
@@ -49,17 +55,18 @@ class EsDaoImpl extends RestHighLevelClientHelper implements EsDao {
     }
 
     @Override
-    void save(IndexingData indexingData) {
+    void save(EsDto esDto) {
+        byte[] byteContents = objectMapper.writeValueAsBytes(esDto)
+        bulkProcessor.add(new IndexRequest(esDto.indexName).source(byteContents, XContentType.JSON))
+    }
+
+    @Override
+    void delete(EsDto esDto) {
 
     }
 
     @Override
-    void delete(IndexingData indexingData) {
-
-    }
-
-    @Override
-    void update(IndexingData indexingData) {
+    void update(EsDto esDto) {
 
     }
 
