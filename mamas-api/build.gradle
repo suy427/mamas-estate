@@ -1,7 +1,7 @@
-plugins {
-    id 'org.springframework.boot' version '2.2.2.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-}
+//plugins {
+//    id 'org.springframework.boot'
+//    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+//}
 
 configurations {
     developmentOnly
@@ -15,20 +15,19 @@ configurations {
 
 dependencies {
     // 이 의존성들은 어디에 있는게 좋을까.. 프로젝트 자체가 spring인데 root에 놓는게 나을까..? boot-starter-web에 있는 logger도 전 모듈에서 다 쓰긴 써야한다.
-    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
-    implementation 'org.springframework.boot:spring-boot-starter-groovy-templates'
-    implementation 'org.springframework.boot:spring-boot-starter-mustache'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    implementation "org.springframework.boot:spring-boot-starter-groovy-templates:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-mustache:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-client:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    testImplementation 'org.springframework.security:spring-security-test'
+//    testImplementation "org.springframework.security:spring-security-test:${springBootVersion}"
 }
 test {
     useJUnitPlatform()
