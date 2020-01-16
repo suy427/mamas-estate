@@ -5,15 +5,38 @@
  * For more details take a look at the Groovy Quickstart chapter in the Gradle
  * User Manual available at https://docs.gradle.org/5.3.1/userguide/tutorial_groovy_projects.html
  */
+
+///의존성 관리가 어떻게 되고있는건지 잘 파악이 안된다....ㅠㅠㅜㅠㅜㅠㅜㅠㅜㅠㅜㅠㅜ
+buildscript {
+    ext {
+        springBootVersion = '2.2.2.RELEASE'
+    }
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        maven { url 'http://repo.spring.io/milestone' }
+        maven { url 'https://repo.spring.io/snapshot' }
+        maven { url "https://jitpack.io" }
+    }
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+//        classpath 'io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE'
+    }
+}
+
 wrapper {
     gradleVersion = '4.10.3'
 }
 
-allprojects {
+subprojects {
     apply plugin: 'groovy'
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'maven'
+    apply plugin: 'org.springframework.boot'
+//    apply plugin: 'io.spring.dependency-management'
 
     group 'com.sondahum.mamas'
     version '1.0-SNAPSHOT'
@@ -26,7 +49,10 @@ allprojects {
         // You can declare any Maven/Ivy/file repository here.
         jcenter()
         mavenCentral()
+        maven { url 'http://repo.spring.io/milestone' }
+        maven { url "https://jitpack.io" }
     }
+
 
     dependencies {
         // Use the latest Groovy version for building this library
