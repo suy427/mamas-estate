@@ -3,20 +3,25 @@ package com.sondahum.mamas.elasticsearch.service
 import com.sondahum.mamas.elasticsearch.model.EsDto
 import com.sondahum.mamas.elasticsearch.model.SearchOption
 import org.elasticsearch.action.bulk.BackoffPolicy
+import org.elasticsearch.action.bulk.BulkItemResponse
 import org.elasticsearch.action.bulk.BulkProcessor
 import org.elasticsearch.action.bulk.BulkRequest
 import org.codehaus.jackson.map.ObjectMapper
 import org.elasticsearch.action.bulk.BulkResponse
+import org.elasticsearch.action.delete.DeleteRequest
 import org.elasticsearch.action.index.IndexRequest
+import org.elasticsearch.action.update.UpdateRequest
 import org.elasticsearch.client.RequestOptions
 import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.common.unit.TimeValue
 import org.elasticsearch.common.xcontent.XContentType
-import org.junit.platform.commons.logging.LoggerFactory
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Service
 
 import javax.annotation.PostConstruct
-import java.util.logging.Logger
 
+@Service
 class EsDaoImpl extends RestHighLevelClientHelper implements EsDao {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName())
@@ -35,17 +40,26 @@ class EsDaoImpl extends RestHighLevelClientHelper implements EsDao {
                 }, new BulkProcessor.Listener() {
             @Override
             void beforeBulk(long executionId, BulkRequest request) {
-
+                logger.info "[${executionId}] before Bulk - going to bulk of ${request.numberOfActions()} request"
             }
 
             @Override
             void afterBulk(long executionId, BulkRequest request, BulkResponse response) {
+                List<BulkItemResponse> responseList = response.getItems()
+                List<BulkItemResponse.Failure> failureList = []
 
+                responseList.each { bulkResponse ->
+                    failureList.add(bulkResponse.getFailure())
+                }
+
+                Long count = responseList.size() ?: -1
+                String resultLog = "< Check INDEX: test1> SIZE: ${count} FAIL:${failureList.size()} >"
+                logger.info "[${executionId}] ElasticSearch ${resultLog}"
             }
 
             @Override
             void afterBulk(long executionId, BulkRequest request, Throwable failure) {
-
+                logger.warn("error while executing bulk", failure);
             }
         }).setBulkActions(10000) // how many requests at once
                 .setConcurrentRequests(1)
@@ -55,19 +69,25 @@ class EsDaoImpl extends RestHighLevelClientHelper implements EsDao {
     }
 
     @Override
-    void save(EsDto esDto) {
-        byte[] byteContents = objectMapper.writeValueAsBytes(esDto)
-        bulkProcessor.add(new IndexRequest(esDto.indexName).source(byteContents, XContentType.JSON))
+    void save(List<EsDto> esDtoList) {
+        esDtoList.each {dto ->
+            byte[] byteContents = objectMapper.writeValueAsBytes(dto)
+            bulkProcessor.add(new IndexRequest(dto.indexName).source(byteContents, XContentType.JSON))
+        }
     }
 
     @Override
-    void delete(EsDto esDto) {
-
+    void delete(List<EsDto> esDtoList) {
+        esDtoList.each {dto ->
+            bulkProcessor.add(new DeleteRequest(dto.indexName, dto.id))
+        }
     }
 
     @Override
-    void update(EsDto esDto) {
-
+    void update(List<EsDto> esDtoList) {
+        esDtoList.each {dto ->
+            bulkProcessor.add(new UpdateRequest(dto.indexName, dto.id))
+        }
     }
 
     @Override
