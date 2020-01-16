@@ -11,4 +11,5 @@ rootProject.name = 'mamas-estate'
 include 'mamas-search'
 include 'mamas-ui'
 include 'mamas-common'
+include 'mamas-api'
 
