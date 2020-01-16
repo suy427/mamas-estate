@@ -1,4 +1,4 @@
-package com.sondahum.mamas.model.type
+package com.sondahum.mamas.common.model.type
 
 enum EstateType {
     APT(1, '아파트'),
