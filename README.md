@@ -6,3 +6,9 @@
 * Spring boot
 * Elasticsearch
 * Logstash
+
+## Modules
+* mamas-api
+* mamas-search
+* mamas-ui
+* mamas-common
