@@ -1,4 +1,4 @@
-package com.sondahum.mamas.api
+package com.sondahum.mamas.api.controller
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
