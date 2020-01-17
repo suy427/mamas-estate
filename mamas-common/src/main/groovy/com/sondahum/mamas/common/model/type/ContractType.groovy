@@ -6,11 +6,11 @@ enum ContractType {
     CHARTER(3, '전세') // 전세
 
     private int value
-    private String type
+    private String represent
 
-    ContractType(int value, String type) {
+    ContractType(int value, String represent) {
         this.value = value
-        this.type = type
+        this.represent = represent
     }
 
 }

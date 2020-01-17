@@ -6,11 +6,11 @@ enum EstateType {
     VILLA(3, '빌라')
 
     private int value
-    private String type
+    private String represent
 
-    EstateType(int value, String type) {
+    EstateType(int value, String represent) {
         this.value = value
-        this.type = type
+        this.represent = represent
     }
 
 }
