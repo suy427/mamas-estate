@@ -1,6 +1,6 @@
 package com.sondahum.mamas.common.model;
 
-class Address {
+class Address { // 그냥 주소 api를 써보면 어떨까..?
     String zipCode
 
     String state
