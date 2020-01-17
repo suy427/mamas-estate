@@ -1,8 +1,8 @@
 {
-  "index_patterns": "mamas-*",
+  "index_patterns": "mamas-client-*",
   "settings": {
-    "number_of_shards": 1,
-    "number_of_replicas": 1,
+    "number_of_shards": 3,
+    "number_of_replicas": 3,
     "analysis": {
       "analyzer": {
         "dahum_korean_analyzer": {
