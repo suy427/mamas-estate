@@ -5,6 +5,7 @@ import com.sondahum.mamas.common.model.person.Client
 import com.sondahum.mamas.common.model.product.Estate
 import com.sondahum.mamas.common.model.type.Status
 
+// 모든 정보의 단위는 Contract단위...!
 class Contract {
     Estate estate
     Client seller
