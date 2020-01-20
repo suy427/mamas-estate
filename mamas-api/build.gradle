@@ -14,6 +14,9 @@ configurations {
 }
 
 dependencies {
+    if (rootProject.findProject(':mamas-search'))
+        compile project(':mamas-search')
+
     // 이 의존성들은 어디에 있는게 좋을까.. 프로젝트 자체가 spring인데 root에 놓는게 나을까..? boot-starter-web에 있는 logger도 전 모듈에서 다 쓰긴 써야한다.
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
     implementation 'org.springframework.boot:spring-boot-starter-groovy-templates'
