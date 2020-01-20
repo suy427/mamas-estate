@@ -1,6 +1,6 @@
-package com.sondahum.mamas.elasticsearch.service
+package com.sondahum.mamas.elasticsearch.repository
 
-import com.sondahum.mamas.elasticsearch.model.EsDto
+import com.sondahum.mamas.elasticsearch.dto.EsDto
 import com.sondahum.mamas.elasticsearch.model.SearchOption
 import org.elasticsearch.action.search.SearchResponse;
 
