@@ -7,28 +7,28 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
-@RequestMapping('/search')
-class MamasSearchController {
+@RequestMapping('/search/estate')
+class MamasEstateSearchController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName())
 
     @GetMapping('register')
-    void register() {
+    void registerEstate() {
 
     }
 
     @GetMapping('delete')
-    void delete() {
+    void deleteEstate() {
 
     }
 
     @GetMapping('update')
-    void update() {
+    void updateEstate() {
 
     }
 
     @GetMapping('search')
-    void search() {
+    void searchEstate() {
 
     }
 
