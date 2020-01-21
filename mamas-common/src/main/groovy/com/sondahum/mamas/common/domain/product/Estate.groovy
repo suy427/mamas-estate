@@ -1,10 +1,11 @@
-package com.sondahum.mamas.common.model.product
+package com.sondahum.mamas.common.domain.product
 
-import com.sondahum.mamas.common.model.Address
-import com.sondahum.mamas.common.model.type.ContractType
-import com.sondahum.mamas.common.model.type.EstateType
+import com.sondahum.mamas.common.domain.common.Address
+import com.sondahum.mamas.common.domain.type.ContractType
+import com.sondahum.mamas.common.domain.type.EstateType
 
 class Estate { //
+    String id
     String name
     Address address
     EstateType productType
