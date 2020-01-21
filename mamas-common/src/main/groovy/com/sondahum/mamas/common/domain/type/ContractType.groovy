@@ -1,4 +1,4 @@
-package com.sondahum.mamas.common.model.type
+package com.sondahum.mamas.common.domain.type
 
 enum ContractType {
     BARGAIN(1, '매매'), // 매매
@@ -6,11 +6,11 @@ enum ContractType {
     CHARTER(3, '전세') // 전세
 
     private int value
-    private String type
+    private String represent
 
-    ContractType(int value, String type) {
+    ContractType(int value, String represent) {
         this.value = value
-        this.type = type
+        this.represent = represent
     }
 
 }
