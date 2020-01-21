@@ -1,5 +1,6 @@
 package com.sondahum.mamas.elasticsearch.repository
 
+import com.sondahum.mamas.elasticsearch.dto.EsDto
 import org.apache.http.HttpHost
 import org.codehaus.jackson.map.ObjectMapper
 import org.elasticsearch.action.bulk.BackoffPolicy
@@ -11,11 +12,14 @@ import org.elasticsearch.client.RequestOptions
 import org.elasticsearch.client.RestClient
 import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.common.unit.TimeValue
+import org.elasticsearch.script.Script
+import org.elasticsearch.script.ScriptType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 
 import javax.annotation.PostConstruct
+import java.text.SimpleDateFormat
 
 abstract class EsClientHelper {
 
@@ -41,7 +45,6 @@ abstract class EsClientHelper {
         ))
     }
 
-    @PostConstruct
     void init() {
         this.client = createConnection()
         this.objectMapper = new ObjectMapper()
@@ -77,5 +80,19 @@ abstract class EsClientHelper {
                 .setFlushInterval(TimeValue.timeValueSeconds(5))
                 .setBackoffPolicy(BackoffPolicy.exponentialBackoff(TimeValue.timeValueMillis(100), 3))
                 .build()
+    }
+
+    Script getUpdateScript(String indexName, EsDto dto) { // 여기는 엔티티가 들어와야함 에다 수정할 내용을 담아서 고대로 바꿈
+
+        Map<String, Object> params = dto.toMap() // toMap 필요함..!!!
+        params.put('modifiedDate', new Date())
+
+        Script script = new Script(
+                ScriptType.STORED,
+                'painless',
+                "mamas-script-update-${indexName}",
+                params)
+
+        return script
     }
 }
