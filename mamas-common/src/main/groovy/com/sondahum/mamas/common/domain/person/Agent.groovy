@@ -1,4 +1,4 @@
-package com.sondahum.mamas.common.model.person
+package com.sondahum.mamas.common.domain.person
 
 class Agent extends User {
     String company
