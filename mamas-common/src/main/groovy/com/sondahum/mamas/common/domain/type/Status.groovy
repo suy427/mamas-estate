@@ -1,4 +1,4 @@
-package com.sondahum.mamas.common.model.type
+package com.sondahum.mamas.common.domain.type
 
 enum Status {
     PRESALE(1, '예정'),
