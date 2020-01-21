@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 
 import javax.annotation.PostConstruct
-import java.text.SimpleDateFormat
 
 abstract class EsClientHelper {
 
@@ -27,7 +26,7 @@ abstract class EsClientHelper {
 
     protected ObjectMapper objectMapper
     protected BulkProcessor bulkProcessor
-    protected RestHighLevelClient client
+    protected RestHighLevelClient esClient
 
     @Value('${elasticsearch.host}')
     String hostName
@@ -45,12 +44,13 @@ abstract class EsClientHelper {
         ))
     }
 
+    @PostConstruct // 얘는 스프링에서 was각 띄워질때 실행된다는데 얘는 abstract
     void init() {
-        this.client = createConnection()
+        this.esClient = createConnection()
         this.objectMapper = new ObjectMapper()
         this.bulkProcessor = BulkProcessor.builder(
                 { bulkRequest, listener ->
-                    client.bulkAsync(bulkRequest, RequestOptions.DEFAULT, listener)
+                    esClient.bulkAsync(bulkRequest, RequestOptions.DEFAULT, listener)
                 }, new BulkProcessor.Listener() {
             @Override
             void beforeBulk(long executionId, BulkRequest request) {
@@ -67,7 +67,7 @@ abstract class EsClientHelper {
                 }
 
                 Long count = responseList.size() ?: -1
-                String resultLog = "< Check INDEX: test1> SIZE: ${count} FAIL:${failureList.size()} >"
+                String resultLog = "< RESPONSE: ${count} FAIL:${failureList.size()} >"
                 logger.info "[${executionId}] ElasticSearch ${resultLog}"
             }
 
