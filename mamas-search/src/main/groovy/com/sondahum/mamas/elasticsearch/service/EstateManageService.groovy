@@ -1,5 +1,14 @@
 package com.sondahum.mamas.elasticsearch.service
 
-interface EstateManageService {
+import com.sondahum.mamas.elasticsearch.dto.EstateDto
+import com.sondahum.mamas.elasticsearch.model.SearchOption
+
+interface EstateManageService { // Estate 정보 CRUD, Aggregation 까지
+
+    List<EstateDto> getEstateInformation()
+    List<EstateDto> searchEstateData(SearchOption searchOption)
+    List<EstateDto> updateEstateDate(List<EstateDto> estateList)
+    List<EstateDto> deleteEstateData(List<EstateDto> estateList)
+    void createEstateData(List<EstateDto> estateList)
 
 }
