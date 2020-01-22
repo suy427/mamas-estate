@@ -1,5 +1,6 @@
 package com.sondahum.mamas.elasticsearch.repository
 
+import com.sondahum.mamas.elasticsearch.dto.ContractDto
 import com.sondahum.mamas.elasticsearch.dto.EstateDto
 import com.sondahum.mamas.elasticsearch.dto.UserDto
 import com.sondahum.mamas.elasticsearch.model.SearchOption
@@ -14,7 +15,10 @@ import org.elasticsearch.common.xcontent.XContentType
 import org.elasticsearch.script.Script
 import org.elasticsearch.script.ScriptType
 import org.elasticsearch.script.mustache.SearchTemplateRequest
+import org.elasticsearch.search.SearchHits
 import org.springframework.stereotype.Repository
+
+import java.text.SimpleDateFormat
 
 @Repository
 class EstateDaoImpl extends EsClientHelper implements EstateDao{
@@ -30,14 +34,14 @@ class EstateDaoImpl extends EsClientHelper implements EstateDao{
     }
 
     @Override
-    void delete(List<EstateDto> estateList) {
+    List<EstateDto> delete(List<EstateDto> estateList) {
         estateList.each { estate ->
             bulkProcessor.add(new DeleteRequest(indexName, estate.id))
         }
     }
 
     @Override
-    void update(List<EstateDto> estateList) {
+    List<EstateDto> update(List<EstateDto> estateList) {
         estateList.each { estate ->
             UpdateRequest request = new UpdateRequest(indexName, estate.id) // item을 하나씩 가져와서 얘에 대한 정보를 다 쿼리로 작성..?
 
@@ -49,7 +53,7 @@ class EstateDaoImpl extends EsClientHelper implements EstateDao{
     }
 
     @Override
-    SearchResponse search(SearchOption searchOption) {
+    List<EstateDto> search(SearchOption searchOption) {
         SearchTemplateRequest searchTemplateRequest = new SearchTemplateRequest()
         SearchRequest searchRequest = new SearchRequest(indexName)
         searchRequest.searchType(SearchType.DFS_QUERY_THEN_FETCH)
@@ -65,7 +69,27 @@ class EstateDaoImpl extends EsClientHelper implements EstateDao{
 
         //SearchTemplateResponse VS SearchResponse 알아보기
         SearchResponse response = esClient.searchTemplate(searchTemplateRequest, RequestOptions.DEFAULT).getResponse()
+        SearchHits searchHits = response.getHits()
+        List<EstateDto> searchResultList = getSearchResult(searchHits)
 
-        return response
+        return searchResultList
+    }
+
+    private List<EstateDto> getSearchResult(SearchHits searchHits) {
+        List<EstateDto> estateList = searchHits?.collect { hit ->
+            Map<String, Object> _source = hit.sourceAsMap
+            Map<String, Object> _highlighted = hit.highlightFields.collectEntries {
+                field, highlightField -> [field, highlightField.fragments?.join()]} as Map<String, Object> // TODO 이부분 확실히 공부
+
+            return new EstateDto(
+                    id: _source.get("id"),
+                    name: _highlighted.get("name") ?: _source.get("name"),
+                    address: _highlighted.get("address") ?: _source.get("address"),
+                    productType: _highlighted.get("productType") ?: _source.get("productType"),
+                    contractType: _highlighted.get("contractType") ?: _source.get("contractType"),
+                    price: _highlighted.get("price") ?: _source.get("price"),
+            )
+        } ?: []
+        return estateList
     }
 }

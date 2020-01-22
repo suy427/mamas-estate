@@ -7,7 +7,7 @@ import org.elasticsearch.action.search.SearchResponse;
 interface EstateDao {
 
     void save(List<EstateDto> estateList) // Create
-    void delete(List<EstateDto> estateList) // Delete
-    void update(List<EstateDto> estateList) // Update
-    SearchResponse search(SearchOption searchOption) // Retrieve
+    List<EstateDto> delete(List<EstateDto> estateList) // Delete
+    List<EstateDto> update(List<EstateDto> estateList) // Update
+    List<EstateDto> search(SearchOption searchOption) // Retrieve
 }

@@ -7,8 +7,8 @@ import org.elasticsearch.action.search.SearchResponse
 interface UserDao {
 
     void save(List<UserDto> userList) // Create
-    void delete(List<UserDto> userList) // Delete
-    void update(List<UserDto> userList) // Update
-    SearchResponse search(SearchOption searchOption) // Retrieve
+    List<UserDto> delete(List<UserDto> userList) // Delete
+    List<UserDto> update(List<UserDto> userList) // Update
+    List<UserDto> search(SearchOption searchOption) // Retrieve
 
 }
