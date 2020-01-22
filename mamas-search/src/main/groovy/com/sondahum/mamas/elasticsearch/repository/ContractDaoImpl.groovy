@@ -10,12 +10,15 @@ import org.elasticsearch.action.search.SearchResponse
 import org.elasticsearch.action.search.SearchType
 import org.elasticsearch.action.update.UpdateRequest
 import org.elasticsearch.client.RequestOptions
+import org.elasticsearch.common.unit.TimeValue
 import org.elasticsearch.common.xcontent.XContentType
+import org.elasticsearch.index.query.MatchAllQueryBuilder
 import org.elasticsearch.script.Script
 import org.elasticsearch.script.ScriptType
 import org.elasticsearch.script.mustache.SearchTemplateRequest
 import org.elasticsearch.search.SearchHit
 import org.elasticsearch.search.SearchHits
+import org.elasticsearch.search.builder.SearchSourceBuilder
 import org.springframework.stereotype.Repository
 
 import java.text.SimpleDateFormat
@@ -24,6 +27,25 @@ import java.text.SimpleDateFormat
 class ContractDaoImpl extends EsClientHelper implements ContractDao{
 
     private final String indexName = 'mamas-contract'
+
+    @Override
+    List<ContractDto> retrieve() {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
+        searchSourceBuilder.query(new MatchAllQueryBuilder())
+        searchSourceBuilder.size(1000)
+
+        SearchRequest request = new SearchRequest(indexName)
+        request.searchType(SearchType.DFS_QUERY_THEN_FETCH)
+        request.allowPartialSearchResults(false)
+        request.scroll(TimeValue.timeValueMinutes(1L))
+        request.source(searchSourceBuilder)
+
+        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT)
+        SearchHits searchHits = response.getHits()
+        List<ContractDto> totalContractList = getSearchResult(searchHits)
+
+        return totalContractList
+    }
 
     @Override
     void save(List<ContractDto> contractList) {
@@ -81,7 +103,7 @@ class ContractDaoImpl extends EsClientHelper implements ContractDao{
             Map<String, Object> _highlighted = hit.highlightFields.collectEntries {
                 field, highlightField -> [field, highlightField.fragments?.join()]} as Map<String, Object> // TODO 이부분 확실히 공부
 
-            return new ContractDto(
+            return new ContractDto( // TODO 이부분 직접 바꾸지말고 유연하게 다시 짜볼것.
                     id: _source.get("id"),
                     estate: _highlighted.get("estate.for_search") ?: _source.get("estate"),
                     seller: _highlighted.get("seller") ?: _source.get("seller"),

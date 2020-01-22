@@ -10,19 +10,40 @@ import org.elasticsearch.action.search.SearchResponse
 import org.elasticsearch.action.search.SearchType
 import org.elasticsearch.action.update.UpdateRequest
 import org.elasticsearch.client.RequestOptions
+import org.elasticsearch.common.unit.TimeValue
 import org.elasticsearch.common.xcontent.XContentType
+import org.elasticsearch.index.query.MatchAllQueryBuilder
 import org.elasticsearch.script.Script
 import org.elasticsearch.script.ScriptType
 import org.elasticsearch.script.mustache.SearchTemplateRequest
 import org.elasticsearch.search.SearchHits
+import org.elasticsearch.search.builder.SearchSourceBuilder
 import org.springframework.stereotype.Repository
 
-import java.text.SimpleDateFormat
 
 @Repository
 class UserDaoImpl extends EsClientHelper implements UserDao {
 
     private final String indexName = 'mamas-user'
+
+    @Override
+    List<UserDto> retrieve() {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
+        searchSourceBuilder.query(new MatchAllQueryBuilder())
+        searchSourceBuilder.size(1000)
+
+        SearchRequest request = new SearchRequest(indexName)
+        request.searchType(SearchType.DFS_QUERY_THEN_FETCH)
+        request.allowPartialSearchResults(false)
+        request.scroll(TimeValue.timeValueMinutes(1L))
+        request.source(searchSourceBuilder)
+
+        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT)
+        SearchHits searchHits = response.getHits()
+        List<UserDto> totalUserList = getSearchResult(searchHits)
+
+        return totalUserList
+    }
 
     @Override
     void save(List<UserDto> userList) {
