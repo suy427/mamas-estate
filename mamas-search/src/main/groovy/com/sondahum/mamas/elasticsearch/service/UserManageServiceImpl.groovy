@@ -12,28 +12,30 @@ class UserManageServiceImpl implements UserManageService{
     @Autowired
     UserDao userDao
 
+
+
     @Override
     List<UserDto> getUserInformation() {
-        return null
+        userDao.retrieve()
     }
 
     @Override
     List<UserDto> searchUserData(SearchOption searchOption) {
-        return null
+        userDao.search(searchOption)
     }
 
     @Override
     List<UserDto> updateUserData(List<UserDto> userList) {
-        return null
+        userDao.update(userList)
     }
 
     @Override
     List<UserDto> deleteUserData(List<UserDto> userList) {
-        return null
+        userDao.delete(userList)
     }
 
     @Override
     void createUserData(List<UserDto> userList) {
-
+        userDao.save(userList)
     }
 }
