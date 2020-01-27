@@ -8,9 +8,10 @@ import org.elasticsearch.action.search.SearchResponse
 
 interface ContractDao {
 
+    List<ContractDto> retrieve()
     void save(List<ContractDto> contractList) // Create
-    void delete(List<ContractDto> contractList) // Delete
-    void update(List<ContractDto> contractList) // Update
-    SearchResponse search(SearchOption searchOption) // Retrieve
+    List<ContractDto> delete(List<ContractDto> contractList) // Delete
+    List<ContractDto> update(List<ContractDto> contractList) // Update
+    List<ContractDto> search(SearchOption searchOption) // Retrieve
 
 }

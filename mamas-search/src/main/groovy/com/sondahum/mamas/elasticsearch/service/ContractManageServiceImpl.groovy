@@ -12,9 +12,11 @@ class ContractManageServiceImpl implements ContractManageService{
     @Autowired
     ContractDao contractDao
 
+    
+
     @Override
     List<ContractDto> getContractInformation() {
-        return null
+        contractDao.retrieve()
     }
 
     @Override
@@ -24,16 +26,16 @@ class ContractManageServiceImpl implements ContractManageService{
 
     @Override
     List<ContractDto> updateContractData(List<ContractDto> contractList) {
-        return null
+        contractDao.update(contractList)
     }
 
     @Override
     List<ContractDto> deleteContractData(List<ContractDto> contractList) {
-        return null
+        contractDao.delete(contractList)
     }
 
     @Override
     void createContractData(List<ContractDto> contractList) {
-
+        contractDao.save(contractList)
     }
 }

@@ -12,28 +12,30 @@ class EstateManageServiceImpl implements EstateManageService {
     @Autowired
     EstateDao estateDao
 
+
+
     @Override
     List<EstateDto> getEstateInformation() {
-        return null
+        estateDao.retrieve()
     }
 
     @Override
     List<EstateDto> searchEstateData(SearchOption searchOption) {
-        return null
+        estateDao.search(searchOption)
     }
 
     @Override
     List<EstateDto> updateEstateDate(List<EstateDto> estateList) {
-        return null
+        estateDao.update(estateList)
     }
 
     @Override
     List<EstateDto> deleteEstateData(List<EstateDto> estateList) {
-        return null
+        estateDao.delete(estateList)
     }
 
     @Override
     void createEstateData(List<EstateDto> estateList) {
-
+        estateDao.save(estateList)
     }
 }
