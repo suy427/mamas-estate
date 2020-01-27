@@ -3,6 +3,8 @@ package com.sondahum.mamas.elasticsearch.repository
 import com.sondahum.mamas.elasticsearch.dto.ContractDto
 import com.sondahum.mamas.elasticsearch.dto.UserDto
 import com.sondahum.mamas.elasticsearch.model.SearchOption
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import org.elasticsearch.action.delete.DeleteRequest
 import org.elasticsearch.action.index.IndexRequest
 import org.elasticsearch.action.search.SearchRequest
@@ -86,7 +88,7 @@ class ContractDaoImpl extends EsClientHelper implements ContractDao{
         searchTemplateRequest.setScript('search-template-test1')
 
         // this is why i make java library. i should make feature that set key of map more flexible
-        Map<String, Object> params = searchOption.toMap()
+        Map<String, Object> params = new JsonSlurper().parseText(JsonOutput.toJson(searchOption))
         searchTemplateRequest.setScriptParams(params)
 
         //SearchTemplateResponse VS SearchResponse 알아보기
