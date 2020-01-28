@@ -1,4 +1,4 @@
-package com.sondahum.mamas.general
+package com.sondahum.mamas
 
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
@@ -29,6 +29,12 @@ class GeneralTest {
         println ss
         println ha
         println haha
+    }
+
+    class SearchOption {
+        String query
+        Date startDate
+        Date endDate
     }
 
 }
