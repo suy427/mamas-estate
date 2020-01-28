@@ -1,6 +1,7 @@
 package com.sondahum.mamas.elasticsearch.repository
 
 import com.sondahum.mamas.elasticsearch.dto.ContractDto
+import com.sondahum.mamas.elasticsearch.dto.EsDto
 import com.sondahum.mamas.elasticsearch.dto.UserDto
 import com.sondahum.mamas.elasticsearch.model.SearchOption
 import groovy.json.JsonOutput
@@ -24,6 +25,8 @@ import org.elasticsearch.search.builder.SearchSourceBuilder
 import org.springframework.stereotype.Repository
 
 import java.text.SimpleDateFormat
+
+import static com.sondahum.mamas.common.util.JUtils.objToMap
 
 @Repository
 class ContractDaoImpl extends EsClientHelper implements ContractDao{
@@ -88,33 +91,27 @@ class ContractDaoImpl extends EsClientHelper implements ContractDao{
         searchTemplateRequest.setScript('search-template-test1')
 
         // this is why i make java library. i should make feature that set key of map more flexible
-        Map<String, Object> params = new JsonSlurper().parseText(JsonOutput.toJson(searchOption))
+        Map<String, Object> params = objToMap(searchOption)
         searchTemplateRequest.setScriptParams(params)
 
         //SearchTemplateResponse VS SearchResponse 알아보기
         SearchResponse response = esClient.searchTemplate(searchTemplateRequest, RequestOptions.DEFAULT).getResponse()
         SearchHits searchHits = response.getHits()
-        List<ContractDto> searchResultList = getSearchResult(searchHits)
+        List<ContractDto> searchResultList = getSearchResult(searchHits) as List<ContractDto>
 
         return searchResultList
     }
 
-    private List<ContractDto> getSearchResult(SearchHits searchHits) {
-        List<ContractDto> contractList = searchHits?.collect { hit ->
-            Map<String, Object> _source = hit.sourceAsMap
-            Map<String, Object> _highlighted = hit.highlightFields.collectEntries {
-                field, highlightField -> [field, highlightField.fragments?.join()]} as Map<String, Object> // TODO 이부분 확실히 공부
-
-            return new ContractDto( // TODO 이부분 직접 바꾸지말고 유연하게 다시 짜볼것.
-                    id: _source.get("id"),
-                    estate: _highlighted.get("estate.for_search") ?: _source.get("estate"),
-                    seller: _highlighted.get("seller") ?: _source.get("seller"),
-                    buyer: _highlighted.get("buyer") ?: _source.get("buyer"),
-                    price: _highlighted.get("price") ?: _source.get("price"),
-                    agent: _highlighted.get("agent") ?: _source.get("agent"),
-                    contractedDate: new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(_source.get("contractedDate").toString())
-            )
-        } ?: []
-        return contractList
+    @Override
+    protected EsDto matchDto(Map<String, Object> _source, Map<String, Object> _highlighted) {
+        return new ContractDto( // TODO 이부분 직접 바꾸지말고 유연하게 다시 짜볼것.
+                contractId: _source.get("id"),
+                estate: _highlighted.get("estate.for_search") ?: _source.get("estate"),
+                seller: _highlighted.get("seller") ?: _source.get("seller"),
+                buyer: _highlighted.get("buyer") ?: _source.get("buyer"),
+                agent: _highlighted.get("agent") ?: _source.get("agent"),
+                price: _highlighted.get("price") ?: _source.get("price"),
+                contractedDate: new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(_source.get("contractedDate").toString())
+        )
     }
 }

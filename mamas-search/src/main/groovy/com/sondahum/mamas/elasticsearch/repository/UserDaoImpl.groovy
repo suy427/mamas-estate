@@ -1,6 +1,8 @@
 package com.sondahum.mamas.elasticsearch.repository
 
 import com.sondahum.mamas.elasticsearch.dto.ContractDto
+import com.sondahum.mamas.elasticsearch.dto.EsDto
+import com.sondahum.mamas.elasticsearch.dto.EstateDto
 import com.sondahum.mamas.elasticsearch.dto.UserDto
 import com.sondahum.mamas.elasticsearch.model.SearchOption
 import groovy.json.JsonOutput
@@ -21,6 +23,8 @@ import org.elasticsearch.script.mustache.SearchTemplateRequest
 import org.elasticsearch.search.SearchHits
 import org.elasticsearch.search.builder.SearchSourceBuilder
 import org.springframework.stereotype.Repository
+
+import static com.sondahum.mamas.common.util.JUtils.objToMap
 
 
 @Repository
@@ -86,31 +90,26 @@ class UserDaoImpl extends EsClientHelper implements UserDao {
         searchTemplateRequest.setScript('search-template-test1')
 
         // this is why i make java library. i should make feature that set key of map more flexible
-        Map<String, Object> params = new JsonSlurper().parseText(JsonOutput.toJson(searchOption))
+        Map<String, Object> params = objToMap(searchOption)
         searchTemplateRequest.setScriptParams(params)
 
         //SearchTemplateResponse VS SearchResponse 알아보기
         SearchResponse response = esClient.searchTemplate(searchTemplateRequest, RequestOptions.DEFAULT).getResponse()
         SearchHits searchHits = response.getHits()
-        List<UserDto> searchResultList = getSearchResult(searchHits)
+        List<UserDto> searchResultList = getSearchResult(searchHits) as List<UserDto>
 
         return searchResultList
     }
 
-    private List<UserDto> getSearchResult(SearchHits searchHits) {
-        List<UserDto> contractList = searchHits?.collect { hit ->
-            Map<String, Object> _source = hit.sourceAsMap
-            Map<String, Object> _highlighted = hit.highlightFields.collectEntries {
-                field, highlightField -> [field, highlightField.fragments?.join()]} as Map<String, Object> // TODO 이부분 확실히 공부
-
-            return new UserDto( // TODO : 이걸 키워드로 할지 텍스트로 할지 고민해보
-                    id: _source.get("id"),
-                    name: _highlighted.get("name") ?: _source.get("name"),
-                    role: _highlighted.get("role") ?: _source.get("role"),
-                    phone: _highlighted.get("phone") ?: _source.get("phone"),
-                    bid: _highlighted.get("bid") ?: _source.get("bid"),
-            )
-        } ?: []
-        return contractList
+    @Override
+    protected EsDto matchDto(Map<String, Object> _source, Map<String, Object> _highlighted) {
+        return new UserDto( // TODO : 이걸 키워드로 할지 텍스트로 할지 고민해보
+                id: _source.get("id"),
+                name: _highlighted.get("name") ?: _source.get("name"),
+                role: _highlighted.get("role") ?: _source.get("role"),
+                phone: _highlighted.get("phone") ?: _source.get("phone"),
+                bid: _highlighted.get("bid") ?: _source.get("bid"),
+        )
     }
+
 }
