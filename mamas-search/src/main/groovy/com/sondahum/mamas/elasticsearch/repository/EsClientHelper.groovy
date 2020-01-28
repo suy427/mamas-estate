@@ -1,8 +1,8 @@
 package com.sondahum.mamas.elasticsearch.repository
 
 import com.sondahum.mamas.elasticsearch.dto.EsDto
-import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
+import com.sondahum.mamas.elasticsearch.dto.EstateDto
+import com.sondahum.mamas.elasticsearch.dto.UserDto
 import org.apache.http.HttpHost
 import org.codehaus.jackson.map.ObjectMapper
 import org.elasticsearch.action.bulk.BackoffPolicy
@@ -16,11 +16,13 @@ import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.common.unit.TimeValue
 import org.elasticsearch.script.Script
 import org.elasticsearch.script.ScriptType
+import org.elasticsearch.search.SearchHits
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 
 import javax.annotation.PostConstruct
+import static com.sondahum.mamas.common.util.JUtils.objToMap
 
 abstract class EsClientHelper {
 
@@ -44,6 +46,7 @@ abstract class EsClientHelper {
         RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(
                 new HttpHost(hostName, port, scheme)
         ))
+        return client
     }
 
     @PostConstruct // 얘는 스프링에서 was각 띄워질때 실행된다는데 얘는 abstract
@@ -84,9 +87,9 @@ abstract class EsClientHelper {
                 .build()
     }
 
-    Script getUpdateScript(String indexName, EsDto dto) { // 여기는 엔티티가 들어와야함 에다 수정할 내용을 담아서 고대로 바꿈
+    Script getUpdateScript(String indexName, EsDto dto) {
 
-        Map<String, Object> params = new JsonSlurper().parseText(JsonOutput.toJson(dto)) as Map<String, Object>
+        Map<String, Object> params = objToMap(dto)
         params.put('modifiedDate', new Date())
 
         Script script = new Script(
@@ -97,4 +100,21 @@ abstract class EsClientHelper {
 
         return script
     }
+
+    List<EsDto> getSearchResult(SearchHits searchHits) {
+        List<EsDto> dtoList = searchHits?.collect { hit ->
+            Map<String, Object> _source = hit.sourceAsMap
+            Map<String, Object> _highlighted = hit.highlightFields.collectEntries {
+                field, highlightField -> [field, highlightField.fragments?.join()]} as Map<String, Object> // TODO 이부분 확실히 공부
+
+            // 팩토리 메소드 디자인 패턴 적용했는데 제대로 된걸까...? 이상하게 느껴진다...
+            EsDto dto = matchDto(_source, _highlighted)
+            return dto
+
+        } ?: []
+        return dtoList
+    }
+
+    protected abstract EsDto matchDto(Map<String, Object> _source, Map<String, Object> _highlighted)
+
 }

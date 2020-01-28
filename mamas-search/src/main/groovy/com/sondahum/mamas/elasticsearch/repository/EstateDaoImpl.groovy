@@ -1,6 +1,7 @@
 package com.sondahum.mamas.elasticsearch.repository
 
 import com.sondahum.mamas.elasticsearch.dto.ContractDto
+import com.sondahum.mamas.elasticsearch.dto.EsDto
 import com.sondahum.mamas.elasticsearch.dto.EstateDto
 import com.sondahum.mamas.elasticsearch.dto.UserDto
 import com.sondahum.mamas.elasticsearch.model.SearchOption
@@ -22,6 +23,10 @@ import org.elasticsearch.script.mustache.SearchTemplateRequest
 import org.elasticsearch.search.SearchHits
 import org.elasticsearch.search.builder.SearchSourceBuilder
 import org.springframework.stereotype.Repository
+
+import java.text.SimpleDateFormat
+
+import static com.sondahum.mamas.common.util.JUtils.objToMap
 
 
 
@@ -88,33 +93,27 @@ class EstateDaoImpl extends EsClientHelper implements EstateDao{
         searchTemplateRequest.setScript('search-template-test1')
 
         // this is why i make java library. i should make feature that set key of map more flexible
-        Map<String, Object> params = new JsonSlurper().parseText(JsonOutput.toJson(searchOption))
+        Map<String, Object> params = objToMap(searchOption)
 //        Map<String, Object> params = searchOption.toMap()
         searchTemplateRequest.setScriptParams(params)
 
         //SearchTemplateResponse VS SearchResponse 알아보기
         SearchResponse response = esClient.searchTemplate(searchTemplateRequest, RequestOptions.DEFAULT).getResponse()
         SearchHits searchHits = response.getHits()
-        List<EstateDto> searchResultList = getSearchResult(searchHits)
+        List<EstateDto> searchResultList = getSearchResult(searchHits) as List<EstateDto> // TODO 이런 형 변환 너무 눈에 밟힌다
 
         return searchResultList
     }
 
-    private List<EstateDto> getSearchResult(SearchHits searchHits) {
-        List<EstateDto> estateList = searchHits?.collect { hit ->
-            Map<String, Object> _source = hit.sourceAsMap
-            Map<String, Object> _highlighted = hit.highlightFields.collectEntries {
-                field, highlightField -> [field, highlightField.fragments?.join()]} as Map<String, Object> // TODO 이부분 확실히 공부
-
-            return new EstateDto(
-                    id: _source.get("id"),
-                    name: _highlighted.get("name") ?: _source.get("name"),
-                    address: _highlighted.get("address") ?: _source.get("address"),
-                    productType: _highlighted.get("productType") ?: _source.get("productType"),
-                    contractType: _highlighted.get("contractType") ?: _source.get("contractType"),
-                    price: _highlighted.get("price") ?: _source.get("price"),
-            )
-        } ?: []
-        return estateList
+    @Override
+    protected EsDto matchDto(Map<String, Object> _source, Map<String, Object> _highlighted) {
+        return new EstateDto(
+                id: _source.get("id"),
+                name: _highlighted.get("name") ?: _source.get("name"),
+                address: _highlighted.get("address") ?: _source.get("address"),
+                productType: _highlighted.get("productType") ?: _source.get("productType"),
+                contractType: _highlighted.get("contractType") ?: _source.get("contractType"),
+                price: _highlighted.get("price") ?: _source.get("price"),
+        )
     }
 }
