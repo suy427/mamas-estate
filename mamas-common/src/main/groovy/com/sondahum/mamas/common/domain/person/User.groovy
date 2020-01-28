@@ -1,8 +1,8 @@
 package com.sondahum.mamas.common.domain.person
 
-import com.sondahum.mamas.common.domain.Entity
 
-class User extends Entity{
+class User {
+    String userId
     String name
     String phone
 }
