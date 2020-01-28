@@ -1,6 +1,8 @@
 package com.sondahum.mamas.elasticsearch.repository
 
 import com.sondahum.mamas.elasticsearch.dto.EsDto
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import org.apache.http.HttpHost
 import org.codehaus.jackson.map.ObjectMapper
 import org.elasticsearch.action.bulk.BackoffPolicy
@@ -14,7 +16,6 @@ import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.common.unit.TimeValue
 import org.elasticsearch.script.Script
 import org.elasticsearch.script.ScriptType
-import org.elasticsearch.search.SearchHits
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -85,7 +86,7 @@ abstract class EsClientHelper {
 
     Script getUpdateScript(String indexName, EsDto dto) { // 여기는 엔티티가 들어와야함 에다 수정할 내용을 담아서 고대로 바꿈
 
-        Map<String, Object> params = dto.toMap() // toMap 필요함..!!!
+        Map<String, Object> params = new JsonSlurper().parseText(JsonOutput.toJson(dto)) as Map<String, Object>
         params.put('modifiedDate', new Date())
 
         Script script = new Script(

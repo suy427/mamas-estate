@@ -1,9 +1,8 @@
 package com.sondahum.mamas.elasticsearch.dto
 
-class UserDto extends EsDto implements Serializable {
+import com.sondahum.mamas.common.domain.person.User
 
-    String name
-    String role // 이걸 '소속'이라 생각해도 좋을듯.
-    String phone
-    String bid
+class UserDto implements Serializable, EsDto{
+    String userId
+    User user
 }

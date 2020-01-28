@@ -1,11 +1,9 @@
 package com.sondahum.mamas.elasticsearch.dto
 
+import com.sondahum.mamas.common.domain.product.Estate
 
-class EstateDto extends EsDto implements Serializable{
 
-    String name
-    String address
-    String productType
-    String contractType
-    String price
+class EstateDto implements Serializable, EsDto{
+    String estateId
+    Estate estate
 }
