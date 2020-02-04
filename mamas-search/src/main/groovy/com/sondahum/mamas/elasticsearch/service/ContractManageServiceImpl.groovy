@@ -1,18 +1,18 @@
 package com.sondahum.mamas.elasticsearch.service
 
 import com.sondahum.mamas.elasticsearch.dto.ContractDto
-import com.sondahum.mamas.elasticsearch.model.SearchOption
+import com.sondahum.mamas.elasticsearch.dto.SearchOption
 import com.sondahum.mamas.elasticsearch.repository.ContractDao
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class ContractManageServiceImpl implements ContractManageService{
 
-    @Autowired
-    ContractDao contractDao
+    private ContractDao contractDao
 
-    
+    ContractManageService(ContractDao contractDao) {
+        this.contractDao = contractDao
+    }
 
     @Override
     List<ContractDto> getContractInformation() {

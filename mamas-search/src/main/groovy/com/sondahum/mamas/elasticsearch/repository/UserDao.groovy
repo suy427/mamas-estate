@@ -1,9 +1,8 @@
 package com.sondahum.mamas.elasticsearch.repository
 
-import com.sondahum.mamas.elasticsearch.dto.ContractDto
+
 import com.sondahum.mamas.elasticsearch.dto.UserDto
-import com.sondahum.mamas.elasticsearch.model.SearchOption
-import org.elasticsearch.action.search.SearchResponse
+import com.sondahum.mamas.elasticsearch.dto.SearchOption
 
 interface UserDao {
 

@@ -1,12 +1,9 @@
 package com.sondahum.mamas.elasticsearch.repository
 
-import com.sondahum.mamas.elasticsearch.dto.ContractDto
+
 import com.sondahum.mamas.elasticsearch.dto.EsDto
-import com.sondahum.mamas.elasticsearch.dto.EstateDto
 import com.sondahum.mamas.elasticsearch.dto.UserDto
-import com.sondahum.mamas.elasticsearch.model.SearchOption
-import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
+import com.sondahum.mamas.elasticsearch.dto.SearchOption
 import org.elasticsearch.action.delete.DeleteRequest
 import org.elasticsearch.action.index.IndexRequest
 import org.elasticsearch.action.search.SearchRequest
