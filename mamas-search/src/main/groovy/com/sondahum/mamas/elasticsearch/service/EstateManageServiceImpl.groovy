@@ -1,18 +1,18 @@
 package com.sondahum.mamas.elasticsearch.service
 
 import com.sondahum.mamas.elasticsearch.dto.EstateDto
-import com.sondahum.mamas.elasticsearch.model.SearchOption
+import com.sondahum.mamas.elasticsearch.dto.SearchOption
 import com.sondahum.mamas.elasticsearch.repository.EstateDao
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class EstateManageServiceImpl implements EstateManageService {
 
-    @Autowired
-    EstateDao estateDao
+    private EstateDao estateDao
 
-
+    EstateManageService(EstateDao estateDao) {
+        this.estateDao = estateDao
+    }
 
     @Override
     List<EstateDto> getEstateInformation() {

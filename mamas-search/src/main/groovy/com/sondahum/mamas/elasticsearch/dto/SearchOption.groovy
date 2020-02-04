@@ -1,4 +1,4 @@
-package com.sondahum.mamas.elasticsearch.model
+package com.sondahum.mamas.elasticsearch.dto
 
 class SearchOption {
     String query

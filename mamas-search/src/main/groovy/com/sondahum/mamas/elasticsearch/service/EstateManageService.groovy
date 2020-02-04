@@ -1,7 +1,7 @@
 package com.sondahum.mamas.elasticsearch.service
 
 import com.sondahum.mamas.elasticsearch.dto.EstateDto
-import com.sondahum.mamas.elasticsearch.model.SearchOption
+import com.sondahum.mamas.elasticsearch.dto.SearchOption
 
 interface EstateManageService { // Estate 정보 CRUD, Aggregation 까지
 

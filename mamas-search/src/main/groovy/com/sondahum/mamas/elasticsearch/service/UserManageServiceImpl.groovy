@@ -1,18 +1,18 @@
 package com.sondahum.mamas.elasticsearch.service
 
 import com.sondahum.mamas.elasticsearch.dto.UserDto
-import com.sondahum.mamas.elasticsearch.model.SearchOption
+import com.sondahum.mamas.elasticsearch.dto.SearchOption
 import com.sondahum.mamas.elasticsearch.repository.UserDao
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class UserManageServiceImpl implements UserManageService{
 
-    @Autowired
-    UserDao userDao
+    private UserDao userDao
 
-
+    UserManageServiceImpl(UserDao userDao) {
+        this.userDao = userDao
+    }
 
     @Override
     List<UserDto> getUserInformation() {
