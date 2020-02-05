@@ -10,21 +10,20 @@ import javax.persistence.FetchType
 import javax.persistence.JoinColumn
 import javax.persistence.OneToMany
 import javax.persistence.Table
+import javax.persistence.Temporal
+import javax.persistence.TemporalType
 
 @Entity
 @Table(name = "user")
 class User extends NamedEntity {
 
-    @Column(length = 16, nullable = true)
+    @Column(name = "phone_number")
     String phone
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    List<Cart> buy
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    List<OrderSell> sell
+//    이게 BaseEntity에 있는 날짜로 대체가 될까..?
+//    @Column(name = "registered_date")
+//    @Temporal(TemporalType.TIMESTAMP)
+//    Date registeredDate
 
     @Enumerated(EnumType.STRING)
     Role role
