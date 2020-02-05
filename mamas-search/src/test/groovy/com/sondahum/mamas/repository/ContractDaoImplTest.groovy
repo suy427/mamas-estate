@@ -1,6 +1,4 @@
-package com.sondahum.mamas.elasticsearch.repository;
-
-import static org.junit.jupiter.api.Assertions.*;
+package com.sondahum.mamas.repository
 
 class ContractDaoImplTest {
 

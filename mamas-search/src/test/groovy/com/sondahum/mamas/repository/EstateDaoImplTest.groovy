@@ -1,4 +1,4 @@
-package com.sondahum.mamas.elasticsearch.repository
+package com.sondahum.mamas.repository
 
 
 class EstateDaoImplTest {

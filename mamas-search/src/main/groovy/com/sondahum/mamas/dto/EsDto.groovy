@@ -1,4 +1,4 @@
-package com.sondahum.mamas.elasticsearch.dto
+package com.sondahum.mamas.dto
 
 interface EsDto {
 

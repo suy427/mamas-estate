@@ -1,8 +1,6 @@
-package com.sondahum.mamas.elasticsearch.repository
+package com.sondahum.mamas.repository
 
 import com.sondahum.mamas.elasticsearch.dto.EsDto
-import com.sondahum.mamas.elasticsearch.dto.EstateDto
-import com.sondahum.mamas.elasticsearch.dto.UserDto
 import org.apache.http.HttpHost
 import org.codehaus.jackson.map.ObjectMapper
 import org.elasticsearch.action.bulk.BackoffPolicy

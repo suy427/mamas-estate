@@ -1,4 +1,4 @@
-package com.sondahum.mamas.elasticsearch.repository
+package com.sondahum.mamas.repository
 
 import org.elasticsearch.action.bulk.BulkItemResponse
 import org.elasticsearch.action.bulk.BulkProcessor

@@ -1,4 +1,4 @@
-package com.sondahum.mamas.elasticsearch.service
+package com.sondahum.mamas.service
 
 import com.sondahum.mamas.elasticsearch.dto.ContractDto
 import com.sondahum.mamas.elasticsearch.dto.SearchOption

@@ -1,6 +1,4 @@
-package com.sondahum.mamas.elasticsearch.service;
-
-import static org.junit.jupiter.api.Assertions.*;
+package com.sondahum.mamas.service
 
 class EstateManageServiceImplTest {
 
