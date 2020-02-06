@@ -1,6 +1,7 @@
 package com.sondahum.mamas.domain
 
 import com.sondahum.mamas.model.NamedEntity
+import com.sondahum.mamas.model.Role
 
 import javax.persistence.AttributeOverride
 import javax.persistence.CascadeType
@@ -30,8 +31,4 @@ class User extends NamedEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @JoinColumn(name = "bid_id") // jpa라고 해서 object와 table을 동일한 형태로 만드는게 아니라 'mapping'해주는거다.
     List<Bid> bidList
-
-    enum Role {
-        MAMA, AGENT, OTHER
-    }
 }

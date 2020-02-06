@@ -34,7 +34,6 @@ class Estate extends NamedEntity {
 
     @Column(name = "seller")
     @OneToOne
-    @JoinColumn(name = "user_id")
-    // column name that reference in 'user' table
+    @JoinColumn(name = "user_id") // column name that reference in 'user' table
     User sellerId
 }
