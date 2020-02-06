@@ -2,6 +2,7 @@ package com.sondahum.mamas.domain
 
 import com.sondahum.mamas.model.NamedEntity
 import com.sondahum.mamas.model.Role
+import groovy.transform.builder.Builder
 
 import javax.persistence.AttributeOverride
 import javax.persistence.CascadeType
@@ -18,6 +19,7 @@ import javax.persistence.TemporalType
 
 @Entity
 @Table(name = "user")
+@Builder
 @AttributeOverride(name = "id", column = @Column(name = "user_id"))
 @AttributeOverride(name = "name", column = @Column(name = "user_name"))
 class User extends NamedEntity {
