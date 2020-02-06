@@ -12,6 +12,10 @@ class MamasController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName())
 
+    MamasController() {
+
+    }
+
     @GetMapping('')
     void index() {
 
