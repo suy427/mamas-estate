@@ -10,21 +10,20 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping('/')
-class MamasEssetManageController {
+class MamasAssetManageController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName())
     private final UserRepository userRepository
     private final EstateRepository estateRepository
 
-    MamasEssetManageController(UserRepository userRepository, EstateRepository estateRepository) {
+    MamasAssetManageController(UserRepository userRepository, EstateRepository estateRepository) {
         this.userRepository = userRepository
         this.estateRepository = estateRepository
     }
 
 
     String userRegister() {
-        us
-        return
+        return ''
     }
 
 
