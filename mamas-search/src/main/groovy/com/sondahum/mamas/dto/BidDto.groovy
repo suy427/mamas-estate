@@ -7,4 +7,8 @@ class BidDto {
     EstateDto estate
     String action //  sell/ buy
     String price
+
+    void toEntity() {
+
+    }
 }
