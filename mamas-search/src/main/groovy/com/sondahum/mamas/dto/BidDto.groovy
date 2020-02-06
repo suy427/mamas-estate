@@ -5,6 +5,12 @@ import com.sondahum.mamas.domain.Bid
 import java.time.LocalDate
 
 class BidDto {
+
+    class RegisterBidDto {
+        String userName
+        String price
+        String estate
+    }
     LocalDate createdDate
     EstateDto estate
     UserDto user
