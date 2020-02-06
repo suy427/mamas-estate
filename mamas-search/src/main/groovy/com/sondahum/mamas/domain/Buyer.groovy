@@ -8,7 +8,7 @@ import javax.persistence.OneToMany
 import javax.persistence.Table
 
 @Entity
-@Table("buyer")
+@Table(name = "buyer")
 class Buyer extends NamedEntity { // 살려고 하는사람
 
     @JoinColumn(name = "user_id")
