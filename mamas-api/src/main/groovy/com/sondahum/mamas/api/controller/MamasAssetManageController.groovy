@@ -20,4 +20,12 @@ class MamasEssetManageController {
         this.userRepository = userRepository
         this.estateRepository = estateRepository
     }
+
+
+    String userRegister() {
+        us
+        return
+    }
+
+
 }
