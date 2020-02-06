@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass
 import java.time.LocalDate
 
 @MappedSuperclass
-class BaseEntity implements Serializable {
+abstract class BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
