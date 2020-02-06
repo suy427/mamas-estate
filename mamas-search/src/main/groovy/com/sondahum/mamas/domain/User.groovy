@@ -2,6 +2,8 @@ package com.sondahum.mamas.domain
 
 import com.sondahum.mamas.model.NamedEntity
 
+import javax.persistence.AttributeOverride
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -15,18 +17,19 @@ import javax.persistence.TemporalType
 
 @Entity
 @Table(name = "user")
+@AttributeOverride(name = "id", column = @Column(name = "user_id"))
+@AttributeOverride(name = "name", column = @Column(name = "user_name"))
 class User extends NamedEntity {
 
     @Column(name = "phone_number")
     String phone
 
-//    이게 BaseEntity에 있는 날짜로 대체가 될까..?
-//    @Column(name = "registered_date")
-//    @Temporal(TemporalType.TIMESTAMP)
-//    Date registeredDate
-
     @Enumerated(EnumType.STRING)
     Role role
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JoinColumn(name = "bid_id") // jpa라고 해서 object와 table을 동일한 형태로 만드는게 아니라 'mapping'해주는거다.
+    List<Bid> bidList
 
     enum Role {
         MAMA, AGENT, OTHER

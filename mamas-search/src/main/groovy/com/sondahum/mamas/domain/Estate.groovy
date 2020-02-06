@@ -2,6 +2,8 @@ package com.sondahum.mamas.domain
 
 import com.sondahum.mamas.model.NamedEntity
 
+import javax.persistence.AttributeOverride
+import javax.persistence.AttributeOverrides
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.JoinColumn
@@ -11,6 +13,8 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "estate")
+@AttributeOverride(name = "id", column = @Column(name = "estate_id"))
+@AttributeOverride(name = "name", column = @Column(name = "estate_name"))
 class Estate extends NamedEntity {
 
     String address1
@@ -30,6 +34,7 @@ class Estate extends NamedEntity {
 
     @Column(name = "seller")
     @OneToOne
-    @JoinColumn(name = "user_id") // column name that reference in 'user' table
+    @JoinColumn(name = "user_id")
+    // column name that reference in 'user' table
     User sellerId
 }
