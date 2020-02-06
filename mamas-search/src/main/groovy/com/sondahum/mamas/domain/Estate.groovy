@@ -14,6 +14,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "estate")
+@Builder
 @AttributeOverride(name = "id", column = @Column(name = "estate_id"))
 @AttributeOverride(name = "name", column = @Column(name = "estate_name"))
 class Estate extends NamedEntity {

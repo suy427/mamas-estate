@@ -1,7 +1,6 @@
 package com.sondahum.mamas.domain
 
 import com.sondahum.mamas.model.BaseEntity
-import groovy.transform.builder.Builder
 import org.springframework.format.annotation.DateTimeFormat
 
 import javax.persistence.AttributeOverride
