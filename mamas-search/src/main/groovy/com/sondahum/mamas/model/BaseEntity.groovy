@@ -17,5 +17,5 @@ class BaseEntity implements Serializable {
 
 
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    private LocalDate registeredDate
+    private LocalDate createdDate
 }
