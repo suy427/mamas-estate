@@ -12,8 +12,4 @@ class EstateDto {
     UserDto owner
     String price
     String market_price
-
-    void toEntity() {
-
-    }
 }
