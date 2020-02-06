@@ -7,4 +7,8 @@ class ContractDto {
     UserDto buyer
     LocalDate createdDate
     String contractedDate
+
+    void toEntity() {
+
+    }
 }

@@ -12,4 +12,8 @@ class UserDto {
     Role role
     List<BidDto> bidDtoListList
     LocalDate createdDate
+
+    void toEntity() {
+
+    }
 }
