@@ -1,6 +1,7 @@
 package com.sondahum.mamas.domain
 
 import com.sondahum.mamas.model.BaseEntity
+import groovy.transform.builder.Builder
 import org.springframework.format.annotation.DateTimeFormat
 
 import javax.persistence.AttributeOverride
@@ -14,7 +15,8 @@ import javax.persistence.Table
 import java.time.LocalDate
 
 @Entity
-@Table(name = "bid")\
+@Table(name = "bid")
+@Builder
 @AttributeOverride(name = "id", column = @Column(name = "bid_id"))
 class Bid extends BaseEntity {
 
