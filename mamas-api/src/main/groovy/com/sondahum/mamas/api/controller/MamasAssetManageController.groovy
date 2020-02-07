@@ -17,23 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 class MamasAssetManageController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName())
-    private final UserRepository userRepository
-    private final EstateRepository estateRepository
-
-    MamasAssetManageController(UserRepository userRepository, EstateRepository estateRepository) {
-        this.userRepository = userRepository
-        this.estateRepository = estateRepository
-    }
-
-    @GetMapping('user/new')
-    String userRegister() {
-        return ''
-    }
-
-    @GetMapping('estate/new')
-    String estateRegister() {
-        return ''
-    }
 
 
 }

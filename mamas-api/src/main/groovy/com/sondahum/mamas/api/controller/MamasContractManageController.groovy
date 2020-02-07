@@ -13,17 +13,5 @@ import org.springframework.web.bind.annotation.RequestMapping
 class MamasContractManageController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName())
-    private final BidRepository bidRepository
-    private final ContractRepository contractRepository
-
-    MamasContractManageController(BidRepository bidRepository, ContractRepository contractRepository) {
-        this.bidRepository = bidRepository
-        this.contractRepository = contractRepository
-    }
-
-    @GetMapping('')
-    void index() {
-
-    }
-
+  
 }
