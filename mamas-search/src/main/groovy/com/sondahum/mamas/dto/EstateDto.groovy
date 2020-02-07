@@ -1,15 +1,17 @@
 package com.sondahum.mamas.dto
 
 import com.sondahum.mamas.model.Address
+import com.sondahum.mamas.model.Price
 
 import java.time.LocalDate
 
 class EstateDto {
     String name
-    LocalDate createdDate
     Address address
     String area
-    UserDto owner
-    String price
-    String market_price
+    String owner
+    List<String> estateType
+    List<String> contractType
+    Price desiredPrice
+    Price marketPrice
 }

@@ -1,5 +1,6 @@
 package com.sondahum.mamas.domain
 
+import com.sondahum.mamas.dto.UserDto
 import com.sondahum.mamas.model.NamedEntity
 import com.sondahum.mamas.model.Role
 import groovy.transform.builder.Builder
@@ -19,7 +20,6 @@ import javax.persistence.TemporalType
 
 @Entity
 @Table(name = "user")
-@Builder
 @AttributeOverride(name = "id", column = @Column(name = "user_id"))
 @AttributeOverride(name = "name", column = @Column(name = "user_name"))
 class User extends NamedEntity {
@@ -33,4 +33,15 @@ class User extends NamedEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @JoinColumn(name = "bid_id") // jpa라고 해서 object와 table을 동일한 형태로 만드는게 아니라 'mapping'해주는거다.
     List<Bid> bidList
+
+    UserDto toDto() {
+        return new UserDto(
+                name: name,
+                phone: phone,
+                role: role,
+                sellingEstateNumber: bidList.findAll{it.action == 'sell'}.size(),
+                buyingEstateNumber: bidList.findAll{it.action == 'buy'}.size(),
+                recentContractDate: bidList.last().createdDate
+        )
+    }
 }
