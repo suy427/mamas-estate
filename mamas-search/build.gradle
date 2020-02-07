@@ -30,8 +30,8 @@ dependencies {
     // spring jpa
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.2.4.RELEASE'
 
-    // model mapper
-    compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.6'
+    // model mapper --> reflection을 쓰는데 reflection은 최대한 피해야한다는거같다... 성능이슈땜에..
+//    compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.6'
 
     // postgresql
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.9'
