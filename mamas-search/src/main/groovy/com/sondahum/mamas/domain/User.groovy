@@ -20,6 +20,7 @@ import javax.persistence.TemporalType
 
 @Entity
 @Table(name = "user")
+@Builder
 @AttributeOverride(name = "id", column = @Column(name = "user_id"))
 @AttributeOverride(name = "name", column = @Column(name = "user_name"))
 class User extends NamedEntity {

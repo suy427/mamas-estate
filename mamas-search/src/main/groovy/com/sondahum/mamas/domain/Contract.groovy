@@ -10,6 +10,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "contract")
+@Builder
 @AttributeOverride(name = "id", column = @Column(name = "contract_id"))
 @AttributeOverride(name = "name", column = @Column(name = "contract_name"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "contracted_date"))
