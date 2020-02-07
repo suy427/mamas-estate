@@ -30,8 +30,17 @@ class Estate extends NamedEntity {
     @Column(name = "estate_type")
     String estateType
 
-    @Column(name = "market_price", nullable = true)
-    String marketPrice
+    @Column(name = "market_min_price", nullable = true)
+    String marketMinimumPrice
+
+    @Column(name = "market_max_price", nullable = true)
+    String marketMaximumPrice
+
+    @Column(name = "owner_min_price")
+    String ownerMinimumPrice
+
+    @Column(name = "owner_max_price")
+    String ownerMaximumPrice
 
     @Column(name = "seller")
     @OneToOne

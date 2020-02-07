@@ -30,5 +30,9 @@ class Bid extends BaseEntity {
     @JoinColumn(name = "estate_id") // column name that reference in 'user' table
     Estate estate   // 이거다!!! 아~~ 진짜 관계지향 --> 객체지향으로 맵핑하는구나!!
 
-    String price
+    @Column(name = "min_price")
+    String minimumPrice
+
+    @Column(name = "max_price")
+    String maximumPrice
 }
