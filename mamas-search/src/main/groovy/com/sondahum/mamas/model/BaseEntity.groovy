@@ -13,9 +13,9 @@ abstract class BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    protected Integer id;
 
 
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    private LocalDate createdDate
+    protected LocalDate createdDate
 }
