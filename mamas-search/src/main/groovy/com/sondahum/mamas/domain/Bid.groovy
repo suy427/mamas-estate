@@ -16,7 +16,6 @@ import java.time.LocalDate
 
 @Entity
 @Table(name = "bid")
-@Builder
 @AttributeOverride(name = "id", column = @Column(name = "bid_id"))
 class Bid extends BaseEntity {
 
