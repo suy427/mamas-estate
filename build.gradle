@@ -10,6 +10,8 @@
 buildscript {
     ext {
         springBootVersion = '2.2.2.RELEASE'
+        springRestDocVersion = '2.0.4.RELEASE'
+        springDataJpaVersion = '2.2.4.RELEASE'
     }
 
     repositories {
