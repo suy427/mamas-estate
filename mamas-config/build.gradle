@@ -1,13 +1,17 @@
 dependencies {
 
+    // spring boot
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 
+    // spring boot test
     compile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
+    // spring boot test... 위에거랑 뭐가 다르지..?ㅎㅎ
     testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
+    // spring data jpa
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.2.4.RELEASE'
 
 }
