@@ -1,4 +1,7 @@
 dependencies {
+    if (rootProject.findProject('mamas-common'))
+        compile project(':mamas-common')
+
 
     // spring boot
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
@@ -11,7 +14,9 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
+    compile "org.springframework.restdocs:spring-restdocs-mockmvc:${springRestDocVersion}"
+
     // spring data jpa
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.2.4.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springDataJpaVersion
 
 }
