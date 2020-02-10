@@ -1,4 +1,0 @@
-elasticsearch:
-  host: 127.0.0.1
-  port: 9200
-  cluster_name: MAMAS_CLUSTER
