@@ -9,5 +9,8 @@ dependencies {
     if (rootProject.findProject('mamas-api'))
         compile project(':mamas-api')
 
+    if (rootProject.findProject('mamas-config'))
+        compile project(':mamas-config')
+
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 }

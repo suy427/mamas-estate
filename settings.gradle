@@ -13,4 +13,6 @@ include 'mamas-ui'
 include 'mamas-common'
 include 'mamas-api'
 include 'mamas-starter'
+include 'mamas-tester'
+include 'mamas-config'
 
