@@ -3,5 +3,11 @@ dependencies {
     if (rootProject.findProject('mamas-common'))
         compile project(':mamas-common')
 
+    if (rootProject.findProject('mamas-search'))
+        compile project(':mamas-search')
+
+    if (rootProject.findProject('mamas-api'))
+        compile project(':mamas-api')
+
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 }
