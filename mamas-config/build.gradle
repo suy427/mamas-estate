@@ -14,9 +14,12 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
-    compile "org.springframework.restdocs:spring-restdocs-mockmvc:${springRestDocVersion}"
-
     // spring data jpa
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springDataJpaVersion
 
+    // mysql
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+
+
+    compile "org.springframework.restdocs:spring-restdocs-mockmvc:${springRestDocVersion}"
 }
