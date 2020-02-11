@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 4
+    url: jdbc:mysql://127.0.0.1:3306/mamasdb
+    username: sondahum
+    password: sondahum
+
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true

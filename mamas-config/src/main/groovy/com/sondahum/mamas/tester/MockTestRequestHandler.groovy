@@ -70,7 +70,6 @@ abstract class MockTestRequestHandler {
     }
 
 
-
     /**************************************************
      *
      * Values
@@ -337,11 +336,11 @@ abstract class MockTestRequestHandler {
      *          MockMultipartFile jsonFile = new MockMultipartFile("json", "", "application/json", "{\"json\": \"someValue\"}".getBytes());
      */
     Object requestPostWithMultipart(String url, List<MockMultipartFile> multipartFileList) {
-        return requestPostWithMultipart(url, new RequestValuesHandler(new MultipartValues(values: multipartFileList)))
+        return requestPostWithMultipart(url, new RequestValuesHandler(new MultipartValues(values: multipartFileList)) as List<MockMultipartFile>)
     }
 
     Object requestPostWithMultipart(String url, List<Object> pathParameterList, List<MockMultipartFile> multipartFileList) {
-        return requestPostWithMultipart(url, new RequestValuesHandler(pathValues(pathParameterList), new MultipartValues(values: multipartFileList)))
+        return requestPostWithMultipart(url, new RequestValuesHandler(pathValues(pathParameterList), new MultipartValues(values: multipartFileList)) as List<MockMultipartFile>)
     }
 
     Object requestPostWithMultipart(String url, RequestValues... values) {
