@@ -7,7 +7,7 @@ ext {
 }
 
 dependencies {
-    if (rootProject.findProject('mamas-config'))
+      if (rootProject.findProject('mamas-config'))
         compile project(':mamas-config')
 
     implementation 'org.locationtech.jts:jts-core:1.16.1'
