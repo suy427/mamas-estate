@@ -1,4 +1,12 @@
+server:
+  address: localhost
+  port: 8080
+
+
 spring:
+  profiles:
+    active: [search]
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
@@ -13,3 +21,17 @@ spring:
       ddl-auto: create
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true
+
+logging:
+  level:
+    org:
+      springframework:
+        session: ERROR
+        boot: INFO
+        web: INFO
+      apache: ERROR
+    com:
+      sondahum:
+        mamas: DEBUG
+
+

@@ -29,9 +29,10 @@ class User extends NamedEntity {
     String phone
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     Role role
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "bid_id") // jpa라고 해서 object와 table을 동일한 형태로 만드는게 아니라 'mapping'해주는거다.
     List<Bid> bidList
 

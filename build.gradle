@@ -6,7 +6,6 @@
  * User Manual available at https://docs.gradle.org/5.3.1/userguide/tutorial_groovy_projects.html
  */
 
-///의존성 관리가 어떻게 되고있는건지 잘 파악이 안된다....ㅠㅠㅜㅠㅜㅠㅜㅠㅜㅠㅜㅠㅜ
 buildscript {
     ext {
         springBootVersion = '2.2.2.RELEASE'
@@ -24,7 +23,6 @@ buildscript {
 
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-//        classpath 'io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE'
     }
 }
 
@@ -38,7 +36,6 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'maven'
     apply plugin: 'org.springframework.boot'
-//    apply plugin: 'io.spring.dependency-management'
 
     group 'com.sondahum.mamas'
     version '1.0-SNAPSHOT'

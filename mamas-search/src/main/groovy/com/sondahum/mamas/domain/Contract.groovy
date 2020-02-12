@@ -16,7 +16,12 @@ import javax.persistence.Table
 @AttributeOverride(name = "createdDate", column = @Column(name = "contracted_date"))
 class Contract extends NamedEntity {
 
+    @Column(name = "seller", nullable = false)
     User seller
+
+    @Column(name = "buyer", nullable = false)
     User buyer
+
+    @Column(name = "price", nullable = false)
     String price
 }

@@ -19,10 +19,16 @@ import javax.persistence.Table
 @AttributeOverride(name = "name", column = @Column(name = "estate_name"))
 class Estate extends NamedEntity {
 
+    @Column(name = "address1")
     String address1
+
+    @Column(name = "address2")
     String address2
+
+    @Column(name = "address3")
     String address3
 
+    @Column(name = "area")
     String area // 면적
 
     @Column(name = "contract_type")
@@ -43,8 +49,7 @@ class Estate extends NamedEntity {
     @Column(name = "owner_max_price")
     String ownerMaximumPrice
 
-    @Column(name = "seller")
     @OneToOne
-    @JoinColumn(name = "user_id") // column name that reference in 'user' table
+    @JoinColumn(name = "seller") // column name that reference in 'user' table
     User sellerId
 }

@@ -1,9 +1,0 @@
-
-
-dependencies {
-
-    if (rootProject.findProject('mamas-common'))
-        compile project(':mamas-common')
-
-
-}

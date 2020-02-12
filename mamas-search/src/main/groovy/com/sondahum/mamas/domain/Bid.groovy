@@ -20,14 +20,14 @@ import java.time.LocalDate
 class Bid extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     User user
 
+    @Column(name = "action", nullable = false)
     String action
 
-    @Column(name = "estate_id") // column name in this table
     @OneToOne
-    @JoinColumn(name = "estate_id") // column name that reference in 'user' table
+    @JoinColumn(name = "estate_id", nullable = false) // column name that reference in 'user' table
     Estate estate   // 이거다!!! 아~~ 진짜 관계지향 --> 객체지향으로 맵핑하는구나!!
 
     @Column(name = "min_price")
