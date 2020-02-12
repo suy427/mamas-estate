@@ -20,6 +20,10 @@ dependencies {
 
     // h2 database
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
+
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+
 }
 
 test {
