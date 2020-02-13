@@ -7,5 +7,5 @@ import javax.persistence.MappedSuperclass
 abstract class NamedEntity extends BaseEntity{
 
     @Column(name = "name")
-    protected String name;
+    String name;
 }
