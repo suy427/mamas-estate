@@ -63,10 +63,9 @@ class UserRepositoryTest extends AbstractMamasSearchTest{
             User actualUser = actualUsers[i]
             User savedUser = savedUsers[i]
             Bid savedBid = savedBids[i]
-
-            bidRepository
-
-            Assert.assertThat(savedUser)
+//            bidRepository
+//
+//            Assert.assertThat(savedUser)
         }
     }
 

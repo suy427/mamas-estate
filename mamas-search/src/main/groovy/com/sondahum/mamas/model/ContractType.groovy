@@ -1,9 +1,9 @@
 package com.sondahum.mamas.model
 
 enum ContractType {
-    MAMA(1,"MAMA"),
-    AGENT(2, "AGENT"),
-    OTHER(3, "OTHER")
+    RENT(1,"MAMA"),
+    BARGAIN(2, "AGENT"),
+    MONTHLY(3, "OTHER")
 
 
     private final int value
