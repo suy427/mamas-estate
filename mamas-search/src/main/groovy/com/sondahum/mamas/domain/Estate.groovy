@@ -1,5 +1,7 @@
 package com.sondahum.mamas.domain
 
+import com.sondahum.mamas.model.ContractType
+import com.sondahum.mamas.model.EstateType
 import com.sondahum.mamas.model.NamedEntity
 import groovy.transform.builder.Builder
 
@@ -7,6 +9,8 @@ import javax.persistence.AttributeOverride
 import javax.persistence.AttributeOverrides
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.JoinColumn
 import javax.persistence.OneToOne
 import javax.persistence.Table
@@ -14,7 +18,6 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "estate")
-@Builder
 @AttributeOverride(name = "id", column = @Column(name = "estate_id"))
 @AttributeOverride(name = "name", column = @Column(name = "estate_name"))
 class Estate extends NamedEntity {
@@ -31,11 +34,13 @@ class Estate extends NamedEntity {
     @Column(name = "area")
     String area // 면적
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "contract_type")
-    String contractType
+    ContractType contractType
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "estate_type")
-    String estateType
+    EstateType estateType
 
     @Column(name = "market_min_price", nullable = true)
     String marketMinimumPrice
