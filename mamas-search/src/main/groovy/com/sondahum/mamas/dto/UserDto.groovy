@@ -17,7 +17,6 @@ class UserDto {
 
     User toEntity() {
         return new User(
-                id: 0,
                 name: name,
                 role: role
         )
