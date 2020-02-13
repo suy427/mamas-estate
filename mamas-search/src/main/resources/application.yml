@@ -27,11 +27,11 @@ logging:
     org:
       springframework:
         session: ERROR
-        boot: INFO
-        web: INFO
+        boot: ERROR
+        web: ERROR
       apache: ERROR
     com:
       sondahum:
-        mamas: DEBUG
+        mamas: ERROR
 
 
