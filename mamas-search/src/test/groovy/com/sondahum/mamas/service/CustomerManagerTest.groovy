@@ -1,10 +1,13 @@
-package com.sondahum.mamas.service;
+package com.sondahum.mamas.service
 
+import com.sondahum.mamas.AbstractMamasSearchTest;
 import com.sondahum.mamas.domain.User;
 import com.sondahum.mamas.dto.UserDto;
 import com.sondahum.mamas.model.Role;
 import com.sondahum.mamas.repository.BidRepository;
-import com.sondahum.mamas.repository.UserRepository;
+import com.sondahum.mamas.repository.UserRepository
+import org.hamcrest.CoreMatchers
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +32,6 @@ class CustomerManagerTest {
 
     @Test
     void createUser() {
-        UserDto userDto = new UserDto();
-        userDto.setName("james");
-        userDto.setPhone("010-3002-9543");
-        userDto.setRole(Role.OTHER);
-
-        User userEntity = userDto.toEntity();
-
-        userRepository.save(userEntity);
-
 
     }
 
