@@ -18,11 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest extends AbstractMamasSearchTest{
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    BidRepository bidRepository
+    @Autowired UserRepository userRepository;
+    @Autowired BidRepository bidRepository
 
     @Test
     void createUserTest() { // 잘 들어가는지 테스트
@@ -34,11 +31,15 @@ class UserRepositoryTest extends AbstractMamasSearchTest{
         for (int i = 0; i < 10; i++) {
             User actual = actualUsers[i]
             User saved = savedUsers[i]
-//            Assert.assertThat(actual.getId(), CoreMatchers.is(saved.getId())) entity가 영속화되면서 0부터 자동으로 id가 생성되어 들어가지더라..
+
+            //entity가 영속화되면서 0부터 자동으로 id가 생성되어 들어가지더라..
+            //근데 또 갑자기 똑같이나오네..?ㅜㅠㅠ 뭐지...
+            Assert.assertThat(actual.getId(), CoreMatchers.is(saved.getId()))
             Assert.assertThat(actual.getName(), CoreMatchers.is(saved.getName()))
             Assert.assertThat(actual.getPhone(), CoreMatchers.is(saved.getPhone()))
             Assert.assertThat(actual.getRole(), CoreMatchers.is(saved.getRole()))
         }
+        println "hello"
     }
 
     /**

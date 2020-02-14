@@ -56,5 +56,5 @@ class Estate extends NamedEntity {
 
     @OneToOne
     @JoinColumn(name = "seller") // column name that reference in 'user' table
-    User sellerId
+    User owner
 }
