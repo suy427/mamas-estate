@@ -7,6 +7,7 @@ import groovy.transform.builder.Builder
 
 import javax.persistence.AttributeOverride
 import javax.persistence.AttributeOverrides
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -54,7 +55,7 @@ class Estate extends NamedEntity {
     @Column(name = "owner_max_price")
     String ownerMaximumPrice
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "seller") // column name that reference in 'user' table
     User owner
 }

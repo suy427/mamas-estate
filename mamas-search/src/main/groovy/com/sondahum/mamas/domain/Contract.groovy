@@ -4,8 +4,10 @@ import com.sondahum.mamas.model.NamedEntity
 import groovy.transform.builder.Builder
 
 import javax.persistence.AttributeOverride
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.OneToOne
 import javax.persistence.Table
 
 @Entity
@@ -15,6 +17,7 @@ import javax.persistence.Table
 @AttributeOverride(name = "createdDate", column = @Column(name = "contracted_date"))
 class Contract extends NamedEntity {
 
+    @OneToOne(cascade = CascadeType.ALL)
     @Column(name = "seller", nullable = false)
     User seller
 
