@@ -2,6 +2,7 @@ package com.sondahum.mamas.repository
 
 import com.sondahum.mamas.AbstractMamasSearchTest
 import com.sondahum.mamas.domain.Bid
+import com.sondahum.mamas.domain.Estate
 import com.sondahum.mamas.domain.User
 import com.sondahum.mamas.model.Role
 import org.hamcrest.CoreMatchers
@@ -11,6 +12,7 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.test.context.junit4.SpringRunner
 
 @DataJpaTest
@@ -20,6 +22,8 @@ class UserRepositoryTest extends AbstractMamasSearchTest{
 
     @Autowired UserRepository userRepository;
     @Autowired BidRepository bidRepository
+    @Autowired EstateRepository estateRepository
+    @Autowired TestEntityManager entityManager
 
     @Test
     void createUserTest() { // 잘 들어가는지 테스트
@@ -48,19 +52,26 @@ class UserRepositoryTest extends AbstractMamasSearchTest{
      *
      * 1. create bid info of exist user --> check the user's bid list (default was null)
      * 2. create bid info of new user --> check a new user has been created
+     *
+     *
+     *   [CURRENT SCENARIO]
+     *   5명의 유저가 있고, 그 중 3명의 bid정보를 생성함.
+     *   그 외에 기존에 없던 유저의 새로운 3개의 bid정보를 생성함
      */
     @Test
     void bidInfoCascadeTest() {
-        List<User> actualUsers = userInfoGenerator(3)
-        userRepository.saveAll(actualUsers)
+        List<User> initialCreatedUsers = userInfoGenerator(5)
+        userRepository.saveAll(initialCreatedUsers)
 
-        List<Bid> actualBidInfo = bidInfoGenerator(2, actualUsers)
-        bidRepository.saveAll(actualBidInfo)
+        List<Bid> initialCreatedBids = bidInfoGenerator(3, 3, initialCreatedUsers)
+        bidRepository.saveAll(initialCreatedBids)
+
+        // bid정보를 생성하면서 estate정보가 생김 --> estate가 생기면서 user가 생김.
+        List<Estate> createdByBidEstates = estateRepository.findAll()
 
         List<User> savedUsers = userRepository.findAll()
         List<Bid> savedBids = bidRepository.findAll()
 
-        List<User> biddenUsers = savedUsers.findAll{user -> user.bidList.size() > 0}
 
         println ""
     }

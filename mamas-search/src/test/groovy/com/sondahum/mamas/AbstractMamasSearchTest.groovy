@@ -141,26 +141,39 @@ abstract class AbstractMamasSearchTest {
      *
      ********************************/
     @Test
-    List<Bid> bidInfoGenerator(int number, List<User> userList) {
+    List<Bid> bidInfoGenerator(int newUsers, int existUsers,  List<User> userList) {
+        if (existUsers > userList.size()) {
+            logger.error("wrong exist user's bid info number.")
+            throw new Exception()
+        }
         List<Bid> result = []
-        String randomAction
 
         List<Integer> indexes = []
-        for (int i = 0; i < number; i++) {
+        for (int i = 0; i < existUsers; i++) {
             int num = random.nextInt(userList.size())
 
             while (indexes.contains(num)) // 중복 방지
                 num = random.nextInt(userList.size())
 
             indexes.add(num)
-        } // 여기서 bid 정보 넣을 user 선별함.
+        } // 여기서 bid 정보 넣을 userList의 index 뽑음
 
         indexes.each { index ->
-            randomAction = "sell"
             List<String> randomBidPrice = randomPriceRangeGenerator()
-
+            String randomAction = randomNumbersGenerator(2) % 2 ? "sell" : "buy"
             result.add(new Bid(
                     user: userList[index],
+                    action: randomAction,
+                    estate: estateInfoGenerator(1).pop(),
+                    minimumPrice: randomBidPrice[0],
+                    maximumPrice: randomBidPrice[1]
+            ))
+        }
+        for (int i = 0; i < newUsers; i++) {
+            String randomAction = randomNumbersGenerator(2) % 2 ? "sell" : "buy"
+            List<String> randomBidPrice = randomPriceRangeGenerator()
+            result.add(new Bid(
+                    user: userInfoGenerator(1).pop(),
                     action: randomAction,
                     estate: estateInfoGenerator(1).pop(),
                     minimumPrice: randomBidPrice[0],

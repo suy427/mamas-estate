@@ -11,7 +11,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 4
-    url: jdbc:mysql://127.0.0.1:3306/mamasdb
+    url: jdbc:mysql://127.0.0.1:3306/mamasdb?useUnicode=true&characterEncoding=utf8
     username: sondahum
     password: sondahum
 
@@ -19,9 +19,11 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
+    hibernate:
+      ddl-auto: create
+
     properties:
       hibernate:
-        ddl-auto: create
         show_sql: true
         format_sql: true
         use_sql_comment: true
