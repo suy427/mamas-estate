@@ -51,23 +51,18 @@ class UserRepositoryTest extends AbstractMamasSearchTest{
      */
     @Test
     void bidInfoCascadeTest() {
-        List<User> actualUsers = userInfoGenerator(10)
+        List<User> actualUsers = userInfoGenerator(3)
         userRepository.saveAll(actualUsers)
 
-        List<Bid> actualBidInfo = bidInfoGenerator(10, actualUsers)
+        List<Bid> actualBidInfo = bidInfoGenerator(2, actualUsers)
         bidRepository.saveAll(actualBidInfo)
 
         List<User> savedUsers = userRepository.findAll()
         List<Bid> savedBids = bidRepository.findAll()
 
-        for (int i = 0; i < 10; i++) {
-            User actualUser = actualUsers[i]
-            User savedUser = savedUsers[i]
-            Bid savedBid = savedBids[i]
-//            bidRepository
-//
-//            Assert.assertThat(savedUser)
-        }
+        List<User> biddenUsers = savedUsers.findAll{user -> user.bidList.size() > 0}
+
+        println ""
     }
 
     @Test

@@ -13,6 +13,8 @@ class UserDto {
     Role role
     Integer sellingEstateNumber
     Integer buyingEstateNumber
+    Integer soldEstateNumber
+    Integer boughtEstateNumber
     LocalDate recentContractDate
 
     User toEntity() {

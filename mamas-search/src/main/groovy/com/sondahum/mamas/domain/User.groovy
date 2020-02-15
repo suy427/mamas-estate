@@ -31,9 +31,18 @@ class User extends NamedEntity {
     @Column(name = "role")
     Role role
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bid_id") // jpa라고 해서 object와 table을 동일한 형태로 만드는게 아니라 'mapping'해주는거다.
-    List<Bid> bidList
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<Bid> bidList = []
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    List<Estate> estateList = []
+
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    List<Contract> soldList = []
+
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
+    List<Contract> boughtList = []
+
 
     UserDto toDto() {
         return new UserDto(
@@ -42,6 +51,8 @@ class User extends NamedEntity {
                 role: role,
                 sellingEstateNumber: bidList.findAll{it.action == 'sell'}.size(),
                 buyingEstateNumber: bidList.findAll{it.action == 'buy'}.size(),
+                soldEstateNumber: soldList.size(),
+                boughtEstateNumber: boughtList.size(),
                 recentContractDate: bidList.last().createdDate
         )
     }

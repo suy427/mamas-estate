@@ -37,9 +37,9 @@ class EstateRepositoryTest extends AbstractMamasSearchTest {
             Assert.assertThat(actual.getEstateType(), CoreMatchers.is(saved.getEstateType()))
             Assert.assertThat(actual.getContractType(), CoreMatchers.is(saved.getContractType()))
             Assert.assertThat(actual.getMarketMinimumPrice(), CoreMatchers.is(saved.getMarketMinimumPrice()))
-            Assert.assertThat(actual.getOwnerMinimumPrice(), CoreMatchers.is(saved.getOwnerMaximumPrice()))
+            Assert.assertThat(actual.getOwnerMaximumPrice(), CoreMatchers.is(saved.getOwnerMaximumPrice()))
             Assert.assertThat(actual.getOwner(), CoreMatchers.is(saved.getOwner()))
         }
+        println ""  // break point
     }
-
 }

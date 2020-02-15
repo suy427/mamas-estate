@@ -7,6 +7,8 @@ import javax.persistence.AttributeOverride
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
 import javax.persistence.OneToOne
 import javax.persistence.Table
 
@@ -17,11 +19,12 @@ import javax.persistence.Table
 @AttributeOverride(name = "createdDate", column = @Column(name = "contracted_date"))
 class Contract extends NamedEntity {
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @Column(name = "seller", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "seller", nullable = false)
     User seller
 
-    @Column(name = "buyer", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL) // this is additional
+    @JoinColumn(name = "buyer", nullable = false)
     User buyer
 
     @Column(name = "price", nullable = false)

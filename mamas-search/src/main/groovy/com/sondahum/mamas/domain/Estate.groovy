@@ -13,6 +13,7 @@ import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
 import javax.persistence.OneToOne
 import javax.persistence.Table
 
@@ -55,7 +56,7 @@ class Estate extends NamedEntity {
     @Column(name = "owner_max_price")
     String ownerMaximumPrice
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "seller") // column name that reference in 'user' table
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner") // column name that reference in 'user' table
     User owner
 }

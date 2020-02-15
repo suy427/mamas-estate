@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat
 
 import javax.persistence.AttributeOverride
 import javax.persistence.AttributeOverrides
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.JoinColumn
@@ -19,14 +20,14 @@ import java.time.LocalDate
 @AttributeOverride(name = "id", column = @Column(name = "bid_id"))
 class Bid extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     User user
 
     @Column(name = "action", nullable = false)
     String action
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "estate_id", nullable = false) // column name that reference in 'user' table
     Estate estate   // 이거다!!! 아~~ 진짜 관계지향 --> 객체지향으로 맵핑하는구나!!
 
