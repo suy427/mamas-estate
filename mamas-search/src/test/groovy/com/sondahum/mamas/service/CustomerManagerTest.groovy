@@ -1,13 +1,8 @@
 package com.sondahum.mamas.service
 
-import com.sondahum.mamas.AbstractMamasSearchTest;
-import com.sondahum.mamas.domain.User;
-import com.sondahum.mamas.dto.UserDto;
-import com.sondahum.mamas.model.Role;
-import com.sondahum.mamas.repository.BidRepository;
-import com.sondahum.mamas.repository.UserRepository
-import org.hamcrest.CoreMatchers
-import org.junit.Assert;
+
+import com.sondahum.mamas.bid.repository.BidRepository;
+import com.sondahum.mamas.user.repository.UserRepository
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

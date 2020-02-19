@@ -1,10 +1,10 @@
 package com.sondahum.mamas
 
-import com.sondahum.mamas.domain.Bid
-import com.sondahum.mamas.domain.Estate
-import com.sondahum.mamas.domain.User
-import com.sondahum.mamas.model.ContractType
-import com.sondahum.mamas.model.EstateType
+import com.sondahum.mamas.bid.domain.Bid
+import com.sondahum.mamas.estate.domain.Estate
+import com.sondahum.mamas.user.domain.User
+import com.sondahum.mamas.estate.domain.ContractType
+import com.sondahum.mamas.estate.domain.EstateType
 import com.sondahum.mamas.model.Role
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -65,13 +65,13 @@ abstract class AbstractMamasSearchTest {
     }
 
     @Test
-    List<String> randomPriceRangeGenerator() {
-        List<String> range = []
-        String min = RandomStringUtils.randomNumeric(8)
-        String max = RandomStringUtils.randomNumeric(8)
+    List<Long> randomPriceRangeGenerator() {
+        List<Long> range = []
+        Long min = Long.parseLong(RandomStringUtils.randomNumeric(8))
+        Long max = Long.parseLong(RandomStringUtils.randomNumeric(8))
 
-        while (Integer.parseInt(max) < Integer.parseInt(min))
-            max = RandomStringUtils.randomNumeric(8)
+        while (max < min)
+            max = Long.parseLong(RandomStringUtils.randomNumeric(8))
 
         range.add(min)
         range.add(max)
@@ -109,8 +109,8 @@ abstract class AbstractMamasSearchTest {
         List<Estate> result = []
 
         for (int i = 0; i < number; i++) {
-            List<String> randomMarketPrice = randomPriceRangeGenerator()
-            List<String> randomOwnerPrice = randomPriceRangeGenerator()
+            List<Long> randomMarketPrice = randomPriceRangeGenerator()
+            List<Long> randomOwnerPrice = randomPriceRangeGenerator()
 
             result.add(new Estate(
                     address1: randomStringGenerator(8),
@@ -141,7 +141,7 @@ abstract class AbstractMamasSearchTest {
      *
      ********************************/
     @Test
-    List<Bid> addBidForExistUser(int existUsers, List<User> userList) {
+    List<Bid> addBidForExistUser(int newUsers, int existUsers, List<User> userList) {
         if (existUsers > userList.size()) {
             logger.error("wrong exist user's bid info number.")
             throw new Exception()
@@ -159,7 +159,7 @@ abstract class AbstractMamasSearchTest {
         } // 여기서 bid 정보 넣을 userList의 index 뽑음
 
         indexes.each { index ->
-            List<String> randomBidPrice = randomPriceRangeGenerator()
+            List<Long> randomBidPrice = randomPriceRangeGenerator()
             String randomAction = randomNumbersGenerator(2) % 2 ? "sell" : "buy"
             result.add(new Bid(
                     user: userList[index],
@@ -171,7 +171,7 @@ abstract class AbstractMamasSearchTest {
         }
         for (int i = 0; i < newUsers; i++) {
             String randomAction = randomNumbersGenerator(2) % 2 ? "sell" : "buy"
-            List<String> randomBidPrice = randomPriceRangeGenerator()
+            List<Long> randomBidPrice = randomPriceRangeGenerator()
             result.add(new Bid(
                     user: userInfoGenerator(1).pop(),
                     action: randomAction,

@@ -1,8 +1,8 @@
-package com.sondahum.mamas.dto
+package com.sondahum.mamas.bid.dto
 
-import com.sondahum.mamas.domain.Bid
-import com.sondahum.mamas.domain.Estate
-import com.sondahum.mamas.domain.User
+import com.sondahum.mamas.bid.domain.Bid
+import com.sondahum.mamas.estate.domain.Estate
+import com.sondahum.mamas.user.domain.User
 import com.sondahum.mamas.model.Price
 
 import java.time.LocalDate
@@ -13,6 +13,11 @@ class BidDto {
     String estateName
     String action
     LocalDate createdDate
+
+    static class CreateReq {}
+    static class UpdateReq {}
+    static class Response {}
+    //remove 는 id가 바로 넘어가면 될듯!!
 
     Bid toEntity() {
         return new Bid(

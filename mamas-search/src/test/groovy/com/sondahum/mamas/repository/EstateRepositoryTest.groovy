@@ -1,7 +1,9 @@
 package com.sondahum.mamas.repository
 
 import com.sondahum.mamas.AbstractMamasSearchTest
-import com.sondahum.mamas.domain.Estate
+import com.sondahum.mamas.estate.domain.Estate
+import com.sondahum.mamas.estate.repository.EstateRepository
+import com.sondahum.mamas.user.repository.UserRepository
 import org.hamcrest.CoreMatchers
 import org.junit.Assert
 import org.junit.jupiter.api.Test

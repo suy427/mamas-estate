@@ -1,4 +1,4 @@
-package com.sondahum.mamas.model
+package com.sondahum.mamas.estate.domain
 
 enum ContractType {
     RENT(1,"MAMA"),

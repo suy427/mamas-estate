@@ -1,22 +1,24 @@
 package com.sondahum.mamas.repository
 
 import com.sondahum.mamas.AbstractMamasSearchTest
-import com.sondahum.mamas.domain.Bid
-import com.sondahum.mamas.domain.Estate
-import com.sondahum.mamas.domain.User
+import com.sondahum.mamas.bid.domain.Bid
+import com.sondahum.mamas.bid.repository.BidRepository
+import com.sondahum.mamas.estate.domain.Estate
+import com.sondahum.mamas.estate.repository.EstateRepository
+import com.sondahum.mamas.user.domain.User
+import com.sondahum.mamas.user.repository.UserRepository
 import org.hamcrest.CoreMatchers
 import org.junit.Assert
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.test.context.junit4.SpringRunner
 
 @DataJpaTest
 @RunWith(SpringRunner.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest extends AbstractMamasSearchTest{
 
     @Autowired UserRepository userRepository;
@@ -42,7 +44,7 @@ class UserRepositoryTest extends AbstractMamasSearchTest{
             Assert.assertThat(actual.getPhone(), CoreMatchers.is(saved.getPhone()))
             Assert.assertThat(actual.getRole(), CoreMatchers.is(saved.getRole()))
         }
-        println "hello"
+        println ""
     }
 
     /**
@@ -62,7 +64,7 @@ class UserRepositoryTest extends AbstractMamasSearchTest{
         List<User> initialCreatedUsers = userInfoGenerator(5)
         userRepository.saveAll(initialCreatedUsers)
 
-        List<Bid> initialCreatedBids = addBidForExistUser(3, initialCreatedUsers)
+        List<Bid> initialCreatedBids = addBidForExistUser(0,3, initialCreatedUsers)
         bidRepository.saveAll(initialCreatedBids)
 
         // bid정보를 생성하면서 estate정보가 생김 --> estate가 생기면서 user가 생김.
@@ -70,7 +72,6 @@ class UserRepositoryTest extends AbstractMamasSearchTest{
 
         List<User> savedUsers = userRepository.findAll()
         List<Bid> savedBids = bidRepository.findAll()
-
 
         println ""
     }
