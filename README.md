@@ -11,15 +11,10 @@
 ## Modules
 * mamas-api
 * mamas-search
-* mamas-ui
-* mamas-common
-* mamas-starter
-* mamas-config
+* mamas-insight
 
-### mamas-common
+
 ### mamas-search
 ### mamas-api
-### mamas-ui
-### mamas-starter
-### mamas-config
+### mamas-insight
 
