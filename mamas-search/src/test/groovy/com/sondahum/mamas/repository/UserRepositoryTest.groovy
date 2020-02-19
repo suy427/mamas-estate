@@ -4,7 +4,6 @@ import com.sondahum.mamas.AbstractMamasSearchTest
 import com.sondahum.mamas.domain.Bid
 import com.sondahum.mamas.domain.Estate
 import com.sondahum.mamas.domain.User
-import com.sondahum.mamas.model.Role
 import org.hamcrest.CoreMatchers
 import org.junit.Assert
 import org.junit.jupiter.api.Test
@@ -51,19 +50,19 @@ class UserRepositoryTest extends AbstractMamasSearchTest{
      * create user info --> create bid info --> check that bid info affects user info
      *
      * 1. create bid info of exist user --> check the user's bid list (default was null)
-     * 2. create bid info of new user --> check a new user has been created
-     *
      *
      *   [CURRENT SCENARIO]
      *   5명의 유저가 있고, 그 중 3명의 bid정보를 생성함.
-     *   그 외에 기존에 없던 유저의 새로운 3개의 bid정보를 생성함
+     *   1) bid정보 생성 --> estate정보 생성됨. --> estate owner정보(user정보 생성됨.)
+     *   2) bid의 action이 'sell' 일 경우 owner가 bid의 주인인 user여야함. // 그나마 간단
+     *   3) bid의 action이 'buy'이고
      */
     @Test
     void bidInfoCascadeTest() {
         List<User> initialCreatedUsers = userInfoGenerator(5)
         userRepository.saveAll(initialCreatedUsers)
 
-        List<Bid> initialCreatedBids = bidInfoGenerator(3, 3, initialCreatedUsers)
+        List<Bid> initialCreatedBids = addBidForExistUser(3, initialCreatedUsers)
         bidRepository.saveAll(initialCreatedBids)
 
         // bid정보를 생성하면서 estate정보가 생김 --> estate가 생기면서 user가 생김.

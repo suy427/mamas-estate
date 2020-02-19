@@ -141,7 +141,7 @@ abstract class AbstractMamasSearchTest {
      *
      ********************************/
     @Test
-    List<Bid> bidInfoGenerator(int newUsers, int existUsers,  List<User> userList) {
+    List<Bid> addBidForExistUser(int existUsers, List<User> userList) {
         if (existUsers > userList.size()) {
             logger.error("wrong exist user's bid info number.")
             throw new Exception()
