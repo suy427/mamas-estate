@@ -3,12 +3,9 @@ package com.sondahum.mamas.bid.domain
 import com.sondahum.mamas.estate.domain.Estate
 import com.sondahum.mamas.model.Price
 import com.sondahum.mamas.user.domain.User
-import lombok.Builder
-import lombok.NoArgsConstructor
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.format.annotation.DateTimeFormat
-
 import javax.persistence.AttributeOverride
 import javax.persistence.AttributeOverrides
 import javax.persistence.CascadeType
@@ -27,7 +24,6 @@ import javax.persistence.Table
 import java.time.LocalDate
 
 @Entity
-@NoArgsConstructor
 @Table(name = "bid")
 class Bid implements Serializable {
 
@@ -35,7 +31,7 @@ class Bid implements Serializable {
     @Column(name = "bid_id")
     Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     User user
 
@@ -43,7 +39,7 @@ class Bid implements Serializable {
     @Enumerated(EnumType.STRING)
     Action action
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "estate_id", nullable = false) // column name that reference in 'user' table
     Estate estate   // 이거다!!! 아~~ 진짜 관계지향 --> 객체지향으로 맵핑하는구나!!
 

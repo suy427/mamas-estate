@@ -5,12 +5,8 @@ import com.sondahum.mamas.bid.domain.Bid
 import com.sondahum.mamas.contract.domain.Contract
 import com.sondahum.mamas.estate.domain.Estate
 import com.sondahum.mamas.estate.domain.Status
+import com.sondahum.mamas.common.model.Role
 import com.sondahum.mamas.user.dto.UserDto
-import com.sondahum.mamas.model.Role
-import lombok.AccessLevel
-import lombok.Builder
-import lombok.Getter
-import lombok.NoArgsConstructor
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.format.annotation.DateTimeFormat
@@ -45,16 +41,16 @@ class User implements Serializable {
     @Column(name = "role")
     Role role
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     List<Bid> bidList = []
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner")
     List<Estate> estateList = []
 
-    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "seller")
     List<Contract> soldList = []
 
-    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "buyer")
     List<Contract> boughtList = []
 
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
@@ -73,7 +69,7 @@ class User implements Serializable {
         return bidList.findAll { (it.action == Action.BUY) && (it.estate.status == Status.ONSALE)}
     }
 
-    LocalDate getRecentContractDate() {
+    LocalDate getRecentContractedDate() {
         LocalDate result
 
         LocalDate lastSold = soldList.sort({
@@ -91,6 +87,12 @@ class User implements Serializable {
         }
 
         return result
+    }
+
+    void updateUserInfo(UserDto.UpdateReq userDto) {
+        this.name = userDto.name
+        this.phone = userDto.phone
+        this.role = Role.findByName(userDto.role)
     }
 
 

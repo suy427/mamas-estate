@@ -4,12 +4,9 @@ import com.sondahum.mamas.bid.domain.Bid
 import com.sondahum.mamas.model.Address
 import com.sondahum.mamas.model.Price
 import com.sondahum.mamas.user.domain.User
-import lombok.Builder
-import lombok.NoArgsConstructor
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.format.annotation.DateTimeFormat
-
 import javax.persistence.AttributeOverride
 import javax.persistence.AttributeOverrides
 import javax.persistence.CascadeType
@@ -29,7 +26,6 @@ import java.time.LocalDate
 
 
 @Entity
-@NoArgsConstructor
 @Table(name = "estate")
 class Estate implements Serializable {
 
@@ -72,11 +68,11 @@ class Estate implements Serializable {
     @Enumerated(EnumType.STRING)
     Status status
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     @JoinColumn(name = "bid_id")
     List<Bid> bidList
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "owner") // column name that reference in 'user' table
     User owner
 

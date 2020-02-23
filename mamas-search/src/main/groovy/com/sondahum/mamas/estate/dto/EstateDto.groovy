@@ -36,7 +36,7 @@ class EstateDto {
                     address: address,
                     area: area,
                     marketPriceRange: marketPriceRange,
-                    ownerRequirePriceRange: ownerRequirePriceRange
+                    ownerRequirePriceRange: ownerRequirePriceRange,
                     estateType: estateType,
                     contractType: contractType,
                     status: status,

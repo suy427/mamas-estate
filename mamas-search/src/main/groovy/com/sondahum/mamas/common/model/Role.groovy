@@ -1,4 +1,4 @@
-package com.sondahum.mamas.model
+package com.sondahum.mamas.common.model
 
 enum Role {
     MAMA(1,"MAMA"),

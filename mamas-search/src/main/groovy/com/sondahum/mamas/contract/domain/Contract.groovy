@@ -1,14 +1,15 @@
 package com.sondahum.mamas.contract.domain
 
+import com.sondahum.mamas.contract.dto.ContractDto
 import com.sondahum.mamas.estate.domain.Estate
+import com.sondahum.mamas.model.Price
 import com.sondahum.mamas.user.domain.User
-import lombok.Builder
-import lombok.NoArgsConstructor
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.format.annotation.DateTimeFormat
 import javax.persistence.CascadeType
 import javax.persistence.Column
+import javax.persistence.Embedded
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -19,7 +20,6 @@ import javax.persistence.Table
 import java.time.LocalDate
 
 @Entity
-@NoArgsConstructor
 @Table(name = "contract")
 class Contract implements Serializable {
 
@@ -27,18 +27,18 @@ class Contract implements Serializable {
     @Column(name = "contract_id")
     Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "seller", nullable = false)
     User seller
 
-    @ManyToOne(cascade = CascadeType.ALL) // this is additional
+    @ManyToOne
     @JoinColumn(name = "buyer", nullable = false)
     User buyer
 
     @Column(name = "price", nullable = false)
     Long price
 
-    @ManyToOne(cascade = CascadeType.ALL) //
+    @ManyToOne
     @JoinColumn(name = "estate_id", nullable = false)
     Estate estate
 
@@ -50,10 +50,11 @@ class Contract implements Serializable {
     @LastModifiedDate
     LocalDate modifiedDate
 
-    @Builder
-    Contract(User seller, User buyer, Long price) {
-        this.seller = seller
-        this.buyer = buyer
-        this.price = price
+    void updateContractInfo(ContractDto.UpdateReq contractDto) {
+        this.seller.name = contractDto.seller
+        this.buyer.name = contractDto.buyer
+        this.estate.name = contractDto.estate
+        this.price = contractDto.price
+        this.createdDate = contractDto.contractedDate
     }
 }
