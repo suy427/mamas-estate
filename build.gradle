@@ -27,11 +27,10 @@ buildscript {
 }
 
 wrapper {
-    gradleVersion = '4.10.3'
+    gradleVersion = '5.6.3'
 }
 
 subprojects {
-    apply plugin: 'groovy'
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'maven'
@@ -41,7 +40,7 @@ subprojects {
     version '1.0-SNAPSHOT'
     sourceCompatibility = 1.8
 
-    [compileGroovy, compileTestGroovy, compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
     repositories {
         // Use jcenter for resolving your dependencies.
@@ -54,8 +53,12 @@ subprojects {
 
 
     dependencies {
-        // Use the latest Groovy version for building this library
-        implementation group: 'org.codehaus.groovy', name: 'groovy-all', version:'2.5.6'
+        compileOnly 'org.projectlombok:lombok:1.18.12'
+        annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+        testCompileOnly 'org.projectlombok:lombok:1.18.12'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+
         // Use the awesome Spock testing and specification framework
         testImplementation 'org.spockframework:spock-core:1.2-groovy-2.5'
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
