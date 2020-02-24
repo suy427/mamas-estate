@@ -4,9 +4,7 @@ import com.sondahum.mamas.bid.domain.Bid;
 import com.sondahum.mamas.common.model.Address;
 import com.sondahum.mamas.common.model.Price;
 import com.sondahum.mamas.user.domain.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,11 +14,12 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
-@Table(name = "estate")
 @Builder
 @Getter
 @Setter
+@Entity
+@Table(name = "estate")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Estate implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,3 +75,4 @@ public class Estate implements Serializable {
     @LastModifiedDate
     private LocalDate modifiedDate;
 }
+

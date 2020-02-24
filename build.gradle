@@ -53,9 +53,10 @@ subprojects {
 
 
     dependencies {
+        // lombok
         compileOnly 'org.projectlombok:lombok:1.18.12'
         annotationProcessor 'org.projectlombok:lombok:1.18.12'
-
+        // lombok - for test
         testCompileOnly 'org.projectlombok:lombok:1.18.12'
         testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 

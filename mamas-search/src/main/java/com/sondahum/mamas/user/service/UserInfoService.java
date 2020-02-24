@@ -1,8 +1,6 @@
 package com.sondahum.mamas.user.service;
 
-import com.sondahum.mamas.common.AbstractService;
 import com.sondahum.mamas.user.dao.UserRepository;
-import com.sondahum.mamas.user.domain.SearchFilter;
 import com.sondahum.mamas.user.domain.User;
 import com.sondahum.mamas.user.dto.UserDto;
 import com.sondahum.mamas.user.exception.NoSuchUserException;
@@ -10,11 +8,10 @@ import com.sondahum.mamas.user.exception.UserAlreadyExistException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserInfoService extends AbstractService {
+public class UserInfoService {
 
     private final UserRepository userRepository;
 
@@ -41,7 +38,7 @@ public class UserInfoService extends AbstractService {
         return new UserDto.Response(user);
     }
 
-   @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public boolean isSamePersonExist(UserDto.CreateReq userDto) {
         Optional<User> optionalUser = userRepository.findByName(userDto.getName());
 
@@ -49,26 +46,32 @@ public class UserInfoService extends AbstractService {
             User user = optionalUser.get();
             return userDto.getPhone().equals(user.getPhone()); // 핸드폰 번호까지 비교해서 같으면 duplicate
         }
-
         return false;
     }
 
-    public UserDto.Response updateUserInfo(UserDto.UpdateReq userDto) {
-        Optional<User> optional = userRepository.findById(userDto.getId());
-        User user = optional.orElseThrow(NoSuchUserException::new);
+    public UserDto.Response updateUserInfo(Long id, UserDto.UpdateReq userDto) {
+        Optional<User> optional = userRepository.findById(id);
+        User user = optional.orElseThrow(() -> new NoSuchUserException(id));
 
         user.updateUserInfo(userDto);// 예제에 보면 따로 repository에 변경된 entity를 save하지 않는다.
-//        userRepository.save(user)
+//        userRepository.save(user) // TODO 이유 알아내기~~
 
         return new UserDto.Response(user);
     }
 
     public UserDto.Response deleteUserInfo(Long id) {
         Optional<User> optional = userRepository.findById(id);
-        User user = optional.orElseThrow(NoSuchUserException::new);
+        User user = optional.orElseThrow(() -> new NoSuchUserException(id));
 
         userRepository.deleteById(id);
 
         return new UserDto.Response(user);
+    }
+
+    public UserDto.Response getUserById(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        optionalUser.orElseThrow(() -> new NoSuchUserException(id));
+
+        return new UserDto.Response(optionalUser.get());
     }
 }
