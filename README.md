@@ -2,9 +2,8 @@
 
 ## Tech Stack
 * Java (1.8)
-* Groovy
 * Spring boot
-* JPA, Hibernate
+* JPA (Hibernate)
 * QueryDSL
 * Spring Data Jpa
 * Elasticsearch
