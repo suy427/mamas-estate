@@ -17,6 +17,7 @@ import java.time.LocalDate;
 @Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "contract")
 public class Contract implements Serializable, Comparable<Contract> {
 

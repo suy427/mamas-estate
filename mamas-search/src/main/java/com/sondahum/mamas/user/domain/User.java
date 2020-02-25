@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Table(name = "user")
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User implements Serializable {
 

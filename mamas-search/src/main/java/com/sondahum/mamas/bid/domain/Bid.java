@@ -16,7 +16,8 @@ import java.time.LocalDate;
 @Builder
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "bid")
 public class Bid implements Serializable {
 

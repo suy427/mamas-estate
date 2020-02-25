@@ -31,7 +31,7 @@ public class UserInfoService {
      */
     public UserDto.Response createNewUserInfo(UserDto.CreateReq userDto) {
         if (isSamePersonExist(userDto))
-            throw new UserAlreadyExistException();// TODO 이름이 같으면 A,B표시 등등 생각해보기
+            throw new UserAlreadyExistException(userDto.getName());// TODO 이름이 같으면 A,B표시 등등 생각해보기
 
         User user = userRepository.save(userDto.toEntity());
 

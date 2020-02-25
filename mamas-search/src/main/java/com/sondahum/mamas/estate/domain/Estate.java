@@ -19,7 +19,8 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "estate")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Estate implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
