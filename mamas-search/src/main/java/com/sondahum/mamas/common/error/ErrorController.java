@@ -52,7 +52,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse userAlreadyExistExceptionHandler(UserAlreadyExistException e) {
         final ErrorCode errorCode = ErrorCode.DUPLICATED_ENTITY;
-        logger.error(errorCode.getMessage(), e.getProperty() + e.getField());
+        logger.error(errorCode.getMessage(), e.getName() + e.getField());
         return buildError(errorCode);
     }
 

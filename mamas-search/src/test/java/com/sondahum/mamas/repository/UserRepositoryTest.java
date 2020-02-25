@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @DataJpaTest
@@ -30,7 +31,11 @@ class UserRepositoryTest extends AbstractMamasSearchTest{
 
     @Test
     void createUserTest() { // 잘 들어가는지 테스트
-        List<User> actualUsers = userInfoGenerator(10);
+        List<User> actualUsers = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            actualUsers.add(userInfoGenerator());
+        }
+
         userRepository.saveAll(actualUsers);
 
         List<User> savedUsers = userRepository.findAll();
@@ -46,35 +51,6 @@ class UserRepositoryTest extends AbstractMamasSearchTest{
             Assert.assertThat(actual.getPhone(), CoreMatchers.is(saved.getPhone()));
             Assert.assertThat(actual.getRole(), CoreMatchers.is(saved.getRole()));
         }
-        System.out.println("");
-    }
-
-    /**
-     * scenario
-     * create user info --> create bid info --> check that bid info affects user info
-     *
-     * 1. create bid info of exist user --> check the user's bid list (default was null)
-     *
-     *   [CURRENT SCENARIO]
-     *   5명의 유저가 있고, 그 중 3명의 bid정보를 생성함.
-     *   1) bid정보 생성 --> estate정보 생성됨. --> estate owner정보(user정보 생성됨.)
-     *   2) bid의 action이 'sell' 일 경우 owner가 bid의 주인인 user여야함. // 그나마 간단
-     *   3) bid의 action이 'buy'이고
-     */
-    @Test
-    void bidInfoCascadeTest() throws Exception {
-        List<User> initialCreatedUsers = userInfoGenerator(5);
-        userRepository.saveAll(initialCreatedUsers);
-
-        List<Bid> initialCreatedBids = addBidForExistUser(0,3, initialCreatedUsers);
-        bidRepository.saveAll(initialCreatedBids);
-
-        // bid정보를 생성하면서 estate정보가 생김 --> estate가 생기면서 user가 생김.
-        List<Estate> createdByBidEstates = estateRepository.findAll();
-
-        List<User> savedUsers = userRepository.findAll();
-        List<Bid> savedBids = bidRepository.findAll();
-
         System.out.println("");
     }
 

@@ -44,7 +44,7 @@ public class User implements Serializable {
     String name;
 
     @Column(name = "phone_number")
-    String phone;
+    Phone phone;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")

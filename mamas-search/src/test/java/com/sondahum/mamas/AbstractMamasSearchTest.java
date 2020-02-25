@@ -5,6 +5,7 @@ import com.sondahum.mamas.bid.domain.Bid;
 import com.sondahum.mamas.common.model.Address;
 import com.sondahum.mamas.common.model.Price;
 import com.sondahum.mamas.estate.domain.Estate;
+import com.sondahum.mamas.user.domain.Phone;
 import com.sondahum.mamas.user.domain.User;
 import com.sondahum.mamas.estate.domain.ContractType;
 import com.sondahum.mamas.estate.domain.EstateType;
@@ -34,56 +35,66 @@ public abstract class AbstractMamasSearchTest {
     }
 
     @Test
-    public String randomPhoneNumberGenerator() {
+    protected Phone randomPhoneNumberGenerator() {
         String middle = RandomStringUtils.randomNumeric(4);
         String last = RandomStringUtils.randomNumeric(4);
 
-        return "010-" + middle + "-" + last;
+        return Phone.builder().first("010").middle(middle).last(last).build();
     }
 
     @Test
-    public Long randomIdGenerator() {
+    protected Address randomAddressGenerator() {
+        return Address.builder()
+                .address1(randomStringGenerator(5))
+                .address2(randomStringGenerator(5))
+                .address3(randomStringGenerator(5)).build();
+    }
+
+    @Test
+    protected Long randomIdGenerator() {
         return random.nextLong();
     }
 
     @Test
-    public Integer randomNumbersGenerator(int length) {
+    protected Integer randomNumbersGenerator(int length) {
         return random.nextInt(length);
     }
 
     @Test
-    public Role randomRoleGenerator() {
+    protected Role randomRoleGenerator() {
         return Role.findByValue(random.nextInt(3) + 1);
     }
 
     @Test
-    public Names randomNameGenerator() {
+    protected Action randomActionGenerator() {
+        return Action.findByValue(random.nextInt(3) + 1);
+    }
+
+    @Test
+    protected Names randomNameGenerator() {
         return Names.findByValue(random.nextInt(29)+1);
     }
 
     @Test
-    public ContractType randomContractTypeGenerator() {
+    protected ContractType randomContractTypeGenerator() {
         return ContractType.findByValue(random.nextInt(3) + 1);
     }
 
     @Test
-    public EstateType randomEstateTypeGenerator() {
+    protected EstateType randomEstateTypeGenerator() {
         return EstateType.findByValue(random.nextInt(4) + 1);
     }
 
     @Test
-    public List<Long> randomPriceRangeGenerator() {
-        List<Long> range = new ArrayList<>();
+    protected Price randomPriceRangeGenerator() {
         Long min = Long.parseLong(RandomStringUtils.randomNumeric(8));
         Long max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
         while (max < min)
             max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
-        range.add(min);
-        range.add(max);
 
-        return range;
+        return Price.builder().minimum(min).maximum(max).build();
     }
 
     /********************************
@@ -91,17 +102,11 @@ public abstract class AbstractMamasSearchTest {
      *      USER INFO GENERATOR
      *
      ********************************/
-    public List<User> userInfoGenerator(int number) {
-        List<User> result = new ArrayList<>();
-
-        for (int i = 0; i < number; i++) {
-            result.add(User.builder()
-                    .name(randomNameGenerator().name)
-                    .phone(randomPhoneNumberGenerator())
-                    .role(randomRoleGenerator()).build()
-            );
-        }
-        return result;
+    protected User userInfoGenerator() {
+        return User.builder()
+                .name(randomNameGenerator().name)
+                .phone(randomPhoneNumberGenerator())
+                .role(randomRoleGenerator()).build();
     }
 
     /********************************
@@ -110,25 +115,15 @@ public abstract class AbstractMamasSearchTest {
      *
      ********************************/
     @Test
-    public List<Estate> estateInfoGenerator(int number) { // TODO 값 채워넣기
-        List<Estate> result = new ArrayList<>();
-
-        for (int i = 0; i < number; i++) {
-            List<Long> randomMarketPrice = randomPriceRangeGenerator();
-            List<Long> randomOwnerPrice = randomPriceRangeGenerator();
-
-            result.add(Estate.builder()
-                    .address(new Address())
-                    .area(randomNumbersGenerator(200).toString())
-                    .contractType(randomContractTypeGenerator())
-                    .estateType(randomEstateTypeGenerator())
-                    .marketPriceRange(new Price())
-                    .ownerRequirePriceRange(new Price())
-                    .owner(User.builder().build()).build()
-
-            );
-        }
-        return result;
+    protected Estate estateInfoGenerator(User owner) { // TODO 값 채워넣기
+        return Estate.builder()
+                .address(randomAddressGenerator())
+                .area(randomNumbersGenerator(200).toString())
+                .contractType(randomContractTypeGenerator())
+                .estateType(randomEstateTypeGenerator())
+                .marketPriceRange(randomPriceRangeGenerator())
+                .ownerRequirePriceRange(randomPriceRangeGenerator())
+                .owner(owner).build();
     }
 
 
@@ -138,44 +133,12 @@ public abstract class AbstractMamasSearchTest {
      *
      ********************************/
     @Test
-    public List<Bid> addBidForExistUser(int newUsers, int existUsers, List<User> userList) throws Exception {
-        if (existUsers > userList.size()) {
-            logger.error("wrong exist user's bid info number.");
-            throw new Exception();
-        }
-        List<Bid> result = new ArrayList<>();
-
-        List<Integer> indexes = new ArrayList<>();
-        for (int i = 0; i < existUsers; i++) {
-            int num = random.nextInt(userList.size());
-
-            while (indexes.contains(num)) // 중복 방지
-                num = random.nextInt(userList.size());
-
-            indexes.add(num);
-        } // 여기서 bid 정보 넣을 userList의 index 뽑음
-
-        for (Integer index : indexes) {
-            List<Long> randomBidPrice = randomPriceRangeGenerator();
-            String randomAction = randomNumbersGenerator(2) % 2 == 0 ? "sell" : "buy";
-            result.add(Bid.builder()
-                    .user(User.builder().build())
-                    .action(Action.BUY)
-                    .estate(Estate.builder().build())
-                    .priceRange(new Price()).build()
-            );
-        }
-
-        for (int i = 0; i < newUsers; i++) {
-            String randomAction = randomNumbersGenerator(2) % 2  == 0 ? "sell" : "buy";
-            List<Long> randomBidPrice = randomPriceRangeGenerator();
-            result.add(Bid.builder()
-                    .user(User.builder().build())
-                    .action(Action.BUY)
-                    .estate(Estate.builder().build())
-                    .priceRange(new Price()).build()
-            );
-        }
-        return result;
+    protected Bid bidInfoGenerator(User user, Action action, Estate estate) {
+        return Bid.builder()
+                .user(user)
+                .estate(estate)
+                .action(action)
+                .priceRange(randomPriceRangeGenerator()).build();
     }
+
 }
