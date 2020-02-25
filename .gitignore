@@ -9,6 +9,9 @@ HELP.md
 
 !gradle/wrapper/gradle-wrapper.jar
 
+gradlew
+gradlew.bat
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

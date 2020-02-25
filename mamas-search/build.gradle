@@ -1,41 +1,69 @@
-ext {
-    elasticsearchVersion = '7.5.1'
+plugins{
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 dependencies {
-    if (rootProject.findProject('mamas-common'))
-        compile project(':mamas-common')
 
-    implementation 'org.locationtech.jts:jts-core:1.16.1'
-    compile 'net.java.dev.jna:jna:4.2.2'
-    compile group: 'org.elasticsearch.client', name: 'elasticsearch-rest-client', version: "${elasticsearchVersion}"
-    compile group: 'org.elasticsearch.client', name: 'elasticsearch-rest-high-level-client', version:"${elasticsearchVersion}"
-
-    ///덩그러니 홀로 남겨진 spring-web...
+    // spring boot
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    // spring boot test
     compile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude module: 'junit'
+
+
+
+    // spring boot test... 위에거랑 뭐가 다르지..?ㅎㅎ
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+    compile "org.springframework.restdocs:spring-restdocs-mockmvc:${springRestDocVersion}"
 
-    // spring jpa
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.2.4.RELEASE'
 
-    // model mapper
-    compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.6'
 
-    // postgresql
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.9'
+
+    // spring data jpa
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springDataJpaVersion
+    // QueryDSL-JPA
+    compile group: 'com.querydsl', name: 'querydsl-jpa', version: '4.2.2'
+    // QueryDSL-APT
+    compile group: 'com.querydsl', name: 'querydsl-apt', version: '4.2.2'
+    // QueryDSL-CORE
+    compile group: "com.querydsl", name:"querydsl-core", version: "4.2.2"
+    // QueryDSL-COLLECTIONS
+    compile group:"com.querydsl", name:"querydsl-collections", version: "4.2.2"
 
     // h2 database
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
+    // mysql-connector
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude module: 'junit'
+
+
+    // random string generator (for test)
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+}
+
+def querydslSrcDir = 'src/main/generated'
+
+querydsl {
+    library = "com.querydsl:querydsl-apt"
+    jpa = true
+    querydslSourcesDir = querydslSrcDir
+}
+
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', querydslSrcDir]
+        }
     }
-
-
-    compile group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'
-    compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'
 }

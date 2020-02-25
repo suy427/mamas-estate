@@ -1,7 +1,0 @@
-
-dependencies {
-    if (rootProject.findProject('mamas-common'))
-        compile project(':mamas-common')
-
-    implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-}

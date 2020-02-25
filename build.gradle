@@ -6,10 +6,11 @@
  * User Manual available at https://docs.gradle.org/5.3.1/userguide/tutorial_groovy_projects.html
  */
 
-///의존성 관리가 어떻게 되고있는건지 잘 파악이 안된다....ㅠㅠㅜㅠㅜㅠㅜㅠㅜㅠㅜㅠㅜ
 buildscript {
     ext {
         springBootVersion = '2.2.2.RELEASE'
+        springRestDocVersion = '2.0.4.RELEASE'
+        springDataJpaVersion = '2.2.4.RELEASE'
     }
 
     repositories {
@@ -22,27 +23,24 @@ buildscript {
 
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-//        classpath 'io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE'
     }
 }
 
 wrapper {
-    gradleVersion = '4.10.3'
+    gradleVersion = '5.6.3'
 }
 
 subprojects {
-    apply plugin: 'groovy'
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'maven'
     apply plugin: 'org.springframework.boot'
-//    apply plugin: 'io.spring.dependency-management'
 
     group 'com.sondahum.mamas'
     version '1.0-SNAPSHOT'
     sourceCompatibility = 1.8
 
-    [compileGroovy, compileTestGroovy, compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
     repositories {
         // Use jcenter for resolving your dependencies.
@@ -55,8 +53,13 @@ subprojects {
 
 
     dependencies {
-        // Use the latest Groovy version for building this library
-        implementation group: 'org.codehaus.groovy', name: 'groovy-all', version:'2.5.6'
+        // lombok
+        compileOnly 'org.projectlombok:lombok:1.18.12'
+        annotationProcessor 'org.projectlombok:lombok:1.18.12'
+        // lombok - for test
+        testCompileOnly 'org.projectlombok:lombok:1.18.12'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+
         // Use the awesome Spock testing and specification framework
         testImplementation 'org.spockframework:spock-core:1.2-groovy-2.5'
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
