@@ -1,6 +1,7 @@
 package com.sondahum.mamas.user.dto;
 
 import com.sondahum.mamas.common.model.Role;
+import com.sondahum.mamas.user.domain.Phone;
 import com.sondahum.mamas.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class UserDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CreateReq {
         private String name;
-        private String phone;
+        private Phone phone;
         private String role;
 
         public User toEntity() {
@@ -33,14 +34,14 @@ public class UserDto {
     public static class UpdateReq {
         private Long id;
         private String name;
-        private String phone;
+        private Phone phone;
         private String role;
     }
 
     public static class Response {
         private Long id;
         private String name;
-        private String phone;
+        private Phone phone;
         private Role role;
         private Integer owningEstateAmount;
         private Integer soldEstateAmount;
