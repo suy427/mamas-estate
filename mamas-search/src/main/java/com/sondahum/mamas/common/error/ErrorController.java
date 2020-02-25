@@ -37,22 +37,22 @@ class ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         final List<ErrorResponse.FieldError> fieldErrors = getFieldErrors(e.getBindingResult());
-        return buildFieldErrors(ErrorCode.INPUT_VALUE_INVALID, fieldErrors);
+        return buildFieldErrors(ErrorCode.INVALID_INPUT, fieldErrors);
     }
 
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse handleBindException(BindException e) {
         final List<ErrorResponse.FieldError> fieldErrors = getFieldErrors(e.getBindingResult());
-        return buildFieldErrors(ErrorCode.INPUT_VALUE_INVALID, fieldErrors);
+        return buildFieldErrors(ErrorCode.INVALID_INPUT, fieldErrors);
     }
 
 
     @ExceptionHandler(UserAlreadyExistException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleConstraintViolationException(UserAlreadyExistException e) {
+    protected ErrorResponse userAlreadyExistExceptionHandler(UserAlreadyExistException e) {
         final ErrorCode errorCode = ErrorCode.DUPLICATED_ENTITY;
-        logger.error(errorCode.getMessage(), e.() + e.getField());
+        logger.error(errorCode.getMessage(), e.getProperty() + e.getField());
         return buildError(errorCode);
     }
 
@@ -60,7 +60,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         logger.error(e.getMessage());
-        return buildError(ErrorCode.INPUT_VALUE_INVALID);
+        return buildError(ErrorCode.INVALID_INPUT);
     }
 
 
