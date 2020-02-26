@@ -1,7 +1,7 @@
 package com.sondahum.mamas.user;
 
 import com.sondahum.mamas.common.model.PageRequest;
-import com.sondahum.mamas.user.domain.SearchFilter;
+import com.sondahum.mamas.user.domain.UserSearchFilter;
 import com.sondahum.mamas.user.dto.UserDto;
 import com.sondahum.mamas.user.service.UserInfoService;
 import com.sondahum.mamas.user.service.UserSearchService;
@@ -35,7 +35,7 @@ class UserController {
 
     @GetMapping
     public Page<UserDto.Response> getUsers( // 이걸로 검색과 전체 유저 불러오기 가능
-            @RequestParam(name = "type") final SearchFilter filter,
+            @RequestParam(name = "type") final UserSearchFilter filter,
             @RequestParam(name = "value", required = false) final String value,
             final PageRequest pageRequest
     ) {

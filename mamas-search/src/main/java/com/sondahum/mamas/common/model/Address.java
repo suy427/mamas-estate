@@ -14,4 +14,9 @@ public class Address {
     private String address2;
     private String address3;
 
+    @Override
+    public String toString() {
+        return address1 + " " + address2 + " " + address3;
+    }
+
 }

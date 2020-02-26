@@ -2,13 +2,11 @@ package com.sondahum.mamas.estate.service;
 
 import com.querydsl.jpa.JPQLQuery;
 import com.sondahum.mamas.estate.domain.Estate;
+import com.sondahum.mamas.estate.domain.EstateSearchFilter;
 import com.sondahum.mamas.estate.domain.QEstate;
-import com.sondahum.mamas.user.domain.QUser;
-import com.sondahum.mamas.user.domain.SearchFilter;
-import com.sondahum.mamas.user.domain.User;
+import com.sondahum.mamas.user.domain.UserSearchFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Service;
@@ -25,25 +23,28 @@ public class EstateSearchService extends QuerydslRepositorySupport {
         super(Estate.class);
     }
 
-    public Page<Estate> search(final SearchFilter filter, final String value, final Pageable pageable) {
-        final QEstate user = QEstate.estate;
+    public Page<Estate> search(final EstateSearchFilter filter, final String value, final Pageable pageable) {
+        final QEstate estate = QEstate.estate;
         final JPQLQuery<Estate> query;
 
         switch (filter) {
             case NAME: // 이름에 value가 포함되는지. 성, 이름, 전체이름으로 가능. --> TODO 성으로 찾는건 좀 다를수도 있다..!
-                query = from(user)
-                        .where(user.name.likeIgnoreCase(value + "%"));
+                query = from(estate)
+                        .where(estate.name.likeIgnoreCase(value + "%"));
                 break;
-            case PHONE:
-                query = from(user)
-                        .where(user.phone.likeIgnoreCase(value + "%"));
+            case ADDRESS:
+                query = from(estate)
+                        .where(estate.address.address1.likeIgnoreCase(value + "%")
+                            .or(estate.address.address2.likeIgnoreCase(value + "%"))
+                            .or(estate.address.address3.likeIgnoreCase(value + "%"))
+                        );
                 break;
-            case ROLE:
-                query = from(user)
-                        .where(user.role.stringValue().likeIgnoreCase(value + "%"));
+            case OWNER:
+                query = from(estate)
+                        .where(estate.owner.name.likeIgnoreCase(value + "%"));
                 break;
             case ALL:
-                query = from(user).fetchAll();
+                query = from(estate).fetchAll();
                 break;
             default:
                 throw new IllegalArgumentException();

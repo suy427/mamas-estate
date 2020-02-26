@@ -2,7 +2,7 @@ package com.sondahum.mamas.user.service;
 
 import com.querydsl.jpa.JPQLQuery;
 import com.sondahum.mamas.user.domain.QUser;
-import com.sondahum.mamas.user.domain.SearchFilter;
+import com.sondahum.mamas.user.domain.UserSearchFilter;
 import com.sondahum.mamas.user.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,7 +21,7 @@ public class UserSearchService extends QuerydslRepositorySupport {
         super(User.class);
     }
 
-    public Page<User> search(final SearchFilter filter, final String value, final Pageable pageable) {
+    public Page<User> search(final UserSearchFilter filter, final String value, final Pageable pageable) {
         final QUser user = QUser.user;
         final JPQLQuery<User> query;
 
@@ -32,7 +32,7 @@ public class UserSearchService extends QuerydslRepositorySupport {
                 break;
             case PHONE:
                 query = from(user)
-                        .where(user.phone.likeIgnoreCase(value + "%"));
+                        .where(user.phone.whole.likeIgnoreCase(value + "%"));
                 break;
             case ROLE:
                 query = from(user)

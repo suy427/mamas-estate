@@ -1,19 +1,20 @@
 package com.sondahum.mamas.estate.service;
 
+import com.sondahum.mamas.estate.dto.EstateDto;
 import com.sondahum.mamas.user.dto.UserDto;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EstateInfoService {
-    public UserDto.Response getEstateById(long id) {
+    public EstateDto.Response getEstateById(long id) {
         return null;
     }
 
-    public UserDto.Response updateEstateInfo(long id, UserDto.UpdateReq dto) {
+    public EstateDto.Response updateEstateInfo(long id, EstateDto.UpdateReq dto) {
         return null;
     }
 
-    public UserDto.Response createNewEstateInfo(UserDto.CreateReq userDto) {
+    public EstateDto.Response createNewEstateInfo(EstateDto.CreateReq userDto) {
         return null;
     }
 }

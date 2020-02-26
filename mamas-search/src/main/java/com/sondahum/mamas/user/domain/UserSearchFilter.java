@@ -1,5 +1,5 @@
 package com.sondahum.mamas.user.domain;
 
-public enum SearchFilter {
+public enum UserSearchFilter {
     NAME, PHONE, ROLE, ALL;
 }
