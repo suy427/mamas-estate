@@ -34,10 +34,6 @@ public class UserSearchService extends QuerydslRepositorySupport {
                 query = from(user)
                         .where(user.phone.whole.likeIgnoreCase(value + "%"));
                 break;
-            case ROLE:
-                query = from(user)
-                        .where(user.role.stringValue().likeIgnoreCase(value + "%"));
-                break;
             case ALL:
                 query = from(user).fetchAll();
                 break;
