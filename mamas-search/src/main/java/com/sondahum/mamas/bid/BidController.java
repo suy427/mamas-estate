@@ -4,9 +4,7 @@ import com.sondahum.mamas.bid.dto.BidDto;
 import com.sondahum.mamas.bid.service.BidInfoService;
 import com.sondahum.mamas.bid.service.BidSearchService;
 import com.sondahum.mamas.common.model.PageRequest;
-import com.sondahum.mamas.contract.dto.ContractDto;
 import com.sondahum.mamas.user.domain.UserSearchFilter;
-import com.sondahum.mamas.user.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -30,28 +28,22 @@ public class BidController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BidDto.Response createNewBid(@RequestBody @Valid BidDto.CreateReq bidDto) {
-        return bidInfoService.createNewUserInfo(bidDto);
+    public BidDto.DetailResponse createBid(@RequestBody @Valid BidDto.CreateReq bidDto) {
+        return bidInfoService.createBid(bidDto);
     }
 
     @GetMapping
-    public Page<BidDto.Response> getBids( // 이걸로 검색과 전체 유저 불러오기 가능
-                                                @RequestParam(name = "type") final UserSearchFilter filter,
-                                                @RequestParam(name = "value", required = false) final String value,
-                                                final PageRequest pageRequest
+    public Page<BidDto.DetailResponse> searchBids( // 이걸로 검색과 전체 유저 불러오기 가능
+                                                   @RequestParam(name = "type") final UserSearchFilter filter,
+                                                   @RequestParam(name = "value", required = false) final String value,
+                                                   final PageRequest pageRequest
     ) {
-        return bidSearchService.search(filter, value, pageRequest.of()).map(BidDto.Response::new);
-    }
-
-    @GetMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public BidDto.Response getBid(@PathVariable final long id) {
-        return bidInfoService.getUserById(id);
+        return bidSearchService.search(filter, value, pageRequest.of()).map(BidDto.DetailResponse::new);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public BidDto.Response updateBidInfo(@PathVariable final long id, @RequestBody final BidDto.UpdateReq dto) {
+    public BidDto.DetailResponse updateBidInfo(@PathVariable final long id, @RequestBody final BidDto.UpdateReq dto) {
         return bidInfoService.updateUserInfo(id, dto);
     }
 }

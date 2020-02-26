@@ -56,7 +56,7 @@ public class QBid extends EntityPathBase<Bid> {
         super(type, metadata, inits);
         this.estate = inits.isInitialized("estate") ? new com.sondahum.mamas.estate.domain.QEstate(forProperty("estate"), inits.get("estate")) : null;
         this.priceRange = inits.isInitialized("priceRange") ? new com.sondahum.mamas.common.model.QPrice(forProperty("priceRange")) : null;
-        this.user = inits.isInitialized("user") ? new com.sondahum.mamas.user.domain.QUser(forProperty("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.sondahum.mamas.user.domain.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

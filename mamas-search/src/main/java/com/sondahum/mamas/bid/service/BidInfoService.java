@@ -16,15 +16,12 @@ public class BidInfoService {
         this.bidRepository = bidRepository;
     }
 
-    public BidDto.Response createNewUserInfo(BidDto.CreateReq bidDto) {
+
+    public BidDto.DetailResponse createBid(BidDto.CreateReq bidDto) {
         return null;
     }
 
-    public BidDto.Response getUserById(long id) {
-        return null;
-    }
-
-    public BidDto.Response updateUserInfo(long id, BidDto.UpdateReq dto) {
+    public BidDto.DetailResponse updateUserInfo(long id, BidDto.UpdateReq dto) {
         return null;
     }
 }

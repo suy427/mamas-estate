@@ -24,7 +24,7 @@ public class QEstate extends EntityPathBase<Estate> {
 
     public final com.sondahum.mamas.common.model.QAddress address;
 
-    public final StringPath area = createString("area");
+    public final NumberPath<Double> area = createNumber("area", Double.class);
 
     public final ListPath<com.sondahum.mamas.bid.domain.Bid, com.sondahum.mamas.bid.domain.QBid> bidList = this.<com.sondahum.mamas.bid.domain.Bid, com.sondahum.mamas.bid.domain.QBid>createList("bidList", com.sondahum.mamas.bid.domain.Bid.class, com.sondahum.mamas.bid.domain.QBid.class, PathInits.DIRECT2);
 
@@ -68,7 +68,7 @@ public class QEstate extends EntityPathBase<Estate> {
         super(type, metadata, inits);
         this.address = inits.isInitialized("address") ? new com.sondahum.mamas.common.model.QAddress(forProperty("address")) : null;
         this.marketPriceRange = inits.isInitialized("marketPriceRange") ? new com.sondahum.mamas.common.model.QPrice(forProperty("marketPriceRange")) : null;
-        this.owner = inits.isInitialized("owner") ? new com.sondahum.mamas.user.domain.QUser(forProperty("owner")) : null;
+        this.owner = inits.isInitialized("owner") ? new com.sondahum.mamas.user.domain.QUser(forProperty("owner"), inits.get("owner")) : null;
         this.ownerRequirePriceRange = inits.isInitialized("ownerRequirePriceRange") ? new com.sondahum.mamas.common.model.QPrice(forProperty("ownerRequirePriceRange")) : null;
     }
 

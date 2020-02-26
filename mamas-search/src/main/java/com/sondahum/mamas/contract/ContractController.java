@@ -6,7 +6,6 @@ import com.sondahum.mamas.contract.service.ContractSearchService;
 import com.sondahum.mamas.contract.service.ContractService;
 
 import com.sondahum.mamas.user.domain.UserSearchFilter;
-import com.sondahum.mamas.user.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -30,28 +29,22 @@ public class ContractController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ContractDto.Response createNewEstate(@RequestBody @Valid ContractDto.CreateReq userDto) {
-        return contractService.createNewUserInfo(userDto);
+    public ContractDto.DetailResponse createContract(@RequestBody @Valid ContractDto.CreateReq userDto) {
+        return contractService.createContractInfo(userDto);
     }
 
     @GetMapping
-    public Page<ContractDto.Response> getEstates( // 이걸로 검색과 전체 유저 불러오기 가능
-                                            @RequestParam(name = "type") final UserSearchFilter filter,
-                                            @RequestParam(name = "value", required = false) final String value,
-                                            final PageRequest pageRequest
+    public Page<ContractDto.DetailResponse> searchContracts( // 이걸로 검색과 전체 유저 불러오기 가능
+                                                             @RequestParam(name = "type") final UserSearchFilter filter,
+                                                             @RequestParam(name = "value", required = false) final String value,
+                                                             final PageRequest pageRequest
     ) {
-        return contractSearchService.search(filter, value, pageRequest.of()).map(ContractDto.Response::new);
-    }
-
-    @GetMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public ContractDto.Response getEstate(@PathVariable final long id) {
-        return contractService.getUserById(id);
+        return contractSearchService.search(filter, value, pageRequest.of()).map(ContractDto.DetailResponse::new);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public ContractDto.Response updateEstateInfo(@PathVariable final long id, @RequestBody final ContractDto.UpdateReq dto) {
-        return contractService.updateUserInfo(id, dto);
+    public ContractDto.DetailResponse updateContractInfo(@PathVariable final long id, @RequestBody final ContractDto.UpdateReq dto) {
+        return contractService.updateContractInfo(id, dto);
     }
 }

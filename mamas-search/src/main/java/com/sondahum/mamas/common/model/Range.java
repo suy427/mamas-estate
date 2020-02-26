@@ -8,7 +8,7 @@ import javax.persistence.Embeddable;
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Price {
+public class Range {
     private Long minimum;
     private Long maximum;
 }

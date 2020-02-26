@@ -18,6 +18,8 @@ public class QUser extends EntityPathBase<User> {
 
     private static final long serialVersionUID = -317422971L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QUser user = new QUser("user");
 
     public final ListPath<com.sondahum.mamas.bid.domain.Bid, com.sondahum.mamas.bid.domain.QBid> bidList = this.<com.sondahum.mamas.bid.domain.Bid, com.sondahum.mamas.bid.domain.QBid>createList("bidList", com.sondahum.mamas.bid.domain.Bid.class, com.sondahum.mamas.bid.domain.QBid.class, PathInits.DIRECT2);
@@ -34,22 +36,31 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath name = createString("name");
 
-    public final StringPath phone = createString("phone");
+    public final QPhone phone;
 
     public final EnumPath<com.sondahum.mamas.common.model.Role> role = createEnum("role", com.sondahum.mamas.common.model.Role.class);
 
     public final ListPath<com.sondahum.mamas.contract.domain.Contract, com.sondahum.mamas.contract.domain.QContract> soldList = this.<com.sondahum.mamas.contract.domain.Contract, com.sondahum.mamas.contract.domain.QContract>createList("soldList", com.sondahum.mamas.contract.domain.Contract.class, com.sondahum.mamas.contract.domain.QContract.class, PathInits.DIRECT2);
 
     public QUser(String variable) {
-        super(User.class, forVariable(variable));
+        this(User.class, forVariable(variable), INITS);
     }
 
     public QUser(Path<? extends User> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QUser(PathMetadata metadata) {
-        super(User.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QUser(PathMetadata metadata, PathInits inits) {
+        this(User.class, metadata, inits);
+    }
+
+    public QUser(Class<? extends User> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.phone = inits.isInitialized("phone") ? new QPhone(forProperty("phone")) : null;
     }
 
 }

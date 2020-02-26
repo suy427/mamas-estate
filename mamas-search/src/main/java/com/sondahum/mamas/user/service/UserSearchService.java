@@ -1,6 +1,6 @@
 package com.sondahum.mamas.user.service;
 
-import com.querydsl.core.BooleanBuilder;
+
 import com.querydsl.jpa.JPQLQuery;
 import com.sondahum.mamas.user.domain.QUser;
 import com.sondahum.mamas.user.domain.UserSearchFilter;
@@ -35,13 +35,17 @@ public class UserSearchService extends QuerydslRepositorySupport {
                 query = from(user)
                         .where(user.phone.whole.likeIgnoreCase(value + "%"));
                 break;
+            case ROLE:
+                query = from(user)
+                        .where(user.role.stringValue().eq(value));
+                break;
             case ALL:
                 query = from(user).fetchAll();
                 break;
             default:
                 throw new IllegalArgumentException();
         }
-        final List<User> userList = getQuerydsl().applyPagination(pageable, query).fetch();
+        final List<User> userList = getQuerydsl().applyPagination(pageable, query).fetch(); // 결과가 0개 일수도 있다.
         return new PageImpl<>(userList, pageable, query.fetchCount());
     }
 }

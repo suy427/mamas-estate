@@ -54,9 +54,9 @@ public class QContract extends EntityPathBase<Contract> {
 
     public QContract(Class<? extends Contract> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.buyer = inits.isInitialized("buyer") ? new com.sondahum.mamas.user.domain.QUser(forProperty("buyer")) : null;
+        this.buyer = inits.isInitialized("buyer") ? new com.sondahum.mamas.user.domain.QUser(forProperty("buyer"), inits.get("buyer")) : null;
         this.estate = inits.isInitialized("estate") ? new com.sondahum.mamas.estate.domain.QEstate(forProperty("estate"), inits.get("estate")) : null;
-        this.seller = inits.isInitialized("seller") ? new com.sondahum.mamas.user.domain.QUser(forProperty("seller")) : null;
+        this.seller = inits.isInitialized("seller") ? new com.sondahum.mamas.user.domain.QUser(forProperty("seller"), inits.get("seller")) : null;
     }
 
 }

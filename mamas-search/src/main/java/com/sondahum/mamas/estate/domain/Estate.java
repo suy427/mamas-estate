@@ -2,7 +2,7 @@ package com.sondahum.mamas.estate.domain;
 
 import com.sondahum.mamas.bid.domain.Bid;
 import com.sondahum.mamas.common.model.Address;
-import com.sondahum.mamas.common.model.Price;
+import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.user.domain.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -34,7 +34,7 @@ public class Estate implements Serializable {
     private Address address;
 
     @Column(name = "area")
-    private String area;
+    private Double area;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "contract_type")
@@ -48,13 +48,13 @@ public class Estate implements Serializable {
     @AttributeOverrides({
             @AttributeOverride(name = "minimum", column = @Column(name = "market_min_price"))
             , @AttributeOverride(name = "maximum", column = @Column(name = "market_max_price"))})
-    private Price marketPriceRange;
+    private Range marketPriceRange;
 
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "minimum", column = @Column(name = "owner_min_price"))
             , @AttributeOverride(name = "maximum", column = @Column(name = "owner_max_price"))})
-    private Price ownerRequirePriceRange;
+    private Range ownerRequirePriceRange;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

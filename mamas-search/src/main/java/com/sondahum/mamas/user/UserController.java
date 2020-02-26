@@ -29,28 +29,28 @@ class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto.Response createNewUser(@RequestBody @Valid UserDto.CreateReq userDto) {
-        return userInfoService.createNewUserInfo(userDto);
+    public UserDto.DetailResponse createUser(@RequestBody @Valid UserDto.CreateReq userDto) {
+        return userInfoService.createUserInfo(userDto);
     }
 
     @GetMapping
-    public Page<UserDto.Response> getUsers( // 이걸로 검색과 전체 유저 불러오기 가능
-            @RequestParam(name = "type") final UserSearchFilter filter,
-            @RequestParam(name = "value", required = false) final String value,
-            final PageRequest pageRequest
+    public Page<UserDto.SearchResponse> searchUsers( // 서치 결과는 목록형으로... 그걸 누르면 디테일 정보 확인하게끔
+                                                     @RequestParam(name = "type") final UserSearchFilter filter,
+                                                     @RequestParam(name = "value", required = false) final String value,
+                                                     final PageRequest pageRequest
     ) {
-        return userSearchService.search(filter, value, pageRequest.of()).map(UserDto.Response::new);
+        return userSearchService.search(filter, value, pageRequest.of()).map(UserDto.SearchResponse::new);
     }
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public UserDto.Response getUser(@PathVariable final long id) {
+    public UserDto.DetailResponse getUserDetail(@PathVariable final long id) {
         return userInfoService.getUserById(id);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public UserDto.Response updateMyAccount(@PathVariable final long id, @RequestBody final UserDto.UpdateReq dto) {
+    public UserDto.DetailResponse updateUserInfo(@PathVariable final long id, @RequestBody final UserDto.UpdateReq dto) {
         return userInfoService.updateUserInfo(id, dto);
     }
 

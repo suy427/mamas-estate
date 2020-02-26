@@ -38,7 +38,21 @@ public class UserDto {
         private String role;
     }
 
-    public static class Response {
+    public static class SearchResponse {
+        private Long id;
+        private String name;
+        private Phone phone;
+        private Role role;
+
+        public SearchResponse(User user) {
+            this.id = user.getId();
+            this.name = user.getName();
+            this.phone = user.getPhone();
+            this.role = user.getRole();
+        }
+    }
+
+    public static class DetailResponse {
         private Long id;
         private String name;
         private Phone phone;
@@ -49,7 +63,7 @@ public class UserDto {
         private Integer boughtEstateAmount;
         private LocalDate recentContractDate;
 
-        public Response(User user) {
+        public DetailResponse(User user) {
             this.id = user.getId();
             this.name = user.getName();
             this.phone = user.getPhone();

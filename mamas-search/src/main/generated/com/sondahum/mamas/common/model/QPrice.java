@@ -13,7 +13,7 @@ import com.querydsl.core.types.Path;
  * QPrice is a Querydsl query type for Price
  */
 @Generated("com.querydsl.codegen.EmbeddableSerializer")
-public class QPrice extends BeanPath<Price> {
+public class QPrice extends BeanPath<Range> {
 
     private static final long serialVersionUID = 1103056692L;
 
@@ -24,15 +24,15 @@ public class QPrice extends BeanPath<Price> {
     public final NumberPath<Long> minimum = createNumber("minimum", Long.class);
 
     public QPrice(String variable) {
-        super(Price.class, forVariable(variable));
+        super(Range.class, forVariable(variable));
     }
 
-    public QPrice(Path<? extends Price> path) {
+    public QPrice(Path<? extends Range> path) {
         super(path.getType(), path.getMetadata());
     }
 
     public QPrice(PathMetadata metadata) {
-        super(Price.class, metadata);
+        super(Range.class, metadata);
     }
 
 }

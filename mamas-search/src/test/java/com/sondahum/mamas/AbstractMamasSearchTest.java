@@ -3,7 +3,7 @@ package com.sondahum.mamas;
 import com.sondahum.mamas.bid.domain.Action;
 import com.sondahum.mamas.bid.domain.Bid;
 import com.sondahum.mamas.common.model.Address;
-import com.sondahum.mamas.common.model.Price;
+import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.estate.domain.Estate;
 import com.sondahum.mamas.user.domain.Phone;
 import com.sondahum.mamas.user.domain.User;
@@ -15,8 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public abstract class AbstractMamasSearchTest {
@@ -86,7 +84,7 @@ public abstract class AbstractMamasSearchTest {
     }
 
     @Test
-    protected Price randomPriceRangeGenerator() {
+    protected Range randomPriceRangeGenerator() {
         Long min = Long.parseLong(RandomStringUtils.randomNumeric(8));
         Long max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
@@ -94,7 +92,7 @@ public abstract class AbstractMamasSearchTest {
             max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
 
-        return Price.builder().minimum(min).maximum(max).build();
+        return Range.builder().minimum(min).maximum(max).build();
     }
 
     /********************************

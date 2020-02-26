@@ -13,15 +13,12 @@ public class ContractService {
         this.contractRepository = contractRepository;
     }
 
-    public ContractDto.Response createNewUserInfo(ContractDto.CreateReq userDto) {
+
+    public ContractDto.DetailResponse createContractInfo(ContractDto.CreateReq userDto) {
         return null;
     }
 
-    public ContractDto.Response updateUserInfo(long id, ContractDto.UpdateReq dto) {
-        return null;
-    }
-
-    public ContractDto.Response getUserById(long id) {
+    public ContractDto.DetailResponse updateContractInfo(long id, ContractDto.UpdateReq dto) {
         return null;
     }
 }

@@ -43,7 +43,7 @@ public class ContractDto {
         private LocalDate contractedDate;
     }
 
-    public static class Response {
+    public static class DetailResponse {
         private Long id;
         private String seller;
         private String buyer;
@@ -51,7 +51,7 @@ public class ContractDto {
         private Long price;
         private LocalDate contractedDate;
 
-        public Response(Contract contract) {
+        public DetailResponse(Contract contract) {
             this.id = contract.getId();
             this.seller = contract.getSeller().getName();
             this.buyer = contract.getBuyer().getName();
