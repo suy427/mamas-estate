@@ -1,5 +1,6 @@
 package com.sondahum.mamas.user.service;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import com.sondahum.mamas.user.domain.QUser;
 import com.sondahum.mamas.user.domain.UserSearchFilter;

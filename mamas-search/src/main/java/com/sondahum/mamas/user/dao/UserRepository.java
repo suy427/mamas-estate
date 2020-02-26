@@ -2,6 +2,7 @@ package com.sondahum.mamas.user.dao;
 
 import com.sondahum.mamas.common.model.Role;
 import com.sondahum.mamas.user.domain.User;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByName(String name);
+    List<User> findAllByNameLike(String name);
 
     List<User> findByRole(Role role);
 
