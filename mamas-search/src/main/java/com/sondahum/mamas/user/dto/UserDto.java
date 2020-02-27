@@ -1,5 +1,6 @@
 package com.sondahum.mamas.user.dto;
 
+import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.common.model.Role;
 import com.sondahum.mamas.user.domain.Phone;
 import com.sondahum.mamas.user.domain.User;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class UserDto {
 
@@ -36,6 +38,15 @@ public class UserDto {
         private String name;
         private Phone phone;
         private String role;
+    }
+
+    @Getter
+    public static class SearchReq {
+        private String name;
+        private Phone phone;
+        private Role role;
+        private Range.DateRange bidDate;
+        private Range.DateRange contractDate;
     }
 
     public static class SearchResponse {

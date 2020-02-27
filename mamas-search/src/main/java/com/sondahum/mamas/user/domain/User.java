@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Entity
@@ -84,6 +85,13 @@ public class User implements Serializable {
                                 && bid.getEstate().getStatus() == Status.ONSALE
                 )
                 .collect(Collectors.toList());
+    }
+
+    public LocalDate getRecentBidDate() {
+        Optional<Bid> optionalBid = bidList.stream()
+                .max(Bid::compareTo);
+
+        return optionalBid.map(Bid::getCreatedDate).orElse(null);
     }
 
     public LocalDate getRecentContractedDate() { // TODO 쌉 하드코딩...

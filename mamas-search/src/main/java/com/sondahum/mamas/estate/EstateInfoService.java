@@ -1,9 +1,12 @@
-package com.sondahum.mamas.estate.service;
+package com.sondahum.mamas.estate;
 
+import com.sondahum.mamas.bid.domain.Bid;
 import com.sondahum.mamas.estate.dao.EstateRepository;
 import com.sondahum.mamas.estate.domain.Estate;
 import com.sondahum.mamas.estate.dto.EstateDto;
 import com.sondahum.mamas.estate.exception.EstateAlreadyExistException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,5 +51,18 @@ public class EstateInfoService {
 
     public EstateDto.DetailRes updateEstateInfo(long id, EstateDto.UpdateReq dto) {
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Estate> searchEstates(final EstateDto.SearchReq query, final Pageable pageable) {
+        Page<Estate> searchResult;
+
+        if (query == null) {
+            searchResult = estateRepository.findAll(pageable);
+        } else {
+            searchResult = null;
+        }
+
+        return searchResult;
     }
 }

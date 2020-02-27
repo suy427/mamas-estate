@@ -1,10 +1,13 @@
-package com.sondahum.mamas.user.service;
+package com.sondahum.mamas.user;
 
+import com.sondahum.mamas.bid.domain.Bid;
 import com.sondahum.mamas.user.dao.UserRepository;
 import com.sondahum.mamas.user.domain.User;
 import com.sondahum.mamas.user.dto.UserDto;
 import com.sondahum.mamas.user.exception.NoSuchUserException;
 import com.sondahum.mamas.user.exception.UserAlreadyExistException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,5 +76,18 @@ public class UserInfoService {
         userRepository.deleteById(id);
 
         return new UserDto.DetailResponse(user);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<User> searchUsers(final UserDto.SearchReq query, final Pageable pageable) {
+        Page<User> searchResult;
+
+        if (query == null) {
+            searchResult = userRepository.findAll(pageable);
+        } else {
+            searchResult = null;
+        }
+
+        return searchResult;
     }
 }

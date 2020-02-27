@@ -1,10 +1,7 @@
 package com.sondahum.mamas.bid;
 
 import com.sondahum.mamas.bid.dto.BidDto;
-import com.sondahum.mamas.bid.service.BidInfoService;
-import com.sondahum.mamas.bid.service.BidSearchService;
 import com.sondahum.mamas.common.model.PageRequest;
-import com.sondahum.mamas.user.domain.UserSearchFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -19,11 +16,11 @@ public class BidController {
 
     private static final Logger logger =  LoggerFactory.getLogger(BidController.class);
     private final BidInfoService bidInfoService;
-    private final BidSearchService bidSearchService;
+//    private final BidSearchService bidSearchService;
 
-    public BidController(BidInfoService bidInfoService, BidSearchService bidSearchService) {
+    public BidController(BidInfoService bidInfoService) {
         this.bidInfoService = bidInfoService;
-        this.bidSearchService = bidSearchService;
+//        this.bidSearchService = bidSearchService;
     }
 
     @PostMapping
@@ -34,11 +31,10 @@ public class BidController {
 
     @GetMapping
     public Page<BidDto.DetailResponse> searchBids( // 이걸로 검색과 전체 유저 불러오기 가능
-                                                   @RequestParam(name = "type") final UserSearchFilter filter,
-                                                   @RequestParam(name = "value", required = false) final String value,
+                                                   @RequestParam(name = "value", required = false) final BidDto.SearchReq query,
                                                    final PageRequest pageRequest
     ) {
-        return bidSearchService.search(filter, value, pageRequest.of()).map(BidDto.DetailResponse::new);
+        return bidInfoService.searchBid(query, pageRequest.of()).map(BidDto.DetailResponse::new);
     }
 
     @PutMapping(value = "/{id}")

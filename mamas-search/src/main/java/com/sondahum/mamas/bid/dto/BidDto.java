@@ -40,6 +40,10 @@ public class BidDto {
         private String action;
     }
 
+    public static class SearchReq {
+
+    }
+
     public static class DetailResponse {
         private Long id;
         private String user;

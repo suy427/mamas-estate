@@ -1,6 +1,7 @@
 package com.sondahum.mamas.bid.domain;
 
 import com.sondahum.mamas.common.model.Range;
+import com.sondahum.mamas.contract.domain.Contract;
 import com.sondahum.mamas.estate.domain.Estate;
 import com.sondahum.mamas.user.domain.User;
 import lombok.*;
@@ -19,7 +20,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "bid")
-public class Bid implements Serializable {
+public class Bid implements Serializable, Comparable<Bid> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,4 +52,10 @@ public class Bid implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
     @LastModifiedDate
     private LocalDate modifiedDate;
+
+
+    @Override
+    public int compareTo(Bid o) {
+        return this.createdDate.compareTo(o.createdDate);
+    }
 }
