@@ -1,10 +1,10 @@
 package com.sondahum.mamas.estate.service;
 
 import com.querydsl.jpa.JPQLQuery;
-import com.sondahum.mamas.estate.domain.SearchQuery;
 import com.sondahum.mamas.estate.domain.Estate;
 import com.sondahum.mamas.estate.domain.EstateSearchFilter;
 import com.sondahum.mamas.estate.domain.QEstate;
+import com.sondahum.mamas.estate.dto.EstateDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +23,7 @@ public class EstateSearchService extends QuerydslRepositorySupport {
         super(Estate.class);
     }
     // todo 정렬기능도 넣자..
-    public Page<Estate> search(final EstateSearchFilter filter, final SearchQuery query, final Pageable pageable) {
+    public Page<Estate> search(final EstateSearchFilter filter, final EstateDto.SearchReq query, final Pageable pageable) {
         final QEstate estate = QEstate.estate;
         final JPQLQuery<Estate> sql;
 
@@ -34,28 +34,28 @@ public class EstateSearchService extends QuerydslRepositorySupport {
                 break;
             case ADDRESS:
                 sql = from(estate)
-                        .where(estate.address.address1.likeIgnoreCase("%" + query.getStringQuery() + "%")
-                                .or(estate.address.address2.likeIgnoreCase("%" + query.getStringQuery() + "%"))
-                                .or(estate.address.address3.likeIgnoreCase("%" + query.getStringQuery() + "%")));
+                        .where(estate.address.address1.likeIgnoreCase("%" + query.getAddress() + "%")
+                                .or(estate.address.address2.likeIgnoreCase("%" + query.getAddress() + "%"))
+                                .or(estate.address.address3.likeIgnoreCase("%" + query.getAddress() + "%")));
                 break;
             case AREA:
                 sql = from(estate)
-                        .where(estate.area.goe(query.getRangeQuery().getMinimum())
-                        .and(estate.area.loe(query.getRangeQuery().getMaximum())));
+                        .where(estate.area.goe(query.getArea().getMinimum())
+                        .and(estate.area.loe(query.getArea().getMaximum())));
                 break;
             case STATUS:
                 sql = from(estate)
-                        .where(estate.status.stringValue().eq(query.getStringQuery()));
+                        .where(estate.status.eq(query.getStatus()));
                 break;
-            case OWNER_REQUIRED_PRICE: // TODO 쿼리의 종류가 단순 String 이상이여야한다...
+            case OWNER_REQUIRED_PRICE:
                 sql = from(estate)
-                        .where(estate.ownerRequirePriceRange.minimum.goe(query.getRangeQuery().getMinimum()) // todo loe'All'은 뭐지..?
-                                .and(estate.ownerRequirePriceRange.maximum.loe(query.getRangeQuery().getMaximum())));
+                        .where(estate.ownerRequirePriceRange.minimum.goe(query.getOwnerRequirePriceRange().getMinimum()) // todo loe'All'은 뭐지..?
+                                .and(estate.ownerRequirePriceRange.maximum.loe(query.getOwnerRequirePriceRange().getMaximum())));
                 break;
             case MARKET_PRICE:
                 sql = from(estate)
-                        .where(estate.marketPriceRange.minimum.goe(query.getRangeQuery().getMinimum())
-                                .and(estate.marketPriceRange.maximum.loe(query.getRangeQuery().getMaximum())));
+                        .where(estate.marketPriceRange.minimum.goe(query.getMarketPriceRange().getMinimum())
+                                .and(estate.marketPriceRange.maximum.loe(query.getMarketPriceRange().getMaximum())));
                 break;
             case OWNER:
                 sql = from(estate)

@@ -36,7 +36,7 @@ public class QEstate extends EntityPathBase<Estate> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final com.sondahum.mamas.common.model.QPrice marketPriceRange;
+    public final com.sondahum.mamas.common.model.QRange_PriceRange marketPriceRange;
 
     public final DatePath<java.time.LocalDate> modifiedDate = createDate("modifiedDate", java.time.LocalDate.class);
 
@@ -44,7 +44,7 @@ public class QEstate extends EntityPathBase<Estate> {
 
     public final com.sondahum.mamas.user.domain.QUser owner;
 
-    public final com.sondahum.mamas.common.model.QPrice ownerRequirePriceRange;
+    public final com.sondahum.mamas.common.model.QRange_PriceRange ownerRequirePriceRange;
 
     public final EnumPath<Status> status = createEnum("status", Status.class);
 
@@ -67,9 +67,9 @@ public class QEstate extends EntityPathBase<Estate> {
     public QEstate(Class<? extends Estate> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.address = inits.isInitialized("address") ? new com.sondahum.mamas.common.model.QAddress(forProperty("address")) : null;
-        this.marketPriceRange = inits.isInitialized("marketPriceRange") ? new com.sondahum.mamas.common.model.QPrice(forProperty("marketPriceRange")) : null;
+        this.marketPriceRange = inits.isInitialized("marketPriceRange") ? new com.sondahum.mamas.common.model.QRange_PriceRange(forProperty("marketPriceRange")) : null;
         this.owner = inits.isInitialized("owner") ? new com.sondahum.mamas.user.domain.QUser(forProperty("owner"), inits.get("owner")) : null;
-        this.ownerRequirePriceRange = inits.isInitialized("ownerRequirePriceRange") ? new com.sondahum.mamas.common.model.QPrice(forProperty("ownerRequirePriceRange")) : null;
+        this.ownerRequirePriceRange = inits.isInitialized("ownerRequirePriceRange") ? new com.sondahum.mamas.common.model.QRange_PriceRange(forProperty("ownerRequirePriceRange")) : null;
     }
 
 }

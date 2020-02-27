@@ -24,8 +24,8 @@ public class EstateDto {
         private Status status;
         private EstateType estateType;
         private ContractType contractType;
-        private Range ownerRequirePriceRange;
-        private Range marketPriceRange;
+        private Range.PriceRange ownerRequirePriceRange;
+        private Range.PriceRange marketPriceRange;
 
         public Estate toEntity() {
             User owner = User.builder().name(ownerName).build();
@@ -41,7 +41,6 @@ public class EstateDto {
                     .ownerRequirePriceRange(ownerRequirePriceRange)
                     .owner(owner).build();
         }
-
     }
 
     @Getter
@@ -55,17 +54,28 @@ public class EstateDto {
         private Status status;
         private EstateType estateType;
         private ContractType contractType;
-        private Range ownerRequirePriceRange;
-        private Range marketPriceRange;
+        private Range.PriceRange ownerRequirePriceRange;
+        private Range.PriceRange marketPriceRange;
     }
 
-    public static class SearchResponse {
+    @Getter
+    public static class SearchReq {
+        private String name;
+        private String address;
+        private Range.AreaRange area;
+        private Status status;
+        private Range.PriceRange ownerRequirePriceRange;
+        private Range.PriceRange marketPriceRange;
+        private String owner;
+    }
+
+    public static class SearchRes {
         private Long id;
         private String name;
         private String address3; // most detailed address
         private Status status;
 
-        public SearchResponse(Estate estate) {
+        public SearchRes(Estate estate) {
             this.id = estate.getId();
             this.name = estate.getName();
             this.address3 = estate.getAddress().getAddress3();
@@ -74,7 +84,7 @@ public class EstateDto {
 
     }
 
-    public static class DetailResponse {
+    public static class DetailRes {
         private Long id;
         private String name;
         private Address address;
@@ -83,10 +93,10 @@ public class EstateDto {
         private Status status;
         private EstateType estateType;
         private ContractType contractType;
-        private Range ownerRequirePriceRange;
-        private Range marketPriceRange;
+        private Range.PriceRange ownerRequirePriceRange;
+        private Range.PriceRange marketPriceRange;
 
-        public DetailResponse(Estate estate) {
+        public DetailRes(Estate estate) {
             this.id = estate.getId();
             this.name = estate.getName();
             this.address = estate.getAddress();

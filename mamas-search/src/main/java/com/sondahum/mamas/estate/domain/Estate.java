@@ -48,13 +48,13 @@ public class Estate implements Serializable {
     @AttributeOverrides({
             @AttributeOverride(name = "minimum", column = @Column(name = "market_min_price"))
             , @AttributeOverride(name = "maximum", column = @Column(name = "market_max_price"))})
-    private Range marketPriceRange;
+    private Range.PriceRange marketPriceRange;
 
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "minimum", column = @Column(name = "owner_min_price"))
             , @AttributeOverride(name = "maximum", column = @Column(name = "owner_max_price"))})
-    private Range ownerRequirePriceRange;
+    private Range.PriceRange ownerRequirePriceRange;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

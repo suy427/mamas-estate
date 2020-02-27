@@ -14,7 +14,7 @@ public class BidDto {
     public static class CreateReq {
         private String user;
         private String estate;
-        private Range price;
+        private Range.PriceRange price;
         private String action;
 
         public Bid toEntity() {
@@ -36,7 +36,7 @@ public class BidDto {
         private Long id;
         private String user;
         private String estate;
-        private Range price;
+        private Range.PriceRange price;
         private String action;
     }
 
@@ -44,7 +44,7 @@ public class BidDto {
         private Long id;
         private String user;
         private String estate;
-        private Range price;
+        private Range.PriceRange price;
         private String action;
 
 

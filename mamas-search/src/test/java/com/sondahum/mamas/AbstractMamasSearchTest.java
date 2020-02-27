@@ -59,6 +59,17 @@ public abstract class AbstractMamasSearchTest {
     }
 
     @Test
+    protected Range.AreaRange randomAreaGenerator() {
+        Double min = Double.parseDouble(RandomStringUtils.randomNumeric(3));
+        Double max = Double.parseDouble(RandomStringUtils.randomNumeric(3));
+
+        while (max < min)
+            max = Double.parseDouble(RandomStringUtils.randomNumeric(3));
+
+        return Range.AreaRange.builder().minimum(min).maximum(max).build();
+    }
+
+    @Test
     protected Role randomRoleGenerator() {
         return Role.findByValue(random.nextInt(3) + 1);
     }
@@ -84,15 +95,14 @@ public abstract class AbstractMamasSearchTest {
     }
 
     @Test
-    protected Range randomPriceRangeGenerator() {
+    protected Range.PriceRange randomPriceRangeGenerator() {
         Long min = Long.parseLong(RandomStringUtils.randomNumeric(8));
         Long max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
         while (max < min)
             max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
-
-        return Range.builder().minimum(min).maximum(max).build();
+        return Range.PriceRange.builder().minimum(min).maximum(max).build();
     }
 
     /********************************
@@ -116,7 +126,7 @@ public abstract class AbstractMamasSearchTest {
     protected Estate estateInfoGenerator(User owner) { // TODO 값 채워넣기
         return Estate.builder()
                 .address(randomAddressGenerator())
-                .area(randomNumbersGenerator(200).toString())
+                .area(random.nextDouble())
                 .contractType(randomContractTypeGenerator())
                 .estateType(randomEstateTypeGenerator())
                 .marketPriceRange(randomPriceRangeGenerator())

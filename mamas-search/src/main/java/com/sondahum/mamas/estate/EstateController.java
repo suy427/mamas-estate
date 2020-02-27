@@ -1,7 +1,6 @@
 package com.sondahum.mamas.estate;
 
 import com.sondahum.mamas.common.model.PageRequest;
-import com.sondahum.mamas.estate.domain.SearchQuery;
 import com.sondahum.mamas.estate.domain.EstateSearchFilter;
 import com.sondahum.mamas.estate.dto.EstateDto;
 import com.sondahum.mamas.estate.service.EstateInfoService;
@@ -31,28 +30,28 @@ public class EstateController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EstateDto.DetailResponse createEstate(@RequestBody @Valid EstateDto.CreateReq estateDto) {
+    public EstateDto.DetailRes createEstate(@RequestBody @Valid EstateDto.CreateReq estateDto) {
         return estateInfoService.createEstateInfo(estateDto);
     }
 
     @GetMapping
-    public Page<EstateDto.SearchResponse> searchEstates( // 이걸로 검색과 전체 유저 불러오기 가능
-                                                         @RequestParam(name = "type") final EstateSearchFilter filter,
-                                                         @RequestParam(name = "value", required = false) final SearchQuery query,
-                                                         final PageRequest pageRequest
+    public Page<EstateDto.SearchRes> searchEstates( // 이걸로 검색과 전체 유저 불러오기 가능
+                                                    @RequestParam(name = "type") final EstateSearchFilter filter,
+                                                    @RequestParam(name = "value", required = false) final EstateDto.SearchReq query,
+                                                    final PageRequest pageRequest
     ) {
-        return estateSearchService.search(filter, query, pageRequest.of()).map(EstateDto.SearchResponse::new);
+        return estateSearchService.search(filter, query, pageRequest.of()).map(EstateDto.SearchRes::new);
     }
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public EstateDto.DetailResponse getEstateDetail(@PathVariable final long id) {
+    public EstateDto.DetailRes getEstateDetail(@PathVariable final long id) {
         return estateInfoService.getEstateById(id);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public EstateDto.DetailResponse updateEstateInfo(@PathVariable final long id, @RequestBody final EstateDto.UpdateReq dto) {
+    public EstateDto.DetailRes updateEstateInfo(@PathVariable final long id, @RequestBody final EstateDto.UpdateReq dto) {
         return estateInfoService.updateEstateInfo(id, dto);
     }
 

@@ -4,7 +4,6 @@ import com.sondahum.mamas.estate.dao.EstateRepository;
 import com.sondahum.mamas.estate.domain.Estate;
 import com.sondahum.mamas.estate.dto.EstateDto;
 import com.sondahum.mamas.estate.exception.EstateAlreadyExistException;
-import com.sondahum.mamas.user.exception.UserAlreadyExistException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,13 +21,13 @@ public class EstateInfoService {
         this.estateRepository = estateRepository;
     }
 
-    public EstateDto.DetailResponse createEstateInfo(EstateDto.CreateReq estateDto) {
+    public EstateDto.DetailRes createEstateInfo(EstateDto.CreateReq estateDto) {
         if (isSameEstateExist(estateDto))
             throw new EstateAlreadyExistException(estateDto);
 
         Estate estate = estateRepository.save(estateDto.toEntity());
 
-        return new EstateDto.DetailResponse(estate);
+        return new EstateDto.DetailRes(estate);
     }
 
     @Transactional(readOnly = true)
@@ -43,11 +42,11 @@ public class EstateInfoService {
     }
 
 
-    public EstateDto.DetailResponse getEstateById(long id) {
+    public EstateDto.DetailRes getEstateById(long id) {
         return null;
     }
 
-    public EstateDto.DetailResponse updateEstateInfo(long id, EstateDto.UpdateReq dto) {
+    public EstateDto.DetailRes updateEstateInfo(long id, EstateDto.UpdateReq dto) {
         return null;
     }
 }
