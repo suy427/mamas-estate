@@ -50,4 +50,10 @@ class UserController {
         return userInfoService.updateUserInfo(id, dto);
     }
 
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public UserDto.DetailResponse deleteUser(@PathVariable final long id) {
+        return userInfoService.deleteUserInfo(id);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.sondahum.mamas.bid;
 
 import com.sondahum.mamas.bid.dto.BidDto;
 import com.sondahum.mamas.common.model.PageRequest;
+import com.sondahum.mamas.user.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -41,5 +42,11 @@ public class BidController {
     @ResponseStatus(value = HttpStatus.OK)
     public BidDto.DetailResponse updateBidInfo(@PathVariable final long id, @RequestBody final BidDto.UpdateReq dto) {
         return bidInfoService.updateUserInfo(id, dto);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public BidDto.DetailResponse deleteBid(@PathVariable final long id) {
+        return bidInfoService.deleteBidInfo(id);
     }
 }

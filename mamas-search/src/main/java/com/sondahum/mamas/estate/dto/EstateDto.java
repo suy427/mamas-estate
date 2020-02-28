@@ -73,13 +73,13 @@ public class EstateDto {
         private String owner;
     }
 
-    public static class SearchRes {
+    public static class SearchResponse {
         private Long id;
         private String name;
         private String address3; // most detailed address
         private Status status;
 
-        public SearchRes(Estate estate) {
+        public SearchResponse(Estate estate) {
             this.id = estate.getId();
             this.name = estate.getName();
             this.address3 = estate.getAddress().getAddress3();
@@ -88,7 +88,7 @@ public class EstateDto {
 
     }
 
-    public static class DetailRes {
+    public static class DetailResponse {
         private Long id;
         private String name;
         private Address address;
@@ -100,7 +100,7 @@ public class EstateDto {
         private Range.PriceRange ownerRequirePriceRange;
         private Range.PriceRange marketPriceRange;
 
-        public DetailRes(Estate estate) {
+        public DetailResponse(Estate estate) {
             this.id = estate.getId();
             this.name = estate.getName();
             this.address = estate.getAddress();

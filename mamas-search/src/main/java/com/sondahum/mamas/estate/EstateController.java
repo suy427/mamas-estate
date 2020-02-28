@@ -27,28 +27,34 @@ public class EstateController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EstateDto.DetailRes createEstate(@RequestBody @Valid EstateDto.CreateReq estateDto) {
+    public EstateDto.DetailResponse createEstate(@RequestBody @Valid EstateDto.CreateReq estateDto) {
         return estateInfoService.createEstateInfo(estateDto);
     }
 
     @GetMapping
-    public Page<EstateDto.SearchRes> searchEstates( // 이걸로 검색과 전체 유저 불러오기 가능
-                                                    @RequestParam(name = "value", required = false) final EstateDto.SearchReq query,
-                                                    final PageRequest pageRequest
+    public Page<EstateDto.SearchResponse> searchEstates( // 이걸로 검색과 전체 유저 불러오기 가능
+                                                         @RequestParam(name = "value", required = false) final EstateDto.SearchReq query,
+                                                         final PageRequest pageRequest
     ) {
-        return estateInfoService.searchEstates(query, pageRequest.of()).map(EstateDto.SearchRes::new);
+        return estateInfoService.searchEstates(query, pageRequest.of()).map(EstateDto.SearchResponse::new);
     }
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public EstateDto.DetailRes getEstateDetail(@PathVariable final long id) {
+    public EstateDto.DetailResponse getEstateDetail(@PathVariable final long id) {
         return estateInfoService.getEstateById(id);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public EstateDto.DetailRes updateEstateInfo(@PathVariable final long id, @RequestBody final EstateDto.UpdateReq dto) {
+    public EstateDto.DetailResponse updateEstateInfo(@PathVariable final long id, @RequestBody final EstateDto.UpdateReq dto) {
         return estateInfoService.updateEstateInfo(id, dto);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public EstateDto.DetailResponse deleteContract(@PathVariable final long id) {
+        return estateInfoService.deleteEstateInfo(id);
     }
 
 

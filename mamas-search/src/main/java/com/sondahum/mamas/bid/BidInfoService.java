@@ -4,6 +4,8 @@ import com.sondahum.mamas.bid.dao.BidRepository;
 import com.sondahum.mamas.bid.domain.Bid;
 import com.sondahum.mamas.bid.dto.BidDto;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
+import com.sondahum.mamas.user.domain.User;
+import com.sondahum.mamas.user.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

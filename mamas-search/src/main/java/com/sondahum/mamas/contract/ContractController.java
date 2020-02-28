@@ -3,6 +3,7 @@ package com.sondahum.mamas.contract;
 import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.contract.dto.ContractDto;
 
+import com.sondahum.mamas.user.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -42,5 +43,11 @@ public class ContractController {
     @ResponseStatus(value = HttpStatus.OK)
     public ContractDto.DetailResponse updateContractInfo(@PathVariable final long id, @RequestBody final ContractDto.UpdateReq dto) {
         return contractService.updateContractInfo(id, dto);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public ContractDto.DetailResponse deleteUser(@PathVariable final long id) {
+        return contractService.deleteContractInfo(id);
     }
 }

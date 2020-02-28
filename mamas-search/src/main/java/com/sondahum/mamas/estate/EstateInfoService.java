@@ -1,10 +1,12 @@
 package com.sondahum.mamas.estate;
 
-import com.sondahum.mamas.bid.domain.Bid;
 import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
+import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.estate.dao.EstateRepository;
 import com.sondahum.mamas.estate.domain.Estate;
 import com.sondahum.mamas.estate.dto.EstateDto;
+import com.sondahum.mamas.user.domain.User;
+import com.sondahum.mamas.user.dto.UserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,13 +26,13 @@ public class EstateInfoService {
         this.estateRepository = estateRepository;
     }
 
-    public EstateDto.DetailRes createEstateInfo(EstateDto.CreateReq estateDto) {
+    public EstateDto.DetailResponse createEstateInfo(EstateDto.CreateReq estateDto) {
         if (isSameEstateExist(estateDto))
             throw new EntityAlreadyExistException(estateDto.getName());
 
         Estate estate = estateRepository.save(estateDto.toEntity());
 
-        return new EstateDto.DetailRes(estate);
+        return new EstateDto.DetailResponse(estate);
     }
 
     @Transactional(readOnly = true)
@@ -45,11 +47,11 @@ public class EstateInfoService {
     }
 
 
-    public EstateDto.DetailRes getEstateById(long id) {
+    public EstateDto.DetailResponse getEstateById(long id) {
         return null;
     }
 
-    public EstateDto.DetailRes updateEstateInfo(long id, EstateDto.UpdateReq dto) {
+    public EstateDto.DetailResponse updateEstateInfo(long id, EstateDto.UpdateReq dto) {
         return null;
     }
 
@@ -64,5 +66,14 @@ public class EstateInfoService {
         }
 
         return searchResult;
+    }
+
+    public EstateDto.DetailResponse deleteEstateInfo(Long id) {
+        Optional<Estate> optional = estateRepository.findById(id);
+        Estate estate = optional.orElseThrow(() -> new NoSuchEntityException(id));
+
+        estateRepository.deleteById(id);
+
+        return new EstateDto.DetailResponse(estate);
     }
 }

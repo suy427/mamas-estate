@@ -29,7 +29,7 @@ public class ContractService {
         return null;
     }
 
-    public ContractDto.DetailResponse deleteBidInfo(Long id) {
+    public ContractDto.DetailResponse deleteContractInfo(Long id) {
         Optional<Contract> optional = contractRepository.findById(id);
         Contract contract = optional.orElseThrow(() -> new NoSuchEntityException(id)); // todo exception 정리
 
