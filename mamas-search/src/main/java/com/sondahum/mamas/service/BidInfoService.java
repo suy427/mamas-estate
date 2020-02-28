@@ -1,7 +1,7 @@
 package com.sondahum.mamas.service;
 
 import com.sondahum.mamas.repository.BidRepository;
-import com.sondahum.mamas.domain.Bid;
+import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import org.slf4j.Logger;

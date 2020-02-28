@@ -1,7 +1,7 @@
 package com.sondahum.mamas.service;
 
 import com.sondahum.mamas.repository.ContractRepository;
-import com.sondahum.mamas.domain.Contract;
+import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.dto.ContractDto;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import org.springframework.data.domain.Page;

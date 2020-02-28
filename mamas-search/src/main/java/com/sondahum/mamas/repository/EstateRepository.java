@@ -1,6 +1,6 @@
 package com.sondahum.mamas.repository;
 
-import com.sondahum.mamas.domain.Estate;
+import com.sondahum.mamas.domain.estate.Estate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

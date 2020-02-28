@@ -1,8 +1,8 @@
 package com.sondahum.mamas.dto;
 
-import com.sondahum.mamas.domain.Contract;
-import com.sondahum.mamas.domain.Estate;
-import com.sondahum.mamas.domain.User;
+import com.sondahum.mamas.domain.contract.Contract;
+import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.user.User;
 import lombok.Getter;
 
 import javax.validation.constraints.NotEmpty;

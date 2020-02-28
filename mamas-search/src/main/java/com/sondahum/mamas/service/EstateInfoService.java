@@ -3,7 +3,7 @@ package com.sondahum.mamas.service;
 import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.repository.EstateRepository;
-import com.sondahum.mamas.domain.Estate;
+import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.dto.EstateDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,10 +1,8 @@
-package com.sondahum.mamas.domain;
+package com.sondahum.mamas.domain.estate;
 
-import com.sondahum.mamas.common.model.Address;
 import com.sondahum.mamas.common.model.Range;
-import com.sondahum.mamas.common.model.ContractType;
-import com.sondahum.mamas.common.model.EstateType;
-import com.sondahum.mamas.common.model.Status;
+import com.sondahum.mamas.domain.user.User;
+import com.sondahum.mamas.domain.bid.Bid;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -49,13 +47,13 @@ public class Estate implements Serializable {
     @AttributeOverrides({
             @AttributeOverride(name = "minimum", column = @Column(name = "market_min_price"))
             , @AttributeOverride(name = "maximum", column = @Column(name = "market_max_price"))})
-    private Range.PriceRange marketPriceRange;
+    private Range<Long> marketPriceRange;
 
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "minimum", column = @Column(name = "owner_min_price"))
             , @AttributeOverride(name = "maximum", column = @Column(name = "owner_max_price"))})
-    private Range.PriceRange ownerRequirePriceRange;
+    private Range<Long> ownerRequirePriceRange;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

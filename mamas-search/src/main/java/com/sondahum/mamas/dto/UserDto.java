@@ -1,9 +1,9 @@
 package com.sondahum.mamas.dto;
 
 import com.sondahum.mamas.common.model.Range;
-import com.sondahum.mamas.common.model.Role;
-import com.sondahum.mamas.common.model.Phone;
-import com.sondahum.mamas.domain.User;
+import com.sondahum.mamas.domain.user.Role;
+import com.sondahum.mamas.domain.user.Phone;
+import com.sondahum.mamas.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,8 +45,8 @@ public class UserDto {
         private String name;
         private Phone phone;
         private Role role;
-        private Range.DateRange bidDate;
-        private Range.DateRange contractDate;
+        private Range<LocalDate> bidDate;
+        private Range<LocalDate> contractDate;
     }
 
     public static class SearchResponse {

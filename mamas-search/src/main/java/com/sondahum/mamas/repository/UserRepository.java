@@ -1,7 +1,7 @@
 package com.sondahum.mamas.repository;
 
-import com.sondahum.mamas.common.model.Role;
-import com.sondahum.mamas.domain.User;
+import com.sondahum.mamas.domain.user.Role;
+import com.sondahum.mamas.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

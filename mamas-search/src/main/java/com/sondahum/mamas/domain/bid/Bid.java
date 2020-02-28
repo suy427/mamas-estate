@@ -1,7 +1,8 @@
-package com.sondahum.mamas.domain;
+package com.sondahum.mamas.domain.bid;
 
-import com.sondahum.mamas.common.model.Action;
 import com.sondahum.mamas.common.model.Range;
+import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.user.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -41,7 +42,7 @@ public class Bid implements Serializable, Comparable<Bid> {
     @AttributeOverrides({
             @AttributeOverride(name = "minimum", column = @Column(name = "min_price"))
             , @AttributeOverride(name = "maximum", column = @Column(name = "max_price"))})
-    private Range.PriceRange priceRange;
+    private Range<Long> priceRange;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
     @CreatedDate

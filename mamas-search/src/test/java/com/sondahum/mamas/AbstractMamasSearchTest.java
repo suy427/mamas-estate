@@ -1,9 +1,15 @@
 package com.sondahum.mamas;
 
 import com.sondahum.mamas.common.model.*;
-import com.sondahum.mamas.domain.Bid;
-import com.sondahum.mamas.domain.Estate;
-import com.sondahum.mamas.domain.User;
+import com.sondahum.mamas.domain.bid.Action;
+import com.sondahum.mamas.domain.bid.Bid;
+import com.sondahum.mamas.domain.estate.Address;
+import com.sondahum.mamas.domain.estate.ContractType;
+import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.estate.EstateType;
+import com.sondahum.mamas.domain.user.Phone;
+import com.sondahum.mamas.domain.user.Role;
+import com.sondahum.mamas.domain.user.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -53,14 +59,14 @@ public abstract class AbstractMamasSearchTest {
     }
 
     @Test
-    protected Range.AreaRange randomAreaGenerator() {
+    protected Range<Double> randomAreaGenerator() {
         Double min = Double.parseDouble(RandomStringUtils.randomNumeric(3));
         Double max = Double.parseDouble(RandomStringUtils.randomNumeric(3));
 
         while (max < min)
             max = Double.parseDouble(RandomStringUtils.randomNumeric(3));
 
-        return Range.AreaRange.builder().minimum(min).maximum(max).build();
+        return Range.<Double>builder().minimum(min).maximum(max).build();
     }
 
     @Test
@@ -89,14 +95,14 @@ public abstract class AbstractMamasSearchTest {
     }
 
     @Test
-    protected Range.PriceRange randomPriceRangeGenerator() {
+    protected Range<Long> randomPriceRangeGenerator() {
         Long min = Long.parseLong(RandomStringUtils.randomNumeric(8));
         Long max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
         while (max < min)
             max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
-        return Range.PriceRange.builder().minimum(min).maximum(max).build();
+        return Range.<Long>builder().minimum(min).maximum(max).build();
     }
 
     /********************************

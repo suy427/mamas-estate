@@ -1,10 +1,11 @@
-package com.sondahum.mamas.domain;
+package com.sondahum.mamas.domain.user;
 
-import com.sondahum.mamas.common.model.Action;
-import com.sondahum.mamas.common.model.Status;
-import com.sondahum.mamas.common.model.Role;
+import com.sondahum.mamas.domain.bid.Action;
+import com.sondahum.mamas.domain.estate.Status;
+import com.sondahum.mamas.domain.bid.Bid;
+import com.sondahum.mamas.domain.contract.Contract;
+import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.dto.UserDto;
-import com.sondahum.mamas.common.model.Phone;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

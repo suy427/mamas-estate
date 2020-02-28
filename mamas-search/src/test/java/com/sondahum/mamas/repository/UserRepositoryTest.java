@@ -1,7 +1,7 @@
 package com.sondahum.mamas.repository;
 
 import com.sondahum.mamas.AbstractMamasSearchTest;
-import com.sondahum.mamas.domain.User;
+import com.sondahum.mamas.domain.user.User;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

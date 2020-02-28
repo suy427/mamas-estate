@@ -1,10 +1,10 @@
 package com.sondahum.mamas.dto;
 
-import com.sondahum.mamas.common.model.Action;
-import com.sondahum.mamas.domain.Bid;
+import com.sondahum.mamas.domain.bid.Action;
+import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.common.model.Range;
-import com.sondahum.mamas.domain.Estate;
-import com.sondahum.mamas.domain.User;
+import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +18,7 @@ public class BidDto {
         private String user;
         @NotEmpty(message = "등록할 매물의 이름을 입력해주세요.")
         private String estate;
-        private Range.PriceRange price;
+        private Range<Long> price;
         @NotEmpty(message = "매매 종류를 입력해주세요.")
         private String action;
 
@@ -43,7 +43,7 @@ public class BidDto {
         private String user;
         @NotEmpty(message = "변경할 매물 정보를 입력해주세요.")
         private String estate;
-        private Range.PriceRange price;
+        private Range<Long> price;
         @NotEmpty(message = "변경할 매매 종류를 입력해주세요..")
         private String action;
     }
@@ -56,7 +56,7 @@ public class BidDto {
         private Long id;
         private String user;
         private String estate;
-        private Range.PriceRange price;
+        private Range<Long> price;
         private String action;
 
 
