@@ -20,18 +20,23 @@ dependencies {
     compile "org.springframework.restdocs:spring-restdocs-mockmvc:${springRestDocVersion}"
 
 
-
-
     // spring data jpa
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springDataJpaVersion
-    // QueryDSL-JPA
-    compile group: 'com.querydsl', name: 'querydsl-jpa', version: '4.2.2'
-    // QueryDSL-APT
-    compile group: 'com.querydsl', name: 'querydsl-apt', version: '4.2.2'
-    // QueryDSL-CORE
-    compile group: "com.querydsl", name:"querydsl-core", version: "4.2.2"
-    // QueryDSL-COLLECTIONS
-    compile group:"com.querydsl", name:"querydsl-collections", version: "4.2.2"
+
+//    ############################
+
+//          QUERY DSL 봉인...
+
+//    ############################
+
+//    // QueryDSL-JPA
+//    compile group: 'com.querydsl', name: 'querydsl-jpa', version: '4.2.2'
+//    // QueryDSL-APT
+//    compile group: 'com.querydsl', name: 'querydsl-apt', version: '4.2.2'
+//    // QueryDSL-CORE
+//    compile group: "com.querydsl", name:"querydsl-core", version: "4.2.2"
+//    // QueryDSL-COLLECTIONS
+//    compile group:"com.querydsl", name:"querydsl-collections", version: "4.2.2"
 
     // h2 database
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
@@ -44,26 +49,33 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 }
 
-def querydslSrcDir = 'src/main/generated'
 
-querydsl {
-    library = "com.querydsl:querydsl-apt"
-    jpa = true
-    querydslSourcesDir = querydslSrcDir
-}
+//    ############################
 
-compileQuerydsl{
-    options.annotationProcessorPath = configurations.querydsl
-}
+//          QUERY DSL 봉인...
 
-configurations {
-    querydsl.extendsFrom compileClasspath
-}
-
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/main/java', querydslSrcDir]
-        }
-    }
-}
+//    ############################
+//
+//def querydslSrcDir = 'src/main/generated'
+//
+//querydsl {
+//    library = "com.querydsl:querydsl-apt"
+//    jpa = true
+//    querydslSourcesDir = querydslSrcDir
+//}
+//
+//compileQuerydsl{
+//    options.annotationProcessorPath = configurations.querydsl
+//}
+//
+//configurations {
+//    querydsl.extendsFrom compileClasspath
+//}
+//
+//sourceSets {
+//    main {
+//        java {
+//            srcDirs = ['src/main/java', querydslSrcDir]
+//        }
+//    }
+//}

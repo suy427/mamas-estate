@@ -1,13 +1,10 @@
 package com.sondahum.mamas.repository;
 
 import com.sondahum.mamas.AbstractMamasSearchTest;
-import com.sondahum.mamas.bid.dao.BidRepository;
-import com.sondahum.mamas.bid.domain.Action;
-import com.sondahum.mamas.bid.domain.Bid;
-import com.sondahum.mamas.estate.dao.EstateRepository;
-import com.sondahum.mamas.estate.domain.Estate;
-import com.sondahum.mamas.user.dao.UserRepository;
-import com.sondahum.mamas.user.domain.User;
+import com.sondahum.mamas.common.model.Action;
+import com.sondahum.mamas.domain.Bid;
+import com.sondahum.mamas.domain.Estate;
+import com.sondahum.mamas.domain.User;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

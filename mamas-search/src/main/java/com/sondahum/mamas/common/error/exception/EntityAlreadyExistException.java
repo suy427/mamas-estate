@@ -1,8 +1,5 @@
 package com.sondahum.mamas.common.error.exception;
 
-import com.sondahum.mamas.user.domain.Phone;
-import com.sondahum.mamas.user.dto.UserDto;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter

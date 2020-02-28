@@ -1,15 +1,9 @@
 package com.sondahum.mamas;
 
-import com.sondahum.mamas.bid.domain.Action;
-import com.sondahum.mamas.bid.domain.Bid;
-import com.sondahum.mamas.common.model.Address;
-import com.sondahum.mamas.common.model.Range;
-import com.sondahum.mamas.estate.domain.Estate;
-import com.sondahum.mamas.user.domain.Phone;
-import com.sondahum.mamas.user.domain.User;
-import com.sondahum.mamas.estate.domain.ContractType;
-import com.sondahum.mamas.estate.domain.EstateType;
-import com.sondahum.mamas.common.model.Role;
+import com.sondahum.mamas.common.model.*;
+import com.sondahum.mamas.domain.Bid;
+import com.sondahum.mamas.domain.Estate;
+import com.sondahum.mamas.domain.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
