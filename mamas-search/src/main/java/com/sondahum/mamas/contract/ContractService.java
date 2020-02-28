@@ -1,12 +1,9 @@
 package com.sondahum.mamas.contract;
 
-import com.sondahum.mamas.bid.domain.Bid;
-import com.sondahum.mamas.bid.dto.BidDto;
 import com.sondahum.mamas.contract.dao.ContractRepository;
 import com.sondahum.mamas.contract.domain.Contract;
-import com.sondahum.mamas.contract.domain.ContractSearchFilter;
 import com.sondahum.mamas.contract.dto.ContractDto;
-import com.sondahum.mamas.user.exception.NoSuchUserException;
+import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,7 +31,7 @@ public class ContractService {
 
     public ContractDto.DetailResponse deleteBidInfo(Long id) {
         Optional<Contract> optional = contractRepository.findById(id);
-        Contract contract = optional.orElseThrow(() -> new NoSuchUserException(id)); // todo exception 정리
+        Contract contract = optional.orElseThrow(() -> new NoSuchEntityException(id)); // todo exception 정리
 
         contractRepository.deleteById(id);
 

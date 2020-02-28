@@ -8,13 +8,18 @@ import com.sondahum.mamas.user.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
+
 public class BidDto {
 
 
     public static class CreateReq {
+        @NotEmpty(message = "등록할 고객의 이름을 입력해주세요.")
         private String user;
+        @NotEmpty(message = "등록할 매물의 이름을 입력해주세요.")
         private String estate;
         private Range.PriceRange price;
+        @NotEmpty(message = "매매 종류를 입력해주세요.")
         private String action;
 
         public Bid toEntity() {
@@ -34,9 +39,12 @@ public class BidDto {
     @Setter
     public static class UpdateReq {
         private Long id;
+        @NotEmpty(message = "변경할 고객의 이름을 입력해주세요.")
         private String user;
+        @NotEmpty(message = "변경할 매물 정보를 입력해주세요.")
         private String estate;
         private Range.PriceRange price;
+        @NotEmpty(message = "변경할 매매 종류를 입력해주세요..")
         private String action;
     }
 

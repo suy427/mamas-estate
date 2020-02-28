@@ -1,11 +1,10 @@
 package com.sondahum.mamas.user;
 
-import com.sondahum.mamas.bid.domain.Bid;
 import com.sondahum.mamas.user.dao.UserRepository;
 import com.sondahum.mamas.user.domain.User;
 import com.sondahum.mamas.user.dto.UserDto;
-import com.sondahum.mamas.user.exception.NoSuchUserException;
-import com.sondahum.mamas.user.exception.UserAlreadyExistException;
+import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
+import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,7 @@ public class UserInfoService {
      */
     public UserDto.DetailResponse createUserInfo(UserDto.CreateReq userDto) {
         if (isSamePersonExist(userDto))
-            throw new UserAlreadyExistException(userDto);// TODO 이름이 같으면 A,B표시 등등 생각해보기
+            throw new EntityAlreadyExistException(userDto.getName());// TODO 이름이 같으면 A,B표시 등등 생각해보기
 
         User user = userRepository.save(userDto.toEntity());
 
@@ -54,14 +53,14 @@ public class UserInfoService {
 
     public UserDto.DetailResponse getUserById(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
-        optionalUser.orElseThrow(() -> new NoSuchUserException(id));
+        optionalUser.orElseThrow(() -> new NoSuchEntityException(id));
 
         return new UserDto.DetailResponse(optionalUser.get());
     }
 
     public UserDto.DetailResponse updateUserInfo(Long id, UserDto.UpdateReq userDto) {
         Optional<User> optional = userRepository.findById(id);
-        User user = optional.orElseThrow(() -> new NoSuchUserException(id));
+        User user = optional.orElseThrow(() -> new NoSuchEntityException(id));
 
         user.updateUserInfo(userDto);// 예제에 보면 따로 repository에 변경된 entity를 save하지 않는다.
 //        userRepository.save(user) // TODO 이유 알아내기~~
@@ -71,7 +70,7 @@ public class UserInfoService {
 
     public UserDto.DetailResponse deleteUserInfo(Long id) {
         Optional<User> optional = userRepository.findById(id);
-        User user = optional.orElseThrow(() -> new NoSuchUserException(id));
+        User user = optional.orElseThrow(() -> new NoSuchEntityException(id));
 
         userRepository.deleteById(id);
 

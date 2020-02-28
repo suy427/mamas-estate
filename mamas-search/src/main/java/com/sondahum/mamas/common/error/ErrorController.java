@@ -1,7 +1,7 @@
 package com.sondahum.mamas.common.error;
 
-import com.sondahum.mamas.user.exception.NoSuchUserException;
-import com.sondahum.mamas.user.exception.UserAlreadyExistException;
+import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
+import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,40 +25,40 @@ class ErrorController {
     private static final Logger logger =  LoggerFactory.getLogger(ErrorController.class);
 
 
-    @ExceptionHandler(value = {NoSuchUserException.class})
+    @ExceptionHandler(value = {NoSuchEntityException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    protected ErrorResponse userNotFoundExceptionHandler(NoSuchUserException e) {
-        final ErrorCode userNotFound = ErrorCode.NOT_FOUND_SUCH_ENTITY;
-        logger.error(userNotFound.getMessage(), e.getId());
-        return buildError(userNotFound);
+    protected ErrorResponse entityNotFoundExceptionHandler(NoSuchEntityException e) {
+        final ErrorCode notFoundEntity = ErrorCode.CAN_NOT_FOUND_SUCH_ENTITY;
+        logger.error(notFoundEntity.getMessage(), e.getId());
+        return buildError(notFoundEntity);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    protected ErrorResponse invalidInputExceptionHandler(MethodArgumentNotValidException e) {
         final List<ErrorResponse.FieldError> fieldErrors = getFieldErrors(e.getBindingResult());
         return buildFieldErrors(ErrorCode.INVALID_INPUT, fieldErrors);
     }
 
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleBindException(BindException e) {
+    protected ErrorResponse bindExceptionHandler(BindException e) {
         final List<ErrorResponse.FieldError> fieldErrors = getFieldErrors(e.getBindingResult());
         return buildFieldErrors(ErrorCode.INVALID_INPUT, fieldErrors);
     }
 
 
-    @ExceptionHandler(UserAlreadyExistException.class)
+    @ExceptionHandler(EntityAlreadyExistException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ErrorResponse userAlreadyExistExceptionHandler(UserAlreadyExistException e) {
+    protected ErrorResponse entityAlreadyExistExceptionHandler(EntityAlreadyExistException e) {
         final ErrorCode errorCode = ErrorCode.DUPLICATED_ENTITY;
-        logger.error(errorCode.getMessage(), e.getName() + e.getField());
+        logger.error(errorCode.getMessage(), e.getName()); // todo 여기서 getField()를 지웠다..
         return buildError(errorCode);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+    protected ErrorResponse dataIntegrityViolationExceptionHandler(DataIntegrityViolationException e) {
         logger.error(e.getMessage());
         return buildError(ErrorCode.INVALID_INPUT);
     }

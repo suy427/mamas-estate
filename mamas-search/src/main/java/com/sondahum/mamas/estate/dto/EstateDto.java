@@ -12,11 +12,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
+
 public class EstateDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CreateReq {
+        @NotEmpty(message = "등록할 부동산 이름을 입력해주세요.")
         private String name;
         private Address address;
         private String area;
@@ -47,6 +50,7 @@ public class EstateDto {
     @Setter
     public static class UpdateReq {
         private Long id;
+        @NotEmpty(message = "변경할 부동산 이름을 입력해주세요.")
         private String name;
         private Address address;
         private String area;

@@ -1,10 +1,10 @@
 package com.sondahum.mamas.estate;
 
 import com.sondahum.mamas.bid.domain.Bid;
+import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import com.sondahum.mamas.estate.dao.EstateRepository;
 import com.sondahum.mamas.estate.domain.Estate;
 import com.sondahum.mamas.estate.dto.EstateDto;
-import com.sondahum.mamas.estate.exception.EstateAlreadyExistException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class EstateInfoService {
 
     public EstateDto.DetailRes createEstateInfo(EstateDto.CreateReq estateDto) {
         if (isSameEstateExist(estateDto))
-            throw new EstateAlreadyExistException(estateDto);
+            throw new EntityAlreadyExistException(estateDto.getName());
 
         Estate estate = estateRepository.save(estateDto.toEntity());
 

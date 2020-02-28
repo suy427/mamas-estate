@@ -1,29 +1,24 @@
 package com.sondahum.mamas.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Transient;
 
 @Getter
 @Builder
 @Embeddable
+@JsonIgnoreProperties({"first", "middle", "last"})
 public class Phone {
 
-    @Transient
+    @Column(name = "phone_number")
+    private String wholeNumber;
     private String first;
-
-    @Transient
     private String middle;
-
-    @Transient
     private String last;
 
-    @Column(name = "phone_number")
-    private String whole;
-
     public Phone() {
-        whole = first+middle+last;
+        wholeNumber = first + middle + last;
     }
 }

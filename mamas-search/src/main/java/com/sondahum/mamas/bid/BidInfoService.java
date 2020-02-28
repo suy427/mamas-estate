@@ -3,9 +3,7 @@ package com.sondahum.mamas.bid;
 import com.sondahum.mamas.bid.dao.BidRepository;
 import com.sondahum.mamas.bid.domain.Bid;
 import com.sondahum.mamas.bid.dto.BidDto;
-import com.sondahum.mamas.user.domain.User;
-import com.sondahum.mamas.user.dto.UserDto;
-import com.sondahum.mamas.user.exception.NoSuchUserException;
+import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -36,7 +34,7 @@ public class BidInfoService {
 
     public BidDto.DetailResponse deleteBidInfo(Long id) {
         Optional<Bid> optional = bidRepository.findById(id);
-        Bid bid = optional.orElseThrow(() -> new NoSuchUserException(id)); // todo exception 정리
+        Bid bid = optional.orElseThrow(() -> new NoSuchEntityException(id)); // todo exception 정리
 
         bidRepository.deleteById(id);
 

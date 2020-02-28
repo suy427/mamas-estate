@@ -18,6 +18,7 @@ public class UserDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CreateReq {
+        @NotEmpty(message = "등록할 고객의 이름을 입력해주세요")
         private String name;
         private Phone phone;
         private String role;
@@ -35,6 +36,7 @@ public class UserDto {
     @Getter
     public static class UpdateReq {
         private Long id;
+        @NotEmpty(message = "변경할 고객의 이름을 입력해주세요")
         private String name;
         private Phone phone;
         private String role;
