@@ -7,7 +7,6 @@ import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateType;
 import com.sondahum.mamas.domain.estate.Status;
 import com.sondahum.mamas.domain.user.User;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +16,6 @@ import javax.validation.constraints.NotEmpty;
 public class EstateDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CreateReq {
         @NotEmpty(message = "등록할 부동산 이름을 입력해주세요.")
         private String name;

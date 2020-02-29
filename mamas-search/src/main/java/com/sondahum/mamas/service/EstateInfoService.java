@@ -2,6 +2,8 @@ package com.sondahum.mamas.service;
 
 import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
+import com.sondahum.mamas.domain.user.User;
+import com.sondahum.mamas.dto.UserDto;
 import com.sondahum.mamas.repository.EstateRepository;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.dto.EstateDto;
@@ -49,8 +51,14 @@ public class EstateInfoService {
         return null;
     }
 
-    public EstateDto.DetailResponse updateEstateInfo(long id, EstateDto.UpdateReq dto) {
-        return null;
+    public EstateDto.DetailResponse updateEstateInfo(long id, EstateDto.UpdateReq estateDto) {
+        Optional<Estate> optional = estateRepository.findById(id);
+        Estate estate = optional.orElseThrow(() -> new NoSuchEntityException(id));
+
+        estate.updateEstateInfo(estateDto);// 예제에 보면 따로 repository에 변경된 entity를 save하지 않는다.
+//        userRepository.save(user) // TODO 이유 알아내기~~
+
+        return new EstateDto.DetailResponse(estate);
     }
 
     @Transactional(readOnly = true)

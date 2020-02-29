@@ -66,7 +66,10 @@ public abstract class AbstractMamasSearchTest {
         while (max < min)
             max = Double.parseDouble(RandomStringUtils.randomNumeric(3));
 
-        return Range.<Double>builder().minimum(min).maximum(max).build();
+        Range<Double> result = new Range<Double>();
+        result.setMaximum(max);
+        result.setMinimum(min);
+        return result;
     }
 
     @Test
@@ -102,7 +105,10 @@ public abstract class AbstractMamasSearchTest {
         while (max < min)
             max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
-        return Range.<Long>builder().minimum(min).maximum(max).build();
+        Range<Long> result = new Range<Long>();
+        result.setMaximum(max);
+        result.setMinimum(min);
+        return result;
     }
 
     /********************************

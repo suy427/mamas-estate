@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BidRepository extends JpaRepository<Bid, Long>, JpaSpecificationExecutor<Bid> {
+public interface BidRepository extends JpaRepository<Bid, Long> {
 
     List<Bid> findByAction(Action action);
 

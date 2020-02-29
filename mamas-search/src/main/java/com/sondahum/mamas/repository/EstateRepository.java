@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface EstateRepository extends JpaRepository<Estate, Long>, JpaSpecificationExecutor<Estate> {
+public interface EstateRepository extends JpaRepository<Estate, Long> {
 
     Optional<Estate> findByName(String name);
 }

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 public class ContractDto {
 
-
+    @Getter
     public static class CreateReq {
         @NotEmpty(message = "매도자 이름을 입력해주세요.")
         private String seller;

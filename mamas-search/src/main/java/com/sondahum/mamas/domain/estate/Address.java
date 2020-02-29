@@ -7,7 +7,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Address {
 
     private String address1;

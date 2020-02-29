@@ -8,8 +8,7 @@ import java.time.LocalDate;
 
 @Embeddable
 @Getter
-@Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
 public class Range<T> {
 
     private T minimum;

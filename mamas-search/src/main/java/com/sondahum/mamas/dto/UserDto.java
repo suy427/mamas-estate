@@ -1,12 +1,10 @@
 package com.sondahum.mamas.dto;
 
 import com.sondahum.mamas.common.model.Range;
-import com.sondahum.mamas.domain.user.Role;
 import com.sondahum.mamas.domain.user.Phone;
+import com.sondahum.mamas.domain.user.Role;
 import com.sondahum.mamas.domain.user.User;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
@@ -14,7 +12,6 @@ import java.time.LocalDate;
 public class UserDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CreateReq {
         @NotEmpty(message = "등록할 고객의 이름을 입력해주세요")
         private String name;

@@ -3,6 +3,7 @@ package com.sondahum.mamas.domain.estate;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.bid.Bid;
+import com.sondahum.mamas.dto.EstateDto;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -18,8 +19,8 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "estate")
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Estate implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,5 +75,9 @@ public class Estate implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
     @LastModifiedDate
     private LocalDate modifiedDate;
+
+    public void updateEstateInfo(EstateDto.UpdateReq dto) {
+
+    }
 }
 
