@@ -2,7 +2,6 @@ package com.sondahum.mamas.domain.contract;
 
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.user.User;
-import com.sondahum.mamas.dto.ContractDto;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

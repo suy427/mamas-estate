@@ -1,7 +1,6 @@
 package com.sondahum.mamas.domain.contract;
 
 
-import com.sondahum.mamas.dto.ContractDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

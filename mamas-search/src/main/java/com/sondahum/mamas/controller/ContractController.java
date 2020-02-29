@@ -3,7 +3,7 @@ package com.sondahum.mamas.controller;
 import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.domain.contract.ContractSearchService;
 import com.sondahum.mamas.domain.contract.ContractService;
-import com.sondahum.mamas.dto.ContractDto;
+import com.sondahum.mamas.domain.contract.ContractDto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

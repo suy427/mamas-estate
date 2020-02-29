@@ -1,6 +1,5 @@
 package com.sondahum.mamas.domain.contract;
 
-import com.sondahum.mamas.dto.ContractDto;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import org.springframework.stereotype.Service;
 

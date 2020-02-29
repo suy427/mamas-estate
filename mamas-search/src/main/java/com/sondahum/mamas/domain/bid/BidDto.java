@@ -1,4 +1,4 @@
-package com.sondahum.mamas.dto;
+package com.sondahum.mamas.domain.bid;
 
 import com.sondahum.mamas.domain.bid.Action;
 import com.sondahum.mamas.domain.bid.Bid;

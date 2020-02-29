@@ -1,4 +1,4 @@
-package com.sondahum.mamas.dto;
+package com.sondahum.mamas.domain.contract;
 
 import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.domain.estate.Estate;
