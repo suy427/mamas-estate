@@ -3,8 +3,11 @@ package com.sondahum.mamas.repository;
 import com.sondahum.mamas.AbstractMamasSearchTest;
 import com.sondahum.mamas.domain.bid.Action;
 import com.sondahum.mamas.domain.bid.Bid;
+import com.sondahum.mamas.domain.bid.BidRepository;
 import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.estate.EstateRepository;
 import com.sondahum.mamas.domain.user.User;
+import com.sondahum.mamas.domain.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +24,12 @@ import java.util.List;
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BidRepositoryTest extends AbstractMamasSearchTest {
 
-    @Autowired UserRepository userRepository;
-    @Autowired BidRepository bidRepository;
-    @Autowired EstateRepository estateRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    BidRepository bidRepository;
+    @Autowired
+    EstateRepository estateRepository;
     @Autowired TestEntityManager entityManager;
 
     /**

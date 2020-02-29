@@ -1,9 +1,7 @@
-package com.sondahum.mamas.repository;
+package com.sondahum.mamas.domain.user;
 
-import com.sondahum.mamas.domain.user.Role;
-import com.sondahum.mamas.domain.user.User;
+import com.sondahum.mamas.domain.user.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

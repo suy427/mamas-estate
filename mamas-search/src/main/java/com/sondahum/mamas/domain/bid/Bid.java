@@ -42,7 +42,7 @@ public class Bid implements Serializable, Comparable<Bid> {
     @AttributeOverrides({
             @AttributeOverride(name = "minimum", column = @Column(name = "min_price"))
             , @AttributeOverride(name = "maximum", column = @Column(name = "max_price"))})
-    private Range<Long> priceRange;
+    private Range.Price priceRange;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
     @CreatedDate

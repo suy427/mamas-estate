@@ -1,6 +1,10 @@
 package com.sondahum.mamas.domain.estate;
 
 import com.sondahum.mamas.common.model.Range;
+import com.sondahum.mamas.domain.estate.model.Address;
+import com.sondahum.mamas.domain.estate.model.ContractType;
+import com.sondahum.mamas.domain.estate.model.EstateType;
+import com.sondahum.mamas.domain.estate.model.Status;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.dto.EstateDto;
@@ -48,13 +52,13 @@ public class Estate implements Serializable {
     @AttributeOverrides({
             @AttributeOverride(name = "minimum", column = @Column(name = "market_min_price"))
             , @AttributeOverride(name = "maximum", column = @Column(name = "market_max_price"))})
-    private Range<Long> marketPriceRange;
+    private Range.Price marketPriceRange;
 
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "minimum", column = @Column(name = "owner_min_price"))
             , @AttributeOverride(name = "maximum", column = @Column(name = "owner_max_price"))})
-    private Range<Long> ownerRequirePriceRange;
+    private Range.Price ownerRequirePriceRange;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

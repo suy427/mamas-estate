@@ -18,7 +18,7 @@ public class BidDto {
         private String user;
         @NotEmpty(message = "등록할 매물의 이름을 입력해주세요.")
         private String estate;
-        private Range<Long> price;
+        private Range.Price price;
         @NotEmpty(message = "매매 종류를 입력해주세요.")
         private String action;
 
@@ -43,7 +43,7 @@ public class BidDto {
         private String user;
         @NotEmpty(message = "변경할 매물 정보를 입력해주세요.")
         private String estate;
-        private Range<Long> price;
+        private Range.Price price;
         @NotEmpty(message = "변경할 매매 종류를 입력해주세요..")
         private String action;
     }
@@ -56,7 +56,7 @@ public class BidDto {
         private Long id;
         private String user;
         private String estate;
-        private Range<Long> price;
+        private Range.Price price;
         private String action;
 
 

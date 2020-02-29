@@ -1,10 +1,12 @@
 package com.sondahum.mamas.domain.user;
 
 import com.sondahum.mamas.domain.bid.Action;
-import com.sondahum.mamas.domain.estate.Status;
+import com.sondahum.mamas.domain.estate.model.Status;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.user.model.Phone;
+import com.sondahum.mamas.domain.user.model.Role;
 import com.sondahum.mamas.dto.UserDto;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,6 +17,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,11 +52,8 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "owner")
     List<Estate> estateList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "seller")
-    List<Contract> soldList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "buyer")
-    List<Contract> boughtList = new ArrayList<>();
+    @OneToMany
+    List<Contract> contractList = new ArrayList<>();
 
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
     @CreatedDate
@@ -62,6 +62,21 @@ public class User implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
     @LastModifiedDate
     LocalDate modifiedDate;
+
+
+
+    public List<Contract> getSoldList() {
+        return contractList.stream()
+                .filter(contract -> contract.getSeller().id.equals(this.id))
+                .collect(Collectors.toList());
+
+    }
+
+    public List<Contract> getBoughtList() {
+        return contractList.stream()
+                .filter(contract -> contract.getBuyer().id.equals(this.id))
+                .collect(Collectors.toList());
+    }
 
 
     public List<Estate> getSellingList() {
@@ -87,25 +102,7 @@ public class User implements Serializable {
     }
 
     public LocalDate getRecentContractedDate() { // TODO 쌉 하드코딩...
-        Contract recentSold = soldList.stream()
-                .max(Contract::compareTo).orElse(null);
-
-        Contract recentBought = boughtList.stream()
-                .max(Contract::compareTo).orElse(null);
-
-        if (recentBought == null && recentSold == null) {
-            return null;
-        } else if (recentBought == null ) {
-            return recentSold.getCreatedDate();
-        } else if (recentSold == null) {
-            return recentBought.getCreatedDate();
-        } else {
-            if (recentBought.compareTo(recentSold) > 0) {
-                return recentBought.getCreatedDate();
-            } else {
-                return recentSold.getCreatedDate();
-            }
-        }
+        return Collections.max(contractList).getCreatedDate();
     }
 
     public void updateUserInfo(UserDto.UpdateReq userDto) {

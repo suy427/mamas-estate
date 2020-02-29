@@ -1,4 +1,4 @@
-package com.sondahum.mamas.domain.user;
+package com.sondahum.mamas.domain.user.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;

@@ -1,7 +1,10 @@
 package com.sondahum.mamas.repository;
 
 import com.sondahum.mamas.AbstractMamasSearchTest;
+import com.sondahum.mamas.domain.bid.BidRepository;
+import com.sondahum.mamas.domain.estate.EstateRepository;
 import com.sondahum.mamas.domain.user.User;
+import com.sondahum.mamas.domain.user.UserRepository;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -19,9 +22,12 @@ import java.util.List;
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest extends AbstractMamasSearchTest{
 
-    @Autowired UserRepository userRepository;
-    @Autowired BidRepository bidRepository;
-    @Autowired EstateRepository estateRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    BidRepository bidRepository;
+    @Autowired
+    EstateRepository estateRepository;
     @Autowired TestEntityManager entityManager;
 
     @Test

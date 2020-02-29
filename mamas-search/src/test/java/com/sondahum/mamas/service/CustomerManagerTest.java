@@ -1,8 +1,8 @@
 package com.sondahum.mamas.service;
 
 
-import com.sondahum.mamas.repository.BidRepository;
-import com.sondahum.mamas.repository.UserRepository;
+import com.sondahum.mamas.domain.bid.BidRepository;
+import com.sondahum.mamas.domain.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

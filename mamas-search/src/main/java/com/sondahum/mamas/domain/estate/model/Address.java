@@ -1,4 +1,4 @@
-package com.sondahum.mamas.domain.estate;
+package com.sondahum.mamas.domain.estate.model;
 
 import lombok.*;
 

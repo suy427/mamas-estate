@@ -2,7 +2,8 @@ package com.sondahum.mamas.controller;
 
 import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.dto.UserDto;
-import com.sondahum.mamas.service.UserInfoService;
+import com.sondahum.mamas.domain.user.UserInfoService;
+import com.sondahum.mamas.domain.user.UserSearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -17,12 +18,12 @@ class UserController {
 
     private static final Logger logger =  LoggerFactory.getLogger(UserController.class);
     private final UserInfoService userInfoService;
-//    private final UserSearchService userSearchService;
+    private final UserSearchService userSearchService;
 
 
-    UserController(UserInfoService userInfoService) {
+    UserController(UserInfoService userInfoService, UserSearchService userSearchService) {
         this.userInfoService = userInfoService;
-//        this.userSearchService = userSearchService;
+        this.userSearchService = userSearchService;
     }
 
     @PostMapping
@@ -36,7 +37,7 @@ class UserController {
                                                      @RequestParam(name = "value", required = false) final UserDto.SearchReq query,
                                                      final PageRequest pageRequest
     ) {
-        return userInfoService.searchUsers(query, pageRequest.of()).map(UserDto.SearchResponse::new);
+        return userSearchService.search(query, pageRequest.of()).map(UserDto.SearchResponse::new);
     }
 
     @GetMapping(value = "/{id}")

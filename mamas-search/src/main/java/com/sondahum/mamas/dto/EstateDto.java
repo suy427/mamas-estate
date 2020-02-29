@@ -1,14 +1,13 @@
 package com.sondahum.mamas.dto;
 
-import com.sondahum.mamas.domain.estate.Address;
+import com.sondahum.mamas.domain.estate.model.Address;
 import com.sondahum.mamas.common.model.Range;
-import com.sondahum.mamas.domain.estate.ContractType;
+import com.sondahum.mamas.domain.estate.model.ContractType;
 import com.sondahum.mamas.domain.estate.Estate;
-import com.sondahum.mamas.domain.estate.EstateType;
-import com.sondahum.mamas.domain.estate.Status;
+import com.sondahum.mamas.domain.estate.model.EstateType;
+import com.sondahum.mamas.domain.estate.model.Status;
 import com.sondahum.mamas.domain.user.User;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
@@ -25,8 +24,8 @@ public class EstateDto {
         private Status status;
         private EstateType estateType;
         private ContractType contractType;
-        private Range<Long> ownerRequirePriceRange;
-        private Range<Long> marketPriceRange;
+        private Range.Price ownerRequirePriceRange;
+        private Range.Price marketPriceRange;
 
         public Estate toEntity() {
             User owner = User.builder().name(ownerName).build();
@@ -56,18 +55,18 @@ public class EstateDto {
         private Status status;
         private EstateType estateType;
         private ContractType contractType;
-        private Range<Long> ownerRequirePriceRange;
-        private Range<Long> marketPriceRange;
+        private Range.Price ownerRequirePriceRange;
+        private Range.Price marketPriceRange;
     }
 
     @Getter
     public static class SearchReq {
         private String name;
         private String address;
-        private Range<Double> area;
+        private Range.Area area;
         private Status status;
-        private Range<Long> ownerRequirePriceRange;
-        private Range<Long> marketPriceRange;
+        private Range.Price ownerRequirePriceRange;
+        private Range.Price marketPriceRange;
         private String owner;
     }
 
@@ -95,8 +94,8 @@ public class EstateDto {
         private Status status;
         private EstateType estateType;
         private ContractType contractType;
-        private Range<Long> ownerRequirePriceRange;
-        private Range<Long> marketPriceRange;
+        private Range.Price ownerRequirePriceRange;
+        private Range.Price marketPriceRange;
 
         public DetailResponse(Estate estate) {
             this.id = estate.getId();

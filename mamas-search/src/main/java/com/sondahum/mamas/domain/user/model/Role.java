@@ -1,4 +1,4 @@
-package com.sondahum.mamas.domain.user;
+package com.sondahum.mamas.domain.user.model;
 
 import java.util.LinkedHashMap;
 

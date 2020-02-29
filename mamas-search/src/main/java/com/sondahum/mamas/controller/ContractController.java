@@ -1,7 +1,8 @@
 package com.sondahum.mamas.controller;
 
 import com.sondahum.mamas.common.model.PageRequest;
-import com.sondahum.mamas.service.ContractService;
+import com.sondahum.mamas.domain.contract.ContractSearchService;
+import com.sondahum.mamas.domain.contract.ContractService;
 import com.sondahum.mamas.dto.ContractDto;
 
 import org.slf4j.Logger;
@@ -18,11 +19,11 @@ public class ContractController {
 
     private static final Logger logger =  LoggerFactory.getLogger(ContractController.class);
     private final ContractService contractService;
-//    private final ContractSearchService contractSearchService;
+    private final ContractSearchService contractSearchService;
 
-    public ContractController(ContractService contractService) {
+    public ContractController(ContractService contractService, ContractSearchService contractSearchService) {
         this.contractService = contractService;
-//        this.contractSearchService = contractSearchService;
+        this.contractSearchService = contractSearchService;
     }
 
     @PostMapping
@@ -36,7 +37,7 @@ public class ContractController {
                                                              @RequestParam(name = "value", required = false) final ContractDto.SearchReq value,
                                                              final PageRequest pageRequest
     ) {
-        return contractService.searchContracts(value, pageRequest.of()).map(ContractDto.DetailResponse::new);
+        return contractSearchService.search(value, pageRequest.of()).map(ContractDto.DetailResponse::new);
     }
 
     @PutMapping(value = "/{id}")

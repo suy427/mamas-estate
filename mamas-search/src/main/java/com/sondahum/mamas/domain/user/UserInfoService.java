@@ -1,13 +1,9 @@
-package com.sondahum.mamas.service;
+package com.sondahum.mamas.domain.user;
 
 
-import com.sondahum.mamas.dto.UserDto;
-import com.sondahum.mamas.repository.UserRepository;
-import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.sondahum.mamas.dto.UserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,18 +72,5 @@ public class UserInfoService {
         userRepository.deleteById(id);
 
         return new UserDto.DetailResponse(user);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<User> searchUsers(final UserDto.SearchReq query, final Pageable pageable) {
-        Page<User> searchResult;
-
-        if (query == null) {
-            searchResult = userRepository.findAll(pageable);
-        } else {
-            searchResult = null;
-        }
-
-        return searchResult;
     }
 }

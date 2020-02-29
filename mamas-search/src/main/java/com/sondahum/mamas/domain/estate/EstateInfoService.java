@@ -1,14 +1,8 @@
-package com.sondahum.mamas.service;
+package com.sondahum.mamas.domain.estate;
 
 import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
-import com.sondahum.mamas.domain.user.User;
-import com.sondahum.mamas.dto.UserDto;
-import com.sondahum.mamas.repository.EstateRepository;
-import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.dto.EstateDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,19 +53,6 @@ public class EstateInfoService {
 //        userRepository.save(user) // TODO 이유 알아내기~~
 
         return new EstateDto.DetailResponse(estate);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<Estate> searchEstates(final EstateDto.SearchReq query, final Pageable pageable) {
-        Page<Estate> searchResult;
-
-        if (query == null) {
-            searchResult = estateRepository.findAll(pageable);
-        } else {
-            searchResult = null;
-        }
-
-        return searchResult;
     }
 
     public EstateDto.DetailResponse deleteEstateInfo(Long id) {

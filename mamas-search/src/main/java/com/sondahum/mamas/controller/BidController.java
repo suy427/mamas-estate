@@ -1,8 +1,9 @@
 package com.sondahum.mamas.controller;
 
-import com.sondahum.mamas.service.BidInfoService;
+import com.sondahum.mamas.domain.bid.BidInfoService;
 import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.common.model.PageRequest;
+import com.sondahum.mamas.domain.bid.BidSearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -17,11 +18,11 @@ public class BidController {
 
     private static final Logger logger =  LoggerFactory.getLogger(BidController.class);
     private final BidInfoService bidInfoService;
-//    private final BidSearchService bidSearchService;
+    private final BidSearchService bidSearchService;
 
-    public BidController(BidInfoService bidInfoService) {
+    public BidController(BidInfoService bidInfoService, BidSearchService bidSearchService) {
         this.bidInfoService = bidInfoService;
-//        this.bidSearchService = bidSearchService;
+        this.bidSearchService = bidSearchService;
     }
 
     @PostMapping
@@ -35,7 +36,7 @@ public class BidController {
                                                    @RequestParam(name = "value", required = false) final BidDto.SearchReq query,
                                                    final PageRequest pageRequest
     ) {
-        return bidInfoService.searchBid(query, pageRequest.of()).map(BidDto.DetailResponse::new);
+        return bidSearchService.search(query, pageRequest.of()).map(BidDto.DetailResponse::new);
     }
 
     @PutMapping(value = "/{id}")

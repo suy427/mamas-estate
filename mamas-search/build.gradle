@@ -29,14 +29,14 @@ dependencies {
 
 //    ############################
 
-//    // QueryDSL-JPA
-//    compile group: 'com.querydsl', name: 'querydsl-jpa', version: '4.2.2'
-//    // QueryDSL-APT
-//    compile group: 'com.querydsl', name: 'querydsl-apt', version: '4.2.2'
-//    // QueryDSL-CORE
-//    compile group: "com.querydsl", name:"querydsl-core", version: "4.2.2"
-//    // QueryDSL-COLLECTIONS
-//    compile group:"com.querydsl", name:"querydsl-collections", version: "4.2.2"
+    // QueryDSL-JPA
+    compile group: 'com.querydsl', name: 'querydsl-jpa', version: '4.2.2'
+    // QueryDSL-APT
+    compile group: 'com.querydsl', name: 'querydsl-apt', version: '4.2.2'
+    // QueryDSL-CORE
+    compile group: "com.querydsl", name:"querydsl-core", version: "4.2.2"
+    // QueryDSL-COLLECTIONS
+    compile group:"com.querydsl", name:"querydsl-collections", version: "4.2.2"
 
     // h2 database
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
@@ -56,26 +56,26 @@ dependencies {
 
 //    ############################
 //
-//def querydslSrcDir = 'src/main/generated'
-//
-//querydsl {
-//    library = "com.querydsl:querydsl-apt"
-//    jpa = true
-//    querydslSourcesDir = querydslSrcDir
-//}
-//
-//compileQuerydsl{
-//    options.annotationProcessorPath = configurations.querydsl
-//}
-//
-//configurations {
-//    querydsl.extendsFrom compileClasspath
-//}
-//
-//sourceSets {
-//    main {
-//        java {
-//            srcDirs = ['src/main/java', querydslSrcDir]
-//        }
-//    }
-//}
+def querydslSrcDir = 'src/main/generated'
+
+querydsl {
+    library = "com.querydsl:querydsl-apt"
+    jpa = true
+    querydslSourcesDir = querydslSrcDir
+}
+
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', querydslSrcDir]
+        }
+    }
+}

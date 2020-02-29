@@ -1,13 +1,8 @@
-package com.sondahum.mamas.service;
+package com.sondahum.mamas.domain.contract;
 
-import com.sondahum.mamas.repository.ContractRepository;
-import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.dto.ContractDto;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -38,16 +33,4 @@ public class ContractService {
         return new ContractDto.DetailResponse(contract);
     }
 
-    @Transactional(readOnly = true)
-    public Page<Contract> searchContracts(final ContractDto.SearchReq query, final Pageable pageable) {
-        Page<Contract> searchResult;
-
-        if (query == null) {
-            searchResult = contractRepository.findAll(pageable);
-        } else {
-            searchResult = null;
-        }
-
-        return searchResult;
-    }
 }

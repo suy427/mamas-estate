@@ -1,15 +1,10 @@
-package com.sondahum.mamas.service;
+package com.sondahum.mamas.domain.bid;
 
-import com.sondahum.mamas.repository.BidRepository;
-import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -41,16 +36,4 @@ public class BidInfoService {
         return new BidDto.DetailResponse(bid);
     }
 
-    @Transactional(readOnly = true)
-    public Page<Bid> searchBid(final BidDto.SearchReq query, final Pageable pageable) {
-        Page<Bid> searchResult;
-
-        if (query == null) {
-            searchResult = bidRepository.findAll(pageable);
-        } else {
-            searchResult = null;
-        }
-
-        return searchResult;
-    }
 }

@@ -2,7 +2,8 @@ package com.sondahum.mamas.controller;
 
 import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.dto.EstateDto;
-import com.sondahum.mamas.service.EstateInfoService;
+import com.sondahum.mamas.domain.estate.EstateInfoService;
+import com.sondahum.mamas.domain.estate.EstateSearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,12 +19,12 @@ public class EstateController {
 
     private static final Logger logger =  LoggerFactory.getLogger(EstateController.class);
     private final EstateInfoService estateInfoService;
-//    private final EstateSearchService estateSearchService;
+    private final EstateSearchService estateSearchService;
 
 
-    EstateController(EstateInfoService estateInfoService) {
+    EstateController(EstateInfoService estateInfoService, EstateSearchService estateSearchService) {
         this.estateInfoService = estateInfoService;
-//        this.estateSearchService = estateSearchService;
+        this.estateSearchService = estateSearchService;
     }
 
     @PostMapping
@@ -37,7 +38,7 @@ public class EstateController {
                                                          @RequestParam(name = "value", required = false) final EstateDto.SearchReq query,
                                                          final PageRequest pageRequest
     ) {
-        return estateInfoService.searchEstates(query, pageRequest.of()).map(EstateDto.SearchResponse::new);
+        return estateSearchService.search(query, pageRequest.of()).map(EstateDto.SearchResponse::new);
     }
 
     @GetMapping(value = "/{id}")

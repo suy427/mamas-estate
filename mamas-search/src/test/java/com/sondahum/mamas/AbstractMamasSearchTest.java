@@ -1,14 +1,14 @@
 package com.sondahum.mamas;
 
-import com.sondahum.mamas.common.model.*;
+import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.Action;
 import com.sondahum.mamas.domain.bid.Bid;
-import com.sondahum.mamas.domain.estate.Address;
-import com.sondahum.mamas.domain.estate.ContractType;
+import com.sondahum.mamas.domain.estate.model.Address;
+import com.sondahum.mamas.domain.estate.model.ContractType;
 import com.sondahum.mamas.domain.estate.Estate;
-import com.sondahum.mamas.domain.estate.EstateType;
-import com.sondahum.mamas.domain.user.Phone;
-import com.sondahum.mamas.domain.user.Role;
+import com.sondahum.mamas.domain.estate.model.EstateType;
+import com.sondahum.mamas.domain.user.model.Phone;
+import com.sondahum.mamas.domain.user.model.Role;
 import com.sondahum.mamas.domain.user.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
@@ -59,14 +59,14 @@ public abstract class AbstractMamasSearchTest {
     }
 
     @Test
-    protected Range<Double> randomAreaGenerator() {
+    protected Range.Area randomAreaGenerator() {
         Double min = Double.parseDouble(RandomStringUtils.randomNumeric(3));
         Double max = Double.parseDouble(RandomStringUtils.randomNumeric(3));
 
         while (max < min)
             max = Double.parseDouble(RandomStringUtils.randomNumeric(3));
 
-        Range<Double> result = new Range<Double>();
+        Range.Area result = new Range.Area();
         result.setMaximum(max);
         result.setMinimum(min);
         return result;
@@ -98,14 +98,14 @@ public abstract class AbstractMamasSearchTest {
     }
 
     @Test
-    protected Range<Long> randomPriceRangeGenerator() {
+    protected Range.Price randomPriceRangeGenerator() {
         Long min = Long.parseLong(RandomStringUtils.randomNumeric(8));
         Long max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
         while (max < min)
             max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
-        Range<Long> result = new Range<Long>();
+        Range.Price result = new Range.Price();
         result.setMaximum(max);
         result.setMinimum(min);
         return result;
