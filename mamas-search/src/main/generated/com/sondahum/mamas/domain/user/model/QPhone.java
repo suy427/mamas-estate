@@ -1,4 +1,4 @@
-package com.sondahum.mamas.domain.user;
+package com.sondahum.mamas.domain.user.model;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
-import com.sondahum.mamas.domain.user.model.Phone;
 
 
 /**
@@ -16,7 +15,7 @@ import com.sondahum.mamas.domain.user.model.Phone;
 @Generated("com.querydsl.codegen.EmbeddableSerializer")
 public class QPhone extends BeanPath<Phone> {
 
-    private static final long serialVersionUID = 1560500706L;
+    private static final long serialVersionUID = 1477361629L;
 
     public static final QPhone phone = new QPhone("phone");
 

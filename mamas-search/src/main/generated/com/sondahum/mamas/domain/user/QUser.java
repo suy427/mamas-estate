@@ -8,7 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import com.sondahum.mamas.domain.user.model.Role;
 
 
 /**
@@ -37,9 +36,9 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath name = createString("name");
 
-    public final QPhone phone;
+    public final com.sondahum.mamas.domain.user.model.QPhone phone;
 
-    public final EnumPath<Role> role = createEnum("role", Role.class);
+    public final EnumPath<com.sondahum.mamas.domain.user.model.Role> role = createEnum("role", com.sondahum.mamas.domain.user.model.Role.class);
 
     public QUser(String variable) {
         this(User.class, forVariable(variable), INITS);
@@ -59,7 +58,7 @@ public class QUser extends EntityPathBase<User> {
 
     public QUser(Class<? extends User> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.phone = inits.isInitialized("phone") ? new QPhone(forProperty("phone")) : null;
+        this.phone = inits.isInitialized("phone") ? new com.sondahum.mamas.domain.user.model.QPhone(forProperty("phone")) : null;
     }
 
 }

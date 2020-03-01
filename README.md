@@ -2,17 +2,15 @@
 
 ## Tech Stack
 * Java (1.8)
-* Spring boot
+* Spring boot (2.2.2 RELEASE)
 * JPA (Hibernate)
 * QueryDSL
-* Spring Data Jpa
+* Spring Data Jpa (2.2x.4 RELEASE)  
 * Elasticsearch
 * Logstash
 
 
 ## Modules  
-- #### mamas-api
-  *
 - #### mamas-search
   *
 - #### mamas-insight

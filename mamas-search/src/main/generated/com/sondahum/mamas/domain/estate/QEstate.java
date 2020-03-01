@@ -8,9 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import com.sondahum.mamas.domain.estate.model.ContractType;
-import com.sondahum.mamas.domain.estate.model.EstateType;
-import com.sondahum.mamas.domain.estate.model.Status;
 
 
 /**
@@ -25,17 +22,17 @@ public class QEstate extends EntityPathBase<Estate> {
 
     public static final QEstate estate = new QEstate("estate");
 
-    public final QAddress address;
+    public final com.sondahum.mamas.domain.estate.model.QAddress address;
 
     public final NumberPath<Double> area = createNumber("area", Double.class);
 
     public final ListPath<com.sondahum.mamas.domain.bid.Bid, com.sondahum.mamas.domain.bid.QBid> bidList = this.<com.sondahum.mamas.domain.bid.Bid, com.sondahum.mamas.domain.bid.QBid>createList("bidList", com.sondahum.mamas.domain.bid.Bid.class, com.sondahum.mamas.domain.bid.QBid.class, PathInits.DIRECT2);
 
-    public final EnumPath<ContractType> contractType = createEnum("contractType", ContractType.class);
+    public final EnumPath<com.sondahum.mamas.domain.estate.model.ContractType> contractType = createEnum("contractType", com.sondahum.mamas.domain.estate.model.ContractType.class);
 
     public final DatePath<java.time.LocalDate> createdDate = createDate("createdDate", java.time.LocalDate.class);
 
-    public final EnumPath<EstateType> estateType = createEnum("estateType", EstateType.class);
+    public final EnumPath<com.sondahum.mamas.domain.estate.model.EstateType> estateType = createEnum("estateType", com.sondahum.mamas.domain.estate.model.EstateType.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -49,7 +46,7 @@ public class QEstate extends EntityPathBase<Estate> {
 
     public final com.sondahum.mamas.common.model.QRange_Price ownerRequirePriceRange;
 
-    public final EnumPath<Status> status = createEnum("status", Status.class);
+    public final EnumPath<com.sondahum.mamas.domain.estate.model.Status> status = createEnum("status", com.sondahum.mamas.domain.estate.model.Status.class);
 
     public QEstate(String variable) {
         this(Estate.class, forVariable(variable), INITS);
@@ -69,7 +66,7 @@ public class QEstate extends EntityPathBase<Estate> {
 
     public QEstate(Class<? extends Estate> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.address = inits.isInitialized("address") ? new QAddress(forProperty("address")) : null;
+        this.address = inits.isInitialized("address") ? new com.sondahum.mamas.domain.estate.model.QAddress(forProperty("address")) : null;
         this.marketPriceRange = inits.isInitialized("marketPriceRange") ? new com.sondahum.mamas.common.model.QRange_Price(forProperty("marketPriceRange")) : null;
         this.owner = inits.isInitialized("owner") ? new com.sondahum.mamas.domain.user.QUser(forProperty("owner"), inits.get("owner")) : null;
         this.ownerRequirePriceRange = inits.isInitialized("ownerRequirePriceRange") ? new com.sondahum.mamas.common.model.QRange_Price(forProperty("ownerRequirePriceRange")) : null;

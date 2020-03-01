@@ -1,4 +1,4 @@
-package com.sondahum.mamas.domain.estate;
+package com.sondahum.mamas.domain.estate.model;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
-import com.sondahum.mamas.domain.estate.model.Address;
 
 
 /**
@@ -16,7 +15,7 @@ import com.sondahum.mamas.domain.estate.model.Address;
 @Generated("com.querydsl.codegen.EmbeddableSerializer")
 public class QAddress extends BeanPath<Address> {
 
-    private static final long serialVersionUID = 1658968105L;
+    private static final long serialVersionUID = 100488868L;
 
     public static final QAddress address = new QAddress("address");
 
