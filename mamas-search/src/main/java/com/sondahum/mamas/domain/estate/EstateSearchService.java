@@ -3,7 +3,6 @@ package com.sondahum.mamas.domain.estate;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.sondahum.mamas.common.model.Range;
-import com.sondahum.mamas.domain.estate.model.Address;
 import com.sondahum.mamas.domain.estate.model.Status;
 import com.sondahum.mamas.dto.EstateDto;
 import org.springframework.data.domain.Page;
@@ -21,11 +20,19 @@ import static com.sondahum.mamas.domain.estate.QEstate.estate;
 @Service
 public class EstateSearchService extends QuerydslRepositorySupport {
 
-    public EstateSearchService() {
+    private final EstateRepository estateRepository;
+
+    public EstateSearchService(EstateRepository estateRepository) {
         super(Estate.class);
+        this.estateRepository = estateRepository;
     }
 
+
     public Page<Estate> search(final EstateDto.SearchReq query, final Pageable pageable) {
+        if (query == null) {
+            return estateRepository.findAll(pageable);
+        }
+
         List<Estate> estates = from(estate).where(
                 name(query.getName())
                 , address(query.getAddress())
@@ -57,7 +64,7 @@ public class EstateSearchService extends QuerydslRepositorySupport {
     private BooleanExpression area(Range.Area areaRange) {
         if (areaRange == null) return null;
 
-        return estate.area.between(areaRange.getMaximum()-Double.MIN_VALUE, areaRange.getMaximum()+Double.MIN_VALUE);
+        return estate.area.between(areaRange.getMinimum(), areaRange.getMaximum());
     }
 
     private BooleanExpression status(Status status) {
@@ -67,18 +74,19 @@ public class EstateSearchService extends QuerydslRepositorySupport {
     }
 
     private BooleanExpression ownerRequiredPrice(Range.Price ownerPrice) {
-        return PriceRangeContition(ownerPrice);
+        return PriceRangeCondition(ownerPrice);
     }
 
     private BooleanExpression marketPriceRange(Range.Price marketPrice) {
-        return PriceRangeContition(marketPrice);
+        return PriceRangeCondition(marketPrice);
     }
 
-    private BooleanExpression PriceRangeContition(Range.Price priceRange) {
+    private BooleanExpression PriceRangeCondition(Range.Price priceRange) {
         if (priceRange == null) return null;
 
         if (priceRange.getMaximum().equals(priceRange.getMinimum())) {
             Long price = priceRange.getMaximum();
+
             return estate.ownerRequirePriceRange.minimum.loe(price)
                     .and(estate.ownerRequirePriceRange.maximum.goe(price));
         } else {

@@ -50,7 +50,7 @@ public class EstateDto {
         @NotEmpty(message = "변경할 부동산 이름을 입력해주세요.")
         private String name;
         private Address address;
-        private String area;
+        private Double area;
         private String ownerName;
         private Status status;
         private EstateType estateType;
@@ -67,6 +67,8 @@ public class EstateDto {
         private Status status;
         private Range.Price ownerRequirePriceRange;
         private Range.Price marketPriceRange;
+        private ContractType contractType;
+        private EstateType estateType;
         private String owner;
     }
 
@@ -75,12 +77,16 @@ public class EstateDto {
         private String name;
         private String address3; // most detailed address
         private Status status;
+        private EstateType estateType;
+        private ContractType contractType;
 
         public SearchResponse(Estate estate) {
             this.id = estate.getId();
             this.name = estate.getName();
             this.address3 = estate.getAddress().getAddress3();
             this.status = estate.getStatus();
+            this.contractType = estate.getContractType();
+            this.estateType = estate.getEstateType();
         }
 
     }

@@ -30,7 +30,7 @@ public class EstateInfoService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isSameEstateExist(EstateDto.CreateReq estateDto) {
+    boolean isSameEstateExist(EstateDto.CreateReq estateDto) {
         Optional<Estate> optionalEstate = estateRepository.findByName(estateDto.getName());
 
         if (optionalEstate.isPresent()) {

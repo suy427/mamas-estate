@@ -1,7 +1,7 @@
 package com.sondahum.mamas;
 
 import com.sondahum.mamas.common.model.Range;
-import com.sondahum.mamas.domain.bid.Action;
+import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.estate.model.Address;
 import com.sondahum.mamas.domain.estate.model.ContractType;

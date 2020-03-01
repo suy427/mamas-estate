@@ -2,8 +2,8 @@ package com.sondahum.mamas.controller;
 
 import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.domain.contract.ContractSearchService;
-import com.sondahum.mamas.domain.contract.ContractService;
-import com.sondahum.mamas.domain.contract.ContractDto;
+import com.sondahum.mamas.domain.contract.ContractInfoService;
+import com.sondahum.mamas.dto.ContractDto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,18 +18,18 @@ import javax.validation.Valid;
 public class ContractController {
 
     private static final Logger logger =  LoggerFactory.getLogger(ContractController.class);
-    private final ContractService contractService;
+    private final ContractInfoService contractInfoService;
     private final ContractSearchService contractSearchService;
 
-    public ContractController(ContractService contractService, ContractSearchService contractSearchService) {
-        this.contractService = contractService;
+    public ContractController(ContractInfoService contractInfoService, ContractSearchService contractSearchService) {
+        this.contractInfoService = contractInfoService;
         this.contractSearchService = contractSearchService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ContractDto.DetailResponse createContract(@RequestBody @Valid ContractDto.CreateReq userDto) {
-        return contractService.createContractInfo(userDto);
+        return contractInfoService.createContractInfo(userDto);
     }
 
     @GetMapping
@@ -43,12 +43,12 @@ public class ContractController {
     @PutMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public ContractDto.DetailResponse updateContractInfo(@PathVariable final long id, @RequestBody final ContractDto.UpdateReq dto) {
-        return contractService.updateContractInfo(id, dto);
+        return contractInfoService.updateContractInfo(id, dto);
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public ContractDto.DetailResponse deleteUser(@PathVariable final long id) {
-        return contractService.deleteContractInfo(id);
+        return contractInfoService.deleteContractInfo(id);
     }
 }

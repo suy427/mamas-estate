@@ -81,7 +81,9 @@ public class Estate implements Serializable {
     private LocalDate modifiedDate;
 
     public void updateEstateInfo(EstateDto.UpdateReq dto) {
-
+        this.name = dto.getName();
+        this.address = dto.getAddress();
+        this.area = dto.getArea();
     }
 }
 

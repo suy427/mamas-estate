@@ -1,7 +1,7 @@
-package com.sondahum.mamas.domain.bid;
+package com.sondahum.mamas.dto;
 
-import com.sondahum.mamas.domain.bid.Action;
 import com.sondahum.mamas.domain.bid.Bid;
+import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.user.User;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
 
 public class BidDto {
 
-
+    @Getter
     public static class CreateReq {
         @NotEmpty(message = "등록할 고객의 이름을 입력해주세요.")
         private String user;
@@ -48,8 +48,13 @@ public class BidDto {
         private String action;
     }
 
+    @Getter
     public static class SearchReq {
-
+        private String user;
+        private String estate;
+        private Action action;
+        private Range.Date date;
+        private Range.Price price;
     }
 
     public static class DetailResponse {

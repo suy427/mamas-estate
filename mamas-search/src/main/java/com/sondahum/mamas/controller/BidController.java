@@ -1,7 +1,7 @@
 package com.sondahum.mamas.controller;
 
 import com.sondahum.mamas.domain.bid.BidInfoService;
-import com.sondahum.mamas.domain.bid.BidDto;
+import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.domain.bid.BidSearchService;
 import org.slf4j.Logger;

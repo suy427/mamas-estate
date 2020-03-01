@@ -1,4 +1,4 @@
-package com.sondahum.mamas.domain.bid;
+package com.sondahum.mamas.domain.bid.model;
 
 import java.util.LinkedHashMap;
 

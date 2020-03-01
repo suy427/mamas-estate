@@ -20,11 +20,18 @@ import static com.sondahum.mamas.domain.user.QUser.user;
 @Service
 public class UserSearchService extends QuerydslRepositorySupport {
 
-    public UserSearchService() {
+    private final UserRepository userRepository;
+
+    public UserSearchService(UserRepository userRepository) {
         super(User.class);
+        this.userRepository = userRepository;
     }
 
     public Page<User> search(final UserDto.SearchReq query, final Pageable pageable) {
+        if (query == null) {
+            return userRepository.findAll(pageable);
+        }
+
         List<User> users = from(user).where(
                 name(query.getName())
                 , phone(query.getPhone().getWholeNumber())

@@ -1,7 +1,7 @@
 package com.sondahum.mamas.repository;
 
 import com.sondahum.mamas.AbstractMamasSearchTest;
-import com.sondahum.mamas.domain.bid.Action;
+import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.BidRepository;
 import com.sondahum.mamas.domain.estate.Estate;

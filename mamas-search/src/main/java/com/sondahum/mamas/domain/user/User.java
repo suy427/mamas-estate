@@ -1,6 +1,6 @@
 package com.sondahum.mamas.domain.user;
 
-import com.sondahum.mamas.domain.bid.Action;
+import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.estate.model.Status;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.contract.Contract;

@@ -1,5 +1,6 @@
-package com.sondahum.mamas.domain.contract;
+package com.sondahum.mamas.dto;
 
+import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.user.User;
@@ -48,8 +49,13 @@ public class ContractDto {
         private LocalDate contractedDate;
     }
 
+    @Getter
     public static class SearchReq {
-
+        private String estate;
+        private String buyer;
+        private String seller;
+        private Range.Price contractedPrice;
+        private Range.Date contractedDate;
     }
 
     public static class DetailResponse {

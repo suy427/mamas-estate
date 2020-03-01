@@ -1,8 +1,11 @@
 package com.sondahum.mamas.domain.bid;
 
 import com.sondahum.mamas.common.model.Range;
+import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.user.User;
+import com.sondahum.mamas.dto.BidDto;
+import com.sondahum.mamas.dto.ContractDto;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -51,6 +54,14 @@ public class Bid implements Serializable, Comparable<Bid> {
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
     @LastModifiedDate
     private LocalDate modifiedDate;
+
+
+    public void updateBidInfo(BidDto.UpdateReq bidDto) {
+        this.user.setName(bidDto.getUser());      // todo 이런식으로 여기서 user나 estate를 수정해도 되는건가...
+        this.estate.setName(bidDto.getEstate());
+        this.action = Action.findByName(bidDto.getAction());
+        this.priceRange = bidDto.getPrice();
+    }
 
 
     @Override
