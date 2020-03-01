@@ -3,8 +3,8 @@ package com.sondahum.mamas.domain.bid;
 import java.util.LinkedHashMap;
 
 public enum Action {
-    BUY(1, "buy")
-    , SELL(2, "sell");
+    BUY(1, "BUY")
+    , SELL(2, "SELL");
 
 
     private final int value;
