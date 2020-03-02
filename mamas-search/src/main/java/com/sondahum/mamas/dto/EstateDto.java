@@ -9,8 +9,10 @@ import com.sondahum.mamas.domain.estate.model.Status;
 import com.sondahum.mamas.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Sort;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 public class EstateDto {
 
@@ -51,7 +53,7 @@ public class EstateDto {
         private String name;
         private Address address;
         private Double area;
-        private String ownerName;
+//        private String ownerName;
         private Status status;
         private EstateType estateType;
         private ContractType contractType;
@@ -70,6 +72,7 @@ public class EstateDto {
         private ContractType contractType;
         private EstateType estateType;
         private String owner;
+        private List<Sort.Order> sortOrders;
     }
 
     public static class SearchResponse {
@@ -115,9 +118,5 @@ public class EstateDto {
             this.ownerRequirePriceRange = estate.getOwnerRequirePriceRange();
             this.marketPriceRange = estate.getMarketPriceRange();
         }
-    }
-
-    enum SearchOrder {
-
     }
 }

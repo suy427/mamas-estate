@@ -7,8 +7,10 @@ import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Sort;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 public class BidDto {
 
@@ -39,10 +41,10 @@ public class BidDto {
     @Setter
     public static class UpdateReq {
         private Long id;
-        @NotEmpty(message = "변경할 고객의 이름을 입력해주세요.")
-        private String user;
-        @NotEmpty(message = "변경할 매물 정보를 입력해주세요.")
-        private String estate;
+//        @NotEmpty(message = "변경할 고객의 이름을 입력해주세요.")
+//        private String user;
+//        @NotEmpty(message = "변경할 매물 정보를 입력해주세요.")
+//        private String estate;
         private Range.Price price;
         @NotEmpty(message = "변경할 매매 종류를 입력해주세요..")
         private String action;
@@ -55,6 +57,7 @@ public class BidDto {
         private Action action;
         private Range.Date date;
         private Range.Price price;
+        private List<Sort.Order> sortOrders;
     }
 
     public static class DetailResponse {

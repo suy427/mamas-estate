@@ -5,9 +5,11 @@ import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.user.User;
 import lombok.Getter;
+import org.springframework.data.domain.Sort;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
+import java.util.List;
 
 public class ContractDto {
 
@@ -39,12 +41,12 @@ public class ContractDto {
     @Getter
     public static class UpdateReq {
         private Long id;
-        @NotEmpty(message = "변경할 매도자 이름을 입력해주세요.")
-        private String seller;
-        @NotEmpty(message = "변경할 매수자 이름을 입력해주세요.")
-        private String buyer;
-        @NotEmpty(message = "변경할 부동산 이름을 입력해주세요.")
-        private String estate;
+//        @NotEmpty(message = "변경할 매도자 이름을 입력해주세요.")
+//        private String seller;
+//        @NotEmpty(message = "변경할 매수자 이름을 입력해주세요.")
+//        private String buyer;
+//        @NotEmpty(message = "변경할 부동산 이름을 입력해주세요.")
+//        private String estate;
         private Long price;
         private LocalDate contractedDate;
     }
@@ -56,6 +58,7 @@ public class ContractDto {
         private String seller;
         private Range.Price contractedPrice;
         private Range.Date contractedDate;
+        private List<Sort.Order> sortOrders;
     }
 
     public static class DetailResponse {

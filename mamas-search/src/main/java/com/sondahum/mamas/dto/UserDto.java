@@ -5,9 +5,11 @@ import com.sondahum.mamas.domain.user.model.Phone;
 import com.sondahum.mamas.domain.user.model.Role;
 import com.sondahum.mamas.domain.user.User;
 import lombok.Getter;
+import org.springframework.data.domain.Sort;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
+import java.util.List;
 
 public class UserDto {
 
@@ -44,6 +46,7 @@ public class UserDto {
         private Role role;
         private Range.Date bidDate;
         private Range.Date contractDate;
+        private List<Sort.Order> sortOrders;
     }
 
     public static class SearchResponse {
