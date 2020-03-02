@@ -57,8 +57,8 @@ public class Bid implements Serializable, Comparable<Bid> {
 
 
     public void updateBidInfo(BidDto.UpdateReq bidDto) {
-        this.user.setName(bidDto.getUser());      // todo 이런식으로 여기서 user나 estate를 수정해도 되는건가...
-        this.estate.setName(bidDto.getEstate());
+//        this.user.setName(bidDto.getUser());      // todo 이런식으로 여기서 user나 estate를 수정해도 되는건가...
+//        this.estate.setName(bidDto.getEstate());
         this.action = Action.findByName(bidDto.getAction());
         this.priceRange = bidDto.getPrice();
     }

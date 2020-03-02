@@ -3,7 +3,10 @@ package com.sondahum.mamas.domain.user;
 
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
+import com.sondahum.mamas.domain.bid.BidInfoService;
 import com.sondahum.mamas.dto.UserDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +15,7 @@ import java.util.Optional;
 @Service
 public class UserInfoService {
 
+    private static final Logger logger =  LoggerFactory.getLogger(UserInfoService.class);
     private final UserRepository userRepository;
 
 

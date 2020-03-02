@@ -37,7 +37,7 @@ class UserController {
                                                      @RequestParam(name = "value", required = false) final UserDto.SearchReq query,
                                                      final PageRequest pageRequest
     ) {
-        return userSearchService.search(query, pageRequest.of()).map(UserDto.SearchResponse::new);
+        return userSearchService.search(query, pageRequest.of(query.getSortOrders())).map(UserDto.SearchResponse::new);
     }
 
     @GetMapping(value = "/{id}")

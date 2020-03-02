@@ -50,9 +50,6 @@ public class Contract implements Serializable, Comparable<Contract> {
     private LocalDate modifiedDate;
 
     public void updateContractInfo(ContractDto.UpdateReq contractDto) {
-        this.seller.setName(contractDto.getSeller());
-        this.buyer.setName(contractDto.getBuyer());
-        this.estate.setName(contractDto.getEstate());
         this.price = contractDto.getPrice();
         this.createdDate = contractDto.getContractedDate();
     }

@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
 @Service
@@ -19,8 +21,12 @@ public class BidInfoService {
     private static final Logger logger =  LoggerFactory.getLogger(BidInfoService.class);
     private final BidRepository bidRepository;
 
-    public BidInfoService(BidRepository bidRepository) {
+    @PersistenceContext
+    private final EntityManager em;
+
+    public BidInfoService(BidRepository bidRepository, EntityManager em) {
         this.bidRepository = bidRepository;
+        this.em = em;
     }
 
     public BidDto.DetailResponse createBid(BidDto.CreateReq bidDto) {
@@ -30,6 +36,13 @@ public class BidInfoService {
         Bid bid = bidRepository.save(bidDto.toEntity());
 
         return new BidDto.DetailResponse(bid);
+    }
+
+    public BidDto.DetailResponse getBidById(long id) {
+        Optional<Bid> optionalBid = bidRepository.findById(id);
+        optionalBid.orElseThrow(() -> new NoSuchEntityException(id));
+
+        return new BidDto.DetailResponse(optionalBid.get());
     }
 
     @Transactional(readOnly = true)
@@ -44,6 +57,7 @@ public class BidInfoService {
         Optional<Bid> optionalContract = bidRepository.findById(id);
         Bid bid = optionalContract.orElseThrow(() -> new NoSuchEntityException(id));
 
+        em.flush();
         bid.updateBidInfo(dto);
 
         return new BidDto.DetailResponse(bid);

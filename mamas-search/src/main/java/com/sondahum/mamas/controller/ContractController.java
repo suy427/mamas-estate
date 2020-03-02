@@ -5,6 +5,7 @@ import com.sondahum.mamas.domain.contract.ContractSearchService;
 import com.sondahum.mamas.domain.contract.ContractInfoService;
 import com.sondahum.mamas.dto.ContractDto;
 
+import com.sondahum.mamas.dto.EstateDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -34,10 +35,16 @@ public class ContractController {
 
     @GetMapping
     public Page<ContractDto.DetailResponse> searchContracts( // 이걸로 검색과 전체 유저 불러오기 가능
-                                                             @RequestParam(name = "value", required = false) final ContractDto.SearchReq value,
+                                                             @RequestParam(name = "value", required = false) final ContractDto.SearchReq query,
                                                              final PageRequest pageRequest
     ) {
-        return contractSearchService.search(value, pageRequest.of()).map(ContractDto.DetailResponse::new);
+        return contractSearchService.search(query, pageRequest.of(query.getSortOrders())).map(ContractDto.DetailResponse::new);
+    }
+
+    @GetMapping(value = "/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public ContractDto.DetailResponse getEstateDetail(@PathVariable final long id) {
+        return contractInfoService.getContractById(id);
     }
 
     @PutMapping(value = "/{id}")

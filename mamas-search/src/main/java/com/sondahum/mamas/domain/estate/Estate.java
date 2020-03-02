@@ -80,10 +80,17 @@ public class Estate implements Serializable {
     @LastModifiedDate
     private LocalDate modifiedDate;
 
+
+
     public void updateEstateInfo(EstateDto.UpdateReq dto) {
         this.name = dto.getName();
         this.address = dto.getAddress();
         this.area = dto.getArea();
+        this.status = dto.getStatus();
+        this.contractType = dto.getContractType();
+        this.estateType = dto.getEstateType();
+        this.ownerRequirePriceRange = dto.getOwnerRequirePriceRange();
+        this.marketPriceRange = dto.getMarketPriceRange();
     }
 }
 
