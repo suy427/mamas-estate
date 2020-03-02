@@ -8,7 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import com.sondahum.mamas.domain.bid.model.Action;
 
 
 /**
@@ -23,7 +22,7 @@ public class QBid extends EntityPathBase<Bid> {
 
     public static final QBid bid = new QBid("bid");
 
-    public final EnumPath<Action> action = createEnum("action", Action.class);
+    public final EnumPath<com.sondahum.mamas.domain.bid.model.Action> action = createEnum("action", com.sondahum.mamas.domain.bid.model.Action.class);
 
     public final DatePath<java.time.LocalDate> createdDate = createDate("createdDate", java.time.LocalDate.class);
 
