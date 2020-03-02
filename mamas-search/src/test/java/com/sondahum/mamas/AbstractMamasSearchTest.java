@@ -1,22 +1,20 @@
 package com.sondahum.mamas;
 
-import com.sondahum.mamas.bid.domain.Action;
-import com.sondahum.mamas.bid.domain.Bid;
-import com.sondahum.mamas.common.model.Address;
-import com.sondahum.mamas.common.model.Price;
-import com.sondahum.mamas.estate.domain.Estate;
-import com.sondahum.mamas.user.domain.Phone;
-import com.sondahum.mamas.user.domain.User;
-import com.sondahum.mamas.estate.domain.ContractType;
-import com.sondahum.mamas.estate.domain.EstateType;
-import com.sondahum.mamas.common.model.Role;
+import com.sondahum.mamas.common.model.Range;
+import com.sondahum.mamas.domain.bid.model.Action;
+import com.sondahum.mamas.domain.bid.Bid;
+import com.sondahum.mamas.domain.estate.model.Address;
+import com.sondahum.mamas.domain.estate.model.ContractType;
+import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.estate.model.EstateType;
+import com.sondahum.mamas.domain.user.model.Phone;
+import com.sondahum.mamas.domain.user.model.Role;
+import com.sondahum.mamas.domain.user.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public abstract class AbstractMamasSearchTest {
@@ -61,6 +59,20 @@ public abstract class AbstractMamasSearchTest {
     }
 
     @Test
+    protected Range.Area randomAreaGenerator() {
+        Double min = Double.parseDouble(RandomStringUtils.randomNumeric(3));
+        Double max = Double.parseDouble(RandomStringUtils.randomNumeric(3));
+
+        while (max < min)
+            max = Double.parseDouble(RandomStringUtils.randomNumeric(3));
+
+        Range.Area result = new Range.Area();
+        result.setMaximum(max);
+        result.setMinimum(min);
+        return result;
+    }
+
+    @Test
     protected Role randomRoleGenerator() {
         return Role.findByValue(random.nextInt(3) + 1);
     }
@@ -86,15 +98,17 @@ public abstract class AbstractMamasSearchTest {
     }
 
     @Test
-    protected Price randomPriceRangeGenerator() {
+    protected Range.Price randomPriceRangeGenerator() {
         Long min = Long.parseLong(RandomStringUtils.randomNumeric(8));
         Long max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
         while (max < min)
             max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
-
-        return Price.builder().minimum(min).maximum(max).build();
+        Range.Price result = new Range.Price();
+        result.setMaximum(max);
+        result.setMinimum(min);
+        return result;
     }
 
     /********************************
@@ -118,7 +132,7 @@ public abstract class AbstractMamasSearchTest {
     protected Estate estateInfoGenerator(User owner) { // TODO 값 채워넣기
         return Estate.builder()
                 .address(randomAddressGenerator())
-                .area(randomNumbersGenerator(200).toString())
+                .area(random.nextDouble())
                 .contractType(randomContractTypeGenerator())
                 .estateType(randomEstateTypeGenerator())
                 .marketPriceRange(randomPriceRangeGenerator())

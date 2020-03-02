@@ -20,10 +20,15 @@ dependencies {
     compile "org.springframework.restdocs:spring-restdocs-mockmvc:${springRestDocVersion}"
 
 
-
-
     // spring data jpa
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springDataJpaVersion
+
+//    ############################
+
+//          QUERY DSL 봉인...
+
+//    ############################
+
     // QueryDSL-JPA
     compile group: 'com.querydsl', name: 'querydsl-jpa', version: '4.2.2'
     // QueryDSL-APT
@@ -44,6 +49,13 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 }
 
+
+//    ############################
+
+//          QUERY DSL 봉인...
+
+//    ############################
+//
 def querydslSrcDir = 'src/main/generated'
 
 querydsl {

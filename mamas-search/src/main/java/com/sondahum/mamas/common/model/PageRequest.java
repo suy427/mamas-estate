@@ -2,6 +2,8 @@ package com.sondahum.mamas.common.model;
 
 import org.springframework.data.domain.Sort;
 
+import java.util.List;
+
 public final class PageRequest {
 
     private int page;
@@ -34,7 +36,9 @@ public final class PageRequest {
         return direction;
     }
 
-    public org.springframework.data.domain.PageRequest of() {
-        return org.springframework.data.domain.PageRequest.of(page - 1, size, direction, "createdAt");
+    public org.springframework.data.domain.PageRequest of(List<Sort.Order> orders) {
+        if (orders == null)
+            return org.springframework.data.domain.PageRequest.of(page - 1, size, direction, "createdAt");
+        return org.springframework.data.domain.PageRequest.of(page - 1, size, Sort.by(orders));
     }
 }

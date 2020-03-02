@@ -9,6 +9,5 @@
 
 rootProject.name = 'mamas-estate'
 include 'mamas-search'
-include 'mamas-api'
 include 'mamas-insight'
 

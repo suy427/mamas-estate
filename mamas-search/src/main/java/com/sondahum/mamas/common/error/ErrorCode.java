@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 @Getter
 public enum ErrorCode { // TODO 코드 정리하기
     DUPLICATED_ENTITY("DUP-001", "THIS ENTITY IS ALREADY EXISTS.", 400)
-    , NOT_FOUND_SUCH_ENTITY("NOF-001", "CAN NOT FOUND SUCH ENTITY.", 404)
+    , CAN_NOT_FOUND_SUCH_ENTITY("NOF-001", "CAN NOT FOUND SUCH ENTITY.", 404)
     , INVALID_INPUT("INV-001", "INVALID INPUT HAS COME.", 400);
 
     private final String code;
