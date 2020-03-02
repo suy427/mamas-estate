@@ -116,4 +116,8 @@ public class EstateDto {
             this.marketPriceRange = estate.getMarketPriceRange();
         }
     }
+
+    enum SearchOrder {
+
+    }
 }

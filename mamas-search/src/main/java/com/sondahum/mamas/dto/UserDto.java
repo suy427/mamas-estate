@@ -84,4 +84,8 @@ public class UserDto {
 
         }
     }
+
+    enum SearchOrder {
+        NAME,
+    }
 }

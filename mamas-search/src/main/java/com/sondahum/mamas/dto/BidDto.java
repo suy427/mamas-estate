@@ -73,4 +73,8 @@ public class BidDto {
             this.action = bid.getAction().name();
         }
     }
+
+    enum SearchOrder {
+
+    }
 }

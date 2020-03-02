@@ -75,4 +75,8 @@ public class ContractDto {
             this.contractedDate = contract.getCreatedDate();
         }
     }
+
+    enum SearchOrder {
+
+    }
 }
