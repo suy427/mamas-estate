@@ -5,6 +5,8 @@ import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.domain.bid.BidSearchService;
 import com.sondahum.mamas.dto.ContractDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -15,16 +17,13 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/bid")
+@Slf4j
+@RequiredArgsConstructor
 public class BidController {
 
-    private static final Logger logger =  LoggerFactory.getLogger(BidController.class);
     private final BidInfoService bidInfoService;
     private final BidSearchService bidSearchService;
 
-    public BidController(BidInfoService bidInfoService, BidSearchService bidSearchService) {
-        this.bidInfoService = bidInfoService;
-        this.bidSearchService = bidSearchService;
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

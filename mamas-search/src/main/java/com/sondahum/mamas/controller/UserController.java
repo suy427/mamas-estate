@@ -4,8 +4,8 @@ import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.dto.UserDto;
 import com.sondahum.mamas.domain.user.UserInfoService;
 import com.sondahum.mamas.domain.user.UserSearchService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +14,14 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
+@Slf4j
+@RequiredArgsConstructor
 class UserController {
 
-    private static final Logger logger =  LoggerFactory.getLogger(UserController.class);
     private final UserInfoService userInfoService;
     private final UserSearchService userSearchService;
 
 
-    UserController(UserInfoService userInfoService, UserSearchService userSearchService) {
-        this.userInfoService = userInfoService;
-        this.userSearchService = userSearchService;
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

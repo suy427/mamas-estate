@@ -2,12 +2,9 @@ package com.sondahum.mamas.domain.contract;
 
 import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
-import com.sondahum.mamas.domain.bid.BidInfoService;
-import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.dto.ContractDto;
-import com.sondahum.mamas.dto.EstateDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,19 +12,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class ContractInfoService {
 
-    private static final Logger logger =  LoggerFactory.getLogger(ContractInfoService.class);
     private final ContractRepository contractRepository;
 
     @PersistenceContext
     private final EntityManager em;
-
-    public ContractInfoService(ContractRepository contractRepository, EntityManager em) {
-        this.contractRepository = contractRepository;
-        this.em = em;
-    }
 
 
     public ContractDto.DetailResponse createContractInfo(ContractDto.CreateReq contractDto) { //

@@ -2,12 +2,9 @@ package com.sondahum.mamas.domain.estate;
 
 import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
-import com.sondahum.mamas.domain.bid.BidInfoService;
-import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.dto.EstateDto;
-import com.sondahum.mamas.dto.UserDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,21 +12,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
-
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class EstateInfoService {
 
-    private static final Logger logger =  LoggerFactory.getLogger(EstateInfoService.class);
     private final EstateRepository estateRepository;
 
     @PersistenceContext
     private final EntityManager em;
 
-
-    public EstateInfoService(EstateRepository estateRepository, EntityManager em) {
-        this.estateRepository = estateRepository;
-        this.em = em;
-    }
 
     public EstateDto.DetailResponse createEstateInfo(EstateDto.CreateReq estateDto) {
         if (isSameEstateExist(estateDto))
@@ -42,13 +34,10 @@ public class EstateInfoService {
 
     @Transactional(readOnly = true)
     boolean isSameEstateExist(EstateDto.CreateReq estateDto) {
-        Optional<Estate> optionalEstate = estateRepository.findByName(estateDto.getName());
+        Optional<Estate> optionalEstate =
+                estateRepository.findByNameAndAddress(estateDto.getName(), estateDto.getAddress());
 
-        if (optionalEstate.isPresent()) {
-            Estate estate = optionalEstate.get();
-            return estateDto.getAddress().equals(estate.getAddress());
-        }
-        return false;
+        return optionalEstate.isPresent();
     }
 
 
@@ -62,8 +51,8 @@ public class EstateInfoService {
     public EstateDto.DetailResponse updateEstateInfo(long id, EstateDto.UpdateReq estateDto) { // User를 update할때는...?
         /*
             수정 페이지를 생각해보면
-            -------+--+---+---+---+~~~
-              소유자 | 땅 정보들 ~~~~~~~
+             ------+--+---+---+---+~~~
+            소유자 │  땅 정보들 ~~~~~~~
             -------+--+---+---+---+~~~
 todo                          취소, 확인
 

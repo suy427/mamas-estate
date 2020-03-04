@@ -3,11 +3,9 @@ package com.sondahum.mamas.domain.bid;
 import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.domain.bid.model.Action;
-import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.dto.BidDto;
-import com.sondahum.mamas.dto.ContractDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,19 +13,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
+
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class BidInfoService {
 
-    private static final Logger logger =  LoggerFactory.getLogger(BidInfoService.class);
     private final BidRepository bidRepository;
 
     @PersistenceContext
     private final EntityManager em;
 
-    public BidInfoService(BidRepository bidRepository, EntityManager em) {
-        this.bidRepository = bidRepository;
-        this.em = em;
-    }
+
 
     public BidDto.DetailResponse createBid(BidDto.CreateReq bidDto) {
         if (isSameBidExist(bidDto))

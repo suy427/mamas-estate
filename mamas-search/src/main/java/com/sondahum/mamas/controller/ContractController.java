@@ -6,6 +6,8 @@ import com.sondahum.mamas.domain.contract.ContractInfoService;
 import com.sondahum.mamas.dto.ContractDto;
 
 import com.sondahum.mamas.dto.EstateDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,16 +18,13 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/contract")
+@Slf4j
+@RequiredArgsConstructor
 public class ContractController {
 
-    private static final Logger logger =  LoggerFactory.getLogger(ContractController.class);
     private final ContractInfoService contractInfoService;
     private final ContractSearchService contractSearchService;
 
-    public ContractController(ContractInfoService contractInfoService, ContractSearchService contractSearchService) {
-        this.contractInfoService = contractInfoService;
-        this.contractSearchService = contractSearchService;
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
