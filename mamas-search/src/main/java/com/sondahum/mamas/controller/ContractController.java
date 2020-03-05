@@ -34,7 +34,7 @@ public class ContractController {
 
     @GetMapping
     public Page<ContractDto.DetailResponse> searchContracts( // 이걸로 검색과 전체 유저 불러오기 가능
-                                                             @RequestParam(name = "value", required = false) final ContractDto.SearchReq query,
+                                                             @RequestParam(name = "query", required = false) final ContractDto.SearchReq query,
                                                              final PageRequest pageRequest
     ) {
         return contractSearchService.search(query, pageRequest.of(query.getSortOrders())).map(ContractDto.DetailResponse::new);

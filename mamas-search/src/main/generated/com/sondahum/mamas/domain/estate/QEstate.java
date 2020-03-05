@@ -8,6 +8,7 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
+import com.sondahum.mamas.domain.estate.model.EstateStatus;
 
 
 /**
@@ -22,6 +23,8 @@ public class QEstate extends EntityPathBase<Estate> {
 
     public static final QEstate estate = new QEstate("estate");
 
+    public final com.sondahum.mamas.common.model.QBaseEntity _super = new com.sondahum.mamas.common.model.QBaseEntity(this);
+
     public final com.sondahum.mamas.domain.estate.model.QAddress address;
 
     public final NumberPath<Double> area = createNumber("area", Double.class);
@@ -30,15 +33,21 @@ public class QEstate extends EntityPathBase<Estate> {
 
     public final EnumPath<com.sondahum.mamas.domain.estate.model.ContractType> contractType = createEnum("contractType", com.sondahum.mamas.domain.estate.model.ContractType.class);
 
-    public final DatePath<java.time.LocalDate> createdDate = createDate("createdDate", java.time.LocalDate.class);
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     public final EnumPath<com.sondahum.mamas.domain.estate.model.EstateType> estateType = createEnum("estateType", com.sondahum.mamas.domain.estate.model.EstateType.class);
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
+    //inherited
+    public final NumberPath<Long> id = _super.id;
+
+    //inherited
+    public final BooleanPath isDeleted = _super.isDeleted;
 
     public final com.sondahum.mamas.common.model.QRange_Price marketPriceRange;
 
-    public final DatePath<java.time.LocalDate> modifiedDate = createDate("modifiedDate", java.time.LocalDate.class);
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
     public final StringPath name = createString("name");
 
@@ -46,7 +55,9 @@ public class QEstate extends EntityPathBase<Estate> {
 
     public final com.sondahum.mamas.common.model.QRange_Price ownerRequirePriceRange;
 
-    public final EnumPath<com.sondahum.mamas.domain.estate.model.Status> status = createEnum("status", com.sondahum.mamas.domain.estate.model.Status.class);
+    public final DateTimePath<java.time.LocalDateTime> registeredDate = createDateTime("registeredDate", java.time.LocalDateTime.class);
+
+    public final EnumPath<EstateStatus> status = createEnum("status", EstateStatus.class);
 
     public QEstate(String variable) {
         this(Estate.class, forVariable(variable), INITS);

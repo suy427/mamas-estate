@@ -50,7 +50,7 @@ public class UserDto {
         private List<Sort.Order> sortOrders;
     }
 
-    public static class SearchResponse {
+    public static class SearchResponse { // list에 나올 기본정보
         private Long id;
         private String name;
         private Phone phone;
@@ -64,27 +64,37 @@ public class UserDto {
         }
     }
 
-    public static class DetailResponse {
+
+    /*
+        todo 얘를 불러올 때 이미 estate, bid, contract 다 조회하는데
+        여기서 해당 버튼 누르면 또다시 그때마다 estate, bid, contract 다시 불러와야해..?
+     */
+    public static class DetailResponse { // 실제 상세정보
         private Long id;
         private String name;
         private Phone phone;
         private Role role;
-        private Integer owningEstateAmount;
-        private Integer soldEstateAmount;
-        private Integer buyingEstateAmount;
-        private Integer boughtEstateAmount;
+        private Integer owningEstateAmount; // 누르면 estate list pop up --> 파는거, 이미 계약된거 포함
+//      private Integer soldEstateAmount;   // 위에께 있기 때문에 이건 필요 없다.
+//      private Integer boughtEstateAmount; // 따져보면 contract list를 불러오면 이걸 따로 볼 필요없음.
+        private Integer onTradingAmount;
         private LocalDateTime recentContractDate;
+//      private Integer buyingEstateAmount; // 누르면 bid list pop up --> 호가 걸어놓은거
 
         public DetailResponse(User user) {
             this.id = user.getId();
             this.name = user.getName();
             this.phone = user.getPhone();
             this.role = user.getRole();
-            this.owningEstateAmount = user.getSellingList().size();// 현재 파는거
-            this.soldEstateAmount = user.getSoldList().size();
-            this.buyingEstateAmount = user.getBuyingList().size();
-            this.boughtEstateAmount = user.getBoughtList().size();
-            this.recentContractDate = user.getRecentContractedDate();
+            this.owningEstateAmount = user.getEstateList().size();      // estate
+            this.onTradingAmount = user.getTradingList().size();        // bid
+            this.recentContractDate = user.getRecentContractedDate();   // contract
+
+
+//            this.owningEstateAmount = user.getSellingList().size();// 현재 파는거
+//            this.soldEstateAmount = user.getSoldList().size();
+//            this.buyingEstateAmount = user.getBuyingList().size();
+//            this.boughtEstateAmount = user.getBoughtList().size();
 
         }
     }

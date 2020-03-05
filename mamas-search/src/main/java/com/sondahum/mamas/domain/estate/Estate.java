@@ -5,18 +5,13 @@ import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.estate.model.Address;
 import com.sondahum.mamas.domain.estate.model.ContractType;
 import com.sondahum.mamas.domain.estate.model.EstateType;
-import com.sondahum.mamas.domain.estate.model.Status;
+import com.sondahum.mamas.domain.estate.model.EstateStatus;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.dto.EstateDto;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @AttributeOverride(name = "id", column = @Column(name = "estate_id"))
-public class Estate extends BaseEntity implements Serializable {
+public class Estate extends BaseEntity {
 
 
     @Column(name = "estate_name")
@@ -62,7 +57,7 @@ public class Estate extends BaseEntity implements Serializable {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private EstateStatus status;
 
     @OneToMany
     @JoinColumn(name = "bid_id")

@@ -33,7 +33,7 @@ public class EstateController {
 
     @GetMapping
     public Page<EstateDto.SearchResponse> searchEstates( // 이걸로 검색과 전체 유저 불러오기 가능
-                                                         @RequestParam(name = "value", required = false) final EstateDto.SearchReq query,
+                                                         @RequestParam(name = "query", required = false) final EstateDto.SearchReq query,
                                                          final PageRequest pageRequest
     ) {
         return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(EstateDto.SearchResponse::new);

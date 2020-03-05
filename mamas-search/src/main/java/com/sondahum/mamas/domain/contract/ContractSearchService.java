@@ -32,7 +32,7 @@ public class ContractSearchService extends QuerydslRepositorySupport {
             return contractRepository.findAll(pageable);
         }
 
-        List<Contract> contracts = from(contract).where(
+        List<Contract> contracts = from(contract).where( // todo 얘는 전부다 join이다...
                 estate(query.getEstate())
                 , buyer(query.getBuyer())
                 , seller(query.getSeller())

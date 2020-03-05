@@ -1,19 +1,19 @@
 package com.sondahum.mamas.domain.bid;
 
+import com.sondahum.mamas.common.model.BaseEntity;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.model.Action;
+import com.sondahum.mamas.domain.bid.model.BidStatus;
 import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.estate.model.EstateStatus;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.dto.BidDto;
-import com.sondahum.mamas.dto.ContractDto;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "bid")
-public class Bid implements Serializable, Comparable<Bid> {
+public class Bid extends BaseEntity implements Comparable<Bid> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +47,9 @@ public class Bid implements Serializable, Comparable<Bid> {
             @AttributeOverride(name = "minimum", column = @Column(name = "min_price"))
             , @AttributeOverride(name = "maximum", column = @Column(name = "max_price"))})
     private Range.Price priceRange;
+
+
+    private BidStatus status;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
     @CreatedDate

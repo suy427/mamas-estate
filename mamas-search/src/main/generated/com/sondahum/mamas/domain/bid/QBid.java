@@ -8,7 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import com.sondahum.mamas.domain.bid.model.Action;
 
 
 /**
@@ -23,15 +22,20 @@ public class QBid extends EntityPathBase<Bid> {
 
     public static final QBid bid = new QBid("bid");
 
-    public final EnumPath<Action> action = createEnum("action", Action.class);
+    public final com.sondahum.mamas.common.model.QBaseEntity _super = new com.sondahum.mamas.common.model.QBaseEntity(this);
 
-    public final DatePath<java.time.LocalDate> createdDate = createDate("createdDate", java.time.LocalDate.class);
+    public final EnumPath<com.sondahum.mamas.domain.bid.model.Action> action = createEnum("action", com.sondahum.mamas.domain.bid.model.Action.class);
+
+    public final DateTimePath<java.time.LocalDateTime> createdDate = createDateTime("createdDate", java.time.LocalDateTime.class);
 
     public final com.sondahum.mamas.domain.estate.QEstate estate;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final DatePath<java.time.LocalDate> modifiedDate = createDate("modifiedDate", java.time.LocalDate.class);
+    //inherited
+    public final BooleanPath isDeleted = _super.isDeleted;
+
+    public final DateTimePath<java.time.LocalDateTime> modifiedDate = createDateTime("modifiedDate", java.time.LocalDateTime.class);
 
     public final com.sondahum.mamas.common.model.QRange_Price priceRange;
 

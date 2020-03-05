@@ -30,7 +30,7 @@ public class BidController {
 
     @GetMapping
     public Page<BidDto.DetailResponse> searchBids( // 이걸로 검색과 전체 유저 불러오기 가능
-                                                   @RequestParam(name = "value", required = false) final BidDto.SearchReq query,
+                                                   @RequestParam(name = "query", required = false) final BidDto.SearchReq query,
                                                    final PageRequest pageRequest
     ) {
         return bidSearchService.search(query, pageRequest.of(query.getSortOrders())).map(BidDto.DetailResponse::new);
