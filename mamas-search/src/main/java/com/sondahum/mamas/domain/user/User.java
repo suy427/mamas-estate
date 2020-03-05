@@ -1,5 +1,6 @@
 package com.sondahum.mamas.domain.user;
 
+import com.sondahum.mamas.common.model.BaseEntity;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.estate.model.Status;
 import com.sondahum.mamas.domain.bid.Bid;
@@ -16,6 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,12 +31,9 @@ import java.util.stream.Collectors;
 @Table(name = "user")
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "user_id"))
+public class User extends BaseEntity implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    Long id;
 
     @Column(name = "user_name")
     String name;
@@ -54,14 +53,6 @@ public class User implements Serializable {
 
     @OneToMany
     List<Contract> contractList = new ArrayList<>();
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    @CreatedDate
-    LocalDate createdDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    @LastModifiedDate
-    LocalDate modifiedDate;
 
 
 
@@ -94,14 +85,14 @@ public class User implements Serializable {
                 .collect(Collectors.toList());
     }
 
-    public LocalDate getRecentBidDate() {
+    public LocalDateTime getRecentBidDate() {
         Optional<Bid> optionalBid = bidList.stream()
                 .max(Bid::compareTo);
 
         return optionalBid.map(Bid::getCreatedDate).orElse(null);
     }
 
-    public LocalDate getRecentContractedDate() { // TODO 쌉 하드코딩...
+    public LocalDateTime getRecentContractedDate() { // TODO 쌉 하드코딩...
         return Collections.max(contractList).getCreatedDate();
     }
 

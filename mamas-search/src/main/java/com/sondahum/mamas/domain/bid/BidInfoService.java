@@ -3,6 +3,8 @@ package com.sondahum.mamas.domain.bid;
 import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.domain.bid.model.Action;
+import com.sondahum.mamas.domain.estate.EstateRepository;
+import com.sondahum.mamas.domain.user.UserRepository;
 import com.sondahum.mamas.dto.BidDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +25,6 @@ public class BidInfoService {
 
     @PersistenceContext
     private final EntityManager em;
-
 
 
     public BidDto.DetailResponse createBid(BidDto.CreateReq bidDto) {
@@ -50,11 +51,19 @@ public class BidInfoService {
         return optionalBid.isPresent();
     }
 
-    public BidDto.DetailResponse updateUserInfo(long id, BidDto.UpdateReq dto) {
+    public BidDto.DetailResponse updateBidInfo(long id, BidDto.UpdateReq dto) {
+        // 여기서 찾아올 때 이미 user, estate는 수정이 되어있다.
+        // 왜?? 수정 다 하고 저장할 때 이 메소드가 호출이 되니깐.
         Optional<Bid> optionalContract = bidRepository.findById(id);
         Bid bid = optionalContract.orElseThrow(() -> new NoSuchEntityException(id));
 
-        em.flush();
+        /* todo
+         update와 contract는 update할 때, 자신의 정보 뿐 아니라 user, estate 등의 다른
+         entity의 정보 변경도 일어날 수 있다. updateBidInfo()는 변경할 정보를 다 입력받고
+         확정될 때 호출되는 메소드인데, 여기서는 bid고유의 정보만 update된다.
+         나머지 user, estate는 따로 수정되어야한다.
+        * */
+
         bid.updateBidInfo(dto);
 
         return new BidDto.DetailResponse(bid);

@@ -4,11 +4,8 @@ import com.sondahum.mamas.domain.bid.BidInfoService;
 import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.domain.bid.BidSearchService;
-import com.sondahum.mamas.dto.ContractDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +45,7 @@ public class BidController {
     @PutMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public BidDto.DetailResponse updateBidInfo(@PathVariable final long id, @RequestBody final BidDto.UpdateReq dto) {
-        return bidInfoService.updateUserInfo(id, dto);
+        return bidInfoService.updateBidInfo(id, dto);
     }
 
     @DeleteMapping(value = "/{id}")

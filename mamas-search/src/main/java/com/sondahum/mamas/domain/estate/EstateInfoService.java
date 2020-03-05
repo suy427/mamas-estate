@@ -7,9 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
 @Slf4j
@@ -19,8 +16,6 @@ public class EstateInfoService {
 
     private final EstateRepository estateRepository;
 
-    @PersistenceContext
-    private final EntityManager em;
 
 
     public EstateDto.DetailResponse createEstateInfo(EstateDto.CreateReq estateDto) {
@@ -58,12 +53,14 @@ todo                          취소, 확인
 
             여기서 나머지 정보들은 editText 로 두고 소유자는 링크로 하면 소유자 정보는 OwnerService에서 처리할 수 있다.
             그런데 그 후에 확인을 누르면 위의 Estate Entity는 가지고 있는 User Entity의 변경사항이 반영된채로 update가 잘 될까...?
+            ----Answer--->>
+            이 고민은 바보같이 updateEstateInfo메소드가 수정페이지에 들어온 순간부터 호출이 되는걸로 착각을 해서 한것 같다.
+            확인을 누르는 순간에 메소드가 호출이 되기때문에, 이미 수정된 채로 이 메소드가 호출이되고,
+            수정된 정보로 estate entity를 가져온다.
          */
         Optional<Estate> optionalEstate = estateRepository.findById(id);
         Estate estate = optionalEstate.orElseThrow(() -> new NoSuchEntityException(id));
 
-        // estate 엔티티를 update하기전에  EntityContext를 flush라도 한번 해줘야하는거 아닌가...?
-        em.flush(); // 그래서 여기에 flush를 넣어줬다... 개 억지 같은데... 어떻게 고치지..
         estate.updateEstateInfo(estateDto);
 
 //      userRepository.save(user) // TODO | save 안하는 이유 알아내기~~ --> EntityManager는 Entity의 변경사항을 자동으로 감시하여 반영한다.

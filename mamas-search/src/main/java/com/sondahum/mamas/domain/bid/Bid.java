@@ -14,6 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -49,11 +50,11 @@ public class Bid implements Serializable, Comparable<Bid> {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
     @CreatedDate
-    private LocalDate createdDate;
+    private LocalDateTime createdDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
     @LastModifiedDate
-    private LocalDate modifiedDate;
+    private LocalDateTime modifiedDate;
 
 
     public void updateBidInfo(BidDto.UpdateReq bidDto) {

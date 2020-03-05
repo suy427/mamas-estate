@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserDto {
@@ -72,7 +73,7 @@ public class UserDto {
         private Integer soldEstateAmount;
         private Integer buyingEstateAmount;
         private Integer boughtEstateAmount;
-        private LocalDate recentContractDate;
+        private LocalDateTime recentContractDate;
 
         public DetailResponse(User user) {
             this.id = user.getId();

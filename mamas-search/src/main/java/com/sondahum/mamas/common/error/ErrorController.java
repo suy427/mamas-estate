@@ -31,7 +31,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ErrorResponse userNotFoundExceptionHandler(NoSuchEntityException e) {
         final ErrorCode userNotFound = ErrorCode.CAN_NOT_FOUND_SUCH_USER;
-        logger.error(userNotFound., e.getId());
+        logger.error(userNotFound.getMessage(), e.getId());
         return buildError(userNotFound);
     }
 

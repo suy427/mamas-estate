@@ -1,5 +1,6 @@
 package com.sondahum.mamas.domain.estate;
 
+import com.sondahum.mamas.common.model.BaseEntity;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.estate.model.Address;
 import com.sondahum.mamas.domain.estate.model.ContractType;
@@ -16,6 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -25,11 +27,9 @@ import java.util.List;
 @Table(name = "estate")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Estate implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "estate_id"))
+public class Estate extends BaseEntity implements Serializable {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "estate_id")
-    private Long id;
 
     @Column(name = "estate_name")
     private String name;
@@ -72,14 +72,8 @@ public class Estate implements Serializable {
     @JoinColumn(name = "owner")
     private User owner;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    @CreatedDate
-    private LocalDate createdDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    @LastModifiedDate
-    private LocalDate modifiedDate;
-
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime registeredDate;
 
 
     public void updateEstateInfo(EstateDto.UpdateReq dto) {

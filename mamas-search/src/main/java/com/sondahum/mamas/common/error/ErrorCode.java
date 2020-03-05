@@ -3,8 +3,6 @@ package com.sondahum.mamas.common.error;
 
 import lombok.Getter;
 
-import java.util.LinkedHashMap;
-
 @Getter
 public enum ErrorCode { // TODO 코드 정리하기
 

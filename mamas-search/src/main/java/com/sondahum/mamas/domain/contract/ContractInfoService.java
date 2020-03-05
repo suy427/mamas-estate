@@ -19,11 +19,8 @@ public class ContractInfoService {
 
     private final ContractRepository contractRepository;
 
-    @PersistenceContext
-    private final EntityManager em;
 
-
-    public ContractDto.DetailResponse createContractInfo(ContractDto.CreateReq contractDto) { //
+    public ContractDto.DetailResponse createContractInfo(ContractDto.CreateReq contractDto) { // todo 복잡다 복잡아~~
         if (isSameContract(contractDto))
             throw new EntityAlreadyExistException(contractDto.getEstate());
 
@@ -52,7 +49,6 @@ public class ContractInfoService {
         Optional<Contract> optionalContract = contractRepository.findById(id);
         Contract contract = optionalContract.orElseThrow(() -> new NoSuchEntityException(id));
 
-        em.flush();
         contract.updateContractInfo(dto);
 
         return new ContractDto.DetailResponse(contract);
