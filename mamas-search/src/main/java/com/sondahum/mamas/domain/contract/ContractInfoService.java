@@ -20,7 +20,7 @@ public class ContractInfoService {
     private final ContractRepository contractRepository;
 
 
-    public ContractDto.DetailResponse createContractInfo(ContractDto.CreateReq contractDto) { // todo 복잡다 복잡아~~
+    public ContractDto.DetailResponse createContractInfo(ContractDto.CreateReq contractDto) {
         if (isSameContract(contractDto))
             throw new EntityAlreadyExistException(contractDto.getEstate());
 

@@ -49,7 +49,7 @@ public class EstateInfoService {
              ------+--+---+---+---+~~~
             소유자 │  땅 정보들 ~~~~~~~
             -------+--+---+---+---+~~~
-todo                          취소, 확인
+todo                       취소, 확인
 
             여기서 나머지 정보들은 editText 로 두고 소유자는 링크로 하면 소유자 정보는 OwnerService에서 처리할 수 있다.
             그런데 그 후에 확인을 누르면 위의 Estate Entity는 가지고 있는 User Entity의 변경사항이 반영된채로 update가 잘 될까...?

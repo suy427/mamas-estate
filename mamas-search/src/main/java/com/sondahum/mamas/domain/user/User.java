@@ -85,11 +85,11 @@ public class User extends BaseEntity {
                 .collect(Collectors.toList());
     }
 
-    public LocalDateTime getRecentBidDate() {
-        return Collections.max(bidList).getCreatedDate();
-    }
+//    public LocalDateTime getRecentBidDate() {
+//        return Collections.max(bidList).getCreatedDate();
+//    }
 
-    public LocalDateTime getRecentContractedDate() { // TODO 쌉 하드코딩...
+    public LocalDateTime getRecentContractedDate() { // TODO 괜찮은걸로 보이긴한데 좀 찝찝하기도함..ㅎ
         return Collections.max(contractList).getCreatedDate();
     }
 
