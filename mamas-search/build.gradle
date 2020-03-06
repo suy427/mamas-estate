@@ -10,6 +10,8 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
 
+    // https://mvnrepository.com/artifact/org.mockito/mockito-all
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
 
     // spring boot test... 위에거랑 뭐가 다르지..?ㅎㅎ
