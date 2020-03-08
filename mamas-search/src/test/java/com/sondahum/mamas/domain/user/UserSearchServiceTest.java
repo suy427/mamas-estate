@@ -14,6 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  *
  */
-class UserSearchServiceTest {
+public class UserSearchServiceTest {
 
 }

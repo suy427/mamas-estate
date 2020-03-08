@@ -1,7 +1,7 @@
 package com.sondahum.mamas.dto;
 
 import com.sondahum.mamas.common.model.Range;
-import com.sondahum.mamas.domain.user.model.Phone;
+//import com.sondahum.mamas.domain.user.model.Phone;
 import com.sondahum.mamas.domain.user.model.Role;
 import com.sondahum.mamas.domain.user.User;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class UserDto {
     public static class CreateReq {
         @NotEmpty(message = "등록할 고객의 이름을 입력해주세요")
         private String name;
-        private Phone phone;
+        private String phone;
         private String role;
 
         public User toEntity() {
@@ -36,14 +36,14 @@ public class UserDto {
         private Long id;
         @NotEmpty(message = "변경할 고객의 이름을 입력해주세요")
         private String name;
-        private Phone phone;
+        private String phone;
         private String role;
     }
 
     @Getter
     public static class SearchReq {
         private String name;
-        private Phone phone;
+        private String phone;
         private Role role;
         private Range.Date bidDate;
         private Range.Date contractDate;
@@ -53,7 +53,7 @@ public class UserDto {
     public static class SearchResponse { // list에 나올 기본정보
         private Long id;
         private String name;
-        private Phone phone;
+        private String phone;
         private Role role;
 
         public SearchResponse(User user) {
@@ -72,7 +72,7 @@ public class UserDto {
     public static class DetailResponse { // 실제 상세정보
         private Long id;
         private String name;
-        private Phone phone;
+        private String phone;
         private Role role;
         private Integer owningEstateAmount; // 누르면 estate list pop up --> 파는거, 이미 계약된거 포함
 //      private Integer soldEstateAmount;   // 위에께 있기 때문에 이건 필요 없다.

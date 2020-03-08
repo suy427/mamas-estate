@@ -66,6 +66,8 @@ public class ContractDto {
         private List<Sort.Order> sortOrders;
     }
 
+
+    @Getter
     public static class DetailResponse {
         private Long id;
         private String seller;

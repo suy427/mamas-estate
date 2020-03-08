@@ -20,12 +20,10 @@ public abstract class BaseEntity implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     protected Long id;
 
-    @Column(name = "registered_date")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date")
     protected LocalDateTime createdDate;
 
     @Column(name = "modified_date")
-    @Temporal(TemporalType.TIMESTAMP)
     protected LocalDateTime modifiedDate;
 
 

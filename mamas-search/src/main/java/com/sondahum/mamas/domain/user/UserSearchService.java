@@ -54,7 +54,7 @@ public class UserSearchService extends QuerydslRepositorySupport {
                 )
                 .where(
                   name(query.getName())
-                , phone(query.getPhone().getWholeNumber())
+                , phone(query.getPhone())
                 , role(query.getRole().name())
                 )
                 .fetchJoin().fetch();
@@ -76,7 +76,7 @@ public class UserSearchService extends QuerydslRepositorySupport {
         if (StringUtils.isEmpty(phone))
             return null;
 
-        return user.phone.wholeNumber.likeIgnoreCase("%"+phone+"%");
+        return user.phone.likeIgnoreCase("%"+phone+"%");
     }
 
     private BooleanExpression role(String role) {

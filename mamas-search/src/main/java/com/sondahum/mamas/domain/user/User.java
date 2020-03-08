@@ -5,7 +5,7 @@ import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.model.BidStatus;
 import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.domain.estate.Estate;
-import com.sondahum.mamas.domain.user.model.Phone;
+
 import com.sondahum.mamas.domain.user.model.Role;
 import com.sondahum.mamas.dto.UserDto;
 import lombok.*;
@@ -32,20 +32,23 @@ public class User extends BaseEntity {
     @Column(name = "user_name")
     String name;
 
-    @Embedded
-    Phone phone;
+    String phone;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     Role role;
 
-    @OneToMany(mappedBy = "user")
+    @Builder.Default
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Bid> bidList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "owner")
+    @Builder.Default
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     List<Estate> estateList = new ArrayList<>();
 
-    @OneToMany
+    @Builder.Default
+    @OneToMany(cascade = CascadeType.ALL)
     List<Contract> contractList = new ArrayList<>();
 
 

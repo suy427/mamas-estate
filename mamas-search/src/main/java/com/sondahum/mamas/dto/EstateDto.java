@@ -94,6 +94,8 @@ public class EstateDto {
 
     }
 
+
+    @Getter
     public static class DetailResponse {
         private Long id;
         private String name;

@@ -1,6 +1,6 @@
 package com.sondahum.mamas.repository;
 
-import com.sondahum.mamas.AbstractMamasSearchTest;
+import com.sondahum.mamas.AbstractMamasTest;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateRepository;
 import com.sondahum.mamas.domain.user.User;
@@ -20,7 +20,7 @@ import java.util.List;
 @DataJpaTest
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class EstateRepositoryTest extends AbstractMamasSearchTest {
+public class EstateRepositoryTest extends AbstractMamasTest {
 
     @Autowired
     UserRepository userRepository;

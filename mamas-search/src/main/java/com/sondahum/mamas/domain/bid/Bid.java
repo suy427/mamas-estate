@@ -30,7 +30,7 @@ public class Bid extends BaseEntity implements Comparable<Bid> {
     @Column(name = "bid_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -38,7 +38,7 @@ public class Bid extends BaseEntity implements Comparable<Bid> {
     @Enumerated(EnumType.STRING)
     private Action action;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "estate_id", nullable = false)
     private Estate estate;
 
@@ -51,13 +51,6 @@ public class Bid extends BaseEntity implements Comparable<Bid> {
 
     private BidStatus status;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    @CreatedDate
-    private LocalDateTime createdDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    @LastModifiedDate
-    private LocalDateTime modifiedDate;
 
 
     public void updateBidInfo(BidDto.UpdateReq bidDto) {

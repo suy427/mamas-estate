@@ -20,20 +20,20 @@ public class ContractInfoService {
     private final ContractRepository contractRepository;
 
 
-    public ContractDto.DetailResponse createContractInfo(ContractDto.CreateReq contractDto) {
-        if (isSameContract(contractDto))
+    public Contract createContractInfo(ContractDto.CreateReq contractDto) {
+        if (!isSameContract(contractDto))
             throw new EntityAlreadyExistException(contractDto.getEstate());
 
         Contract contract = contractRepository.save(contractDto.toEntity());
 
-        return new ContractDto.DetailResponse(contract);
+        return contract;
     }
 
-    public ContractDto.DetailResponse getContractById(long id) {
+    public Contract getContractById(long id) {
         Optional<Contract> optionalContract = contractRepository.findById(id);
         optionalContract.orElseThrow(() -> new NoSuchEntityException(id));
 
-        return new ContractDto.DetailResponse(optionalContract.get());
+        return optionalContract.get();
     }
 
     @Transactional(readOnly = true)
@@ -45,22 +45,22 @@ public class ContractInfoService {
         return optionalContract.isPresent();
     }
 
-    public ContractDto.DetailResponse updateContractInfo(long id, ContractDto.UpdateReq dto) {
+    public Contract updateContractInfo(long id, ContractDto.UpdateReq dto) {
         Optional<Contract> optionalContract = contractRepository.findById(id);
         Contract contract = optionalContract.orElseThrow(() -> new NoSuchEntityException(id));
 
         contract.updateContractInfo(dto);
 
-        return new ContractDto.DetailResponse(contract);
+        return contract;
     }
 
-    public ContractDto.DetailResponse deleteContractInfo(Long id) {
+    public Contract deleteContractInfo(Long id) {
         Optional<Contract> optional = contractRepository.findById(id);
         Contract contract = optional.orElseThrow(() -> new NoSuchEntityException(id)); // todo exception 정리
 
         contractRepository.deleteById(id);
 
-        return new ContractDto.DetailResponse(contract);
+        return contract;
     }
 
 }

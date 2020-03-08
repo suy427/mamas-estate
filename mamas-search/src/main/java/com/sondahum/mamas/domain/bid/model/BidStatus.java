@@ -8,7 +8,7 @@ public enum BidStatus {
 
     WIN(1, "WIN")
     , PROBABLE(2, "PROBABLE")
-    , ONGOING(3, "ONGOINT");
+    , ONGOING(3, "ONGOING");
 
     private final int value;
     private final String name;

@@ -26,7 +26,8 @@ public class QBid extends EntityPathBase<Bid> {
 
     public final EnumPath<com.sondahum.mamas.domain.bid.model.Action> action = createEnum("action", com.sondahum.mamas.domain.bid.model.Action.class);
 
-    public final DateTimePath<java.time.LocalDateTime> createdDate = createDateTime("createdDate", java.time.LocalDateTime.class);
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     public final com.sondahum.mamas.domain.estate.QEstate estate;
 
@@ -35,9 +36,12 @@ public class QBid extends EntityPathBase<Bid> {
     //inherited
     public final BooleanPath isDeleted = _super.isDeleted;
 
-    public final DateTimePath<java.time.LocalDateTime> modifiedDate = createDateTime("modifiedDate", java.time.LocalDateTime.class);
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
     public final com.sondahum.mamas.common.model.QRange_Price priceRange;
+
+    public final EnumPath<com.sondahum.mamas.domain.bid.model.BidStatus> status = createEnum("status", com.sondahum.mamas.domain.bid.model.BidStatus.class);
 
     public final com.sondahum.mamas.domain.user.QUser user;
 
@@ -61,7 +65,7 @@ public class QBid extends EntityPathBase<Bid> {
         super(type, metadata, inits);
         this.estate = inits.isInitialized("estate") ? new com.sondahum.mamas.domain.estate.QEstate(forProperty("estate"), inits.get("estate")) : null;
         this.priceRange = inits.isInitialized("priceRange") ? new com.sondahum.mamas.common.model.QRange_Price(forProperty("priceRange")) : null;
-        this.user = inits.isInitialized("user") ? new com.sondahum.mamas.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.sondahum.mamas.domain.user.QUser(forProperty("user")) : null;
     }
 
 }

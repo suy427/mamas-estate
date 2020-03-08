@@ -10,6 +10,7 @@ import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.dto.EstateDto;
 import lombok.*;
+import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -59,15 +60,15 @@ public class Estate extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private EstateStatus status;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "bid_id")
     private List<Bid> bidList;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner")
     private User owner;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "registered_date")
     private LocalDateTime registeredDate;
 
 

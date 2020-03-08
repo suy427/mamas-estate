@@ -19,25 +19,23 @@ import java.time.LocalDateTime;
 @AttributeOverride(name = "id", column = @Column(name = "contract_id"))
 public class Contract extends BaseEntity implements Comparable<Contract> {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "seller", nullable = false)
     private User seller;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "buyer", nullable = false)
     private User buyer;
 
     @Column(name = "price", nullable = false)
     private Long price;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "estate_id", nullable = false)
     private Estate estate;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime contractedDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime expireDate;
 
 

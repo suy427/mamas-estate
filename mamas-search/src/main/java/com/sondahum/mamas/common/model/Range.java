@@ -12,6 +12,9 @@ public class Range {
     @Embeddable
     @Getter
     @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Price {
         private Long minimum;
         private Long maximum;
@@ -43,8 +46,8 @@ public class Range {
             return from.compareTo(minimum) <= 0 && maximum.compareTo(to) <= 0;
         }
 
-        public boolean isIn(LocalDateTime data) {
-               return minimum.compareTo(data) <= 0 && maximum.compareTo(data) >= 0;
+        public boolean isIn(LocalDateTime date) {
+               return minimum.compareTo(date) <= 0 && maximum.compareTo(date) >= 0;
         }
     }
 

@@ -8,7 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import com.sondahum.mamas.domain.estate.model.EstateStatus;
 
 
 /**
@@ -57,7 +56,7 @@ public class QEstate extends EntityPathBase<Estate> {
 
     public final DateTimePath<java.time.LocalDateTime> registeredDate = createDateTime("registeredDate", java.time.LocalDateTime.class);
 
-    public final EnumPath<EstateStatus> status = createEnum("status", EstateStatus.class);
+    public final EnumPath<com.sondahum.mamas.domain.estate.model.EstateStatus> status = createEnum("status", com.sondahum.mamas.domain.estate.model.EstateStatus.class);
 
     public QEstate(String variable) {
         this(Estate.class, forVariable(variable), INITS);
@@ -79,7 +78,7 @@ public class QEstate extends EntityPathBase<Estate> {
         super(type, metadata, inits);
         this.address = inits.isInitialized("address") ? new com.sondahum.mamas.domain.estate.model.QAddress(forProperty("address")) : null;
         this.marketPriceRange = inits.isInitialized("marketPriceRange") ? new com.sondahum.mamas.common.model.QRange_Price(forProperty("marketPriceRange")) : null;
-        this.owner = inits.isInitialized("owner") ? new com.sondahum.mamas.domain.user.QUser(forProperty("owner"), inits.get("owner")) : null;
+        this.owner = inits.isInitialized("owner") ? new com.sondahum.mamas.domain.user.QUser(forProperty("owner")) : null;
         this.ownerRequirePriceRange = inits.isInitialized("ownerRequirePriceRange") ? new com.sondahum.mamas.common.model.QRange_Price(forProperty("ownerRequirePriceRange")) : null;
     }
 

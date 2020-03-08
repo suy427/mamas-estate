@@ -27,31 +27,31 @@ public class BidInfoService {
     private final EntityManager em;
 
 
-    public BidDto.DetailResponse createBid(BidDto.CreateReq bidDto) {
+    public Bid createBid(BidDto.CreateReq bidDto) {
         if (isSameBidExist(bidDto))
             throw new EntityAlreadyExistException(bidDto.getUser());
 
         Bid bid = bidRepository.save(bidDto.toEntity());
 
-        return new BidDto.DetailResponse(bid);
+        return bid;
     }
 
-    public BidDto.DetailResponse getBidById(long id) {
+    public Bid getBidById(long id) {
         Optional<Bid> optionalBid = bidRepository.findById(id);
         optionalBid.orElseThrow(() -> new NoSuchEntityException(id));
 
-        return new BidDto.DetailResponse(optionalBid.get());
+        return optionalBid.get();
     }
 
     @Transactional(readOnly = true)
     public boolean isSameBidExist(BidDto.CreateReq bidDto) {
         Optional<Bid> optionalBid = bidRepository.findByUser_NameAndEstate_NameAndAction(
-                bidDto.getUser(),bidDto.getEstate(), Action.findByName(bidDto.getAction()));
+                bidDto.getUser(),bidDto.getEstate(), bidDto.getAction());
 
         return optionalBid.isPresent();
     }
 
-    public BidDto.DetailResponse updateBidInfo(long id, BidDto.UpdateReq dto) {
+    public Bid updateBidInfo(long id, BidDto.UpdateReq dto) {
         // 여기서 찾아올 때 이미 user, estate는 수정이 되어있다.
         // 왜?? 수정 다 하고 저장할 때 이 메소드가 호출이 되니깐.
         Optional<Bid> optionalContract = bidRepository.findById(id);
@@ -66,16 +66,16 @@ public class BidInfoService {
 
         bid.updateBidInfo(dto);
 
-        return new BidDto.DetailResponse(bid);
+        return bid;
     }
 
-    public BidDto.DetailResponse deleteBidInfo(Long id) {
+    public Bid deleteBidInfo(Long id) {
         Optional<Bid> optional = bidRepository.findById(id);
         Bid bid = optional.orElseThrow(() -> new NoSuchEntityException(id)); // todo exception 정리
 
         bidRepository.deleteById(id);
 
-        return new BidDto.DetailResponse(bid);
+        return bid;
     }
 
 }

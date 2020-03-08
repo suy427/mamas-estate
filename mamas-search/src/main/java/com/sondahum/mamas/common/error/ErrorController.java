@@ -2,8 +2,7 @@ package com.sondahum.mamas.common.error;
 
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -15,11 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestControllerAdvice
+@Slf4j
 @ResponseBody
+@RestControllerAdvice
 class ErrorController {
-
-    private static final Logger logger =  LoggerFactory.getLogger(ErrorController.class);
 
 
     /**********************************
@@ -31,7 +29,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ErrorResponse userNotFoundExceptionHandler(NoSuchEntityException e) {
         final ErrorCode userNotFound = ErrorCode.CAN_NOT_FOUND_SUCH_USER;
-        logger.error(userNotFound.getMessage(), e.getId());
+        log.error(userNotFound.getMessage(), e.getId());
         return buildError(userNotFound);
     }
 
@@ -39,7 +37,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ErrorResponse estateNotFoundExceptionHandler(NoSuchEntityException e) {
         final ErrorCode estateNotFound = ErrorCode.CAN_NOT_FOUND_SUCH_ESTATE;
-        logger.error(estateNotFound.getMessage(), e.getId());
+        log.error(estateNotFound.getMessage(), e.getId());
         return buildError(estateNotFound);
     }
 
@@ -47,7 +45,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ErrorResponse bidNotFoundExceptionHandler(NoSuchEntityException e) {
         final ErrorCode bidNotFound = ErrorCode.CAN_NOT_FOUND_SUCH_BID;
-        logger.error(bidNotFound.getMessage(), e.getId());
+        log.error(bidNotFound.getMessage(), e.getId());
         return buildError(bidNotFound);
     }
 
@@ -55,7 +53,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ErrorResponse contractNotFoundExceptionHandler(NoSuchEntityException e) {
         final ErrorCode contractNotFound = ErrorCode.CAN_NOT_FOUND_SUCH_CONTRACT;
-        logger.error(contractNotFound.getMessage(), e.getId());
+        log.error(contractNotFound.getMessage(), e.getId());
         return buildError(contractNotFound);
     }
 
@@ -71,7 +69,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse userAlreadyExistExceptionHandler(EntityAlreadyExistException e) {
         final ErrorCode dupUser = ErrorCode.DUPLICATED_USER;
-        logger.error(dupUser.getMessage(), e.getName()); // todo 여기서 getField()를 지웠다..
+        log.error(dupUser.getMessage(), e.getName()); // todo 여기서 getField()를 지웠다..
         return buildError(dupUser);
     }
 
@@ -79,7 +77,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse estateAlreadyExistExceptionHandler(EntityAlreadyExistException e) {
         final ErrorCode dupEstate = ErrorCode.DUPLICATED_USER;
-        logger.error(dupEstate.getMessage(), e.getName());
+        log.error(dupEstate.getMessage(), e.getName());
         return buildError(dupEstate);
     }
 
@@ -87,7 +85,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse bidAlreadyExistExceptionHandler(EntityAlreadyExistException e) {
         final ErrorCode dupBid = ErrorCode.DUPLICATED_USER;
-        logger.error(dupBid.getMessage(), e.getName());
+        log.error(dupBid.getMessage(), e.getName());
         return buildError(dupBid);
     }
 
@@ -95,7 +93,7 @@ class ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse contractAlreadyExistExceptionHandler(EntityAlreadyExistException e) {
         final ErrorCode dupContract = ErrorCode.DUPLICATED_USER;
-        logger.error(dupContract.getMessage(), e.getName());
+        log.error(dupContract.getMessage(), e.getName());
         return buildError(dupContract);
     }
 
@@ -118,7 +116,7 @@ class ErrorController {
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse dataIntegrityViolationExceptionHandler(DataIntegrityViolationException e) {
-        logger.error(e.getMessage());
+        log.error(e.getMessage());
         return buildError(ErrorCode.ILLEGAL_INPUT);
     }
 

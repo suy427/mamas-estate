@@ -18,13 +18,13 @@ public class EstateInfoService {
 
 
 
-    public EstateDto.DetailResponse createEstateInfo(EstateDto.CreateReq estateDto) {
-        if (isSameEstateExist(estateDto))
+    public Estate createEstateInfo(EstateDto.CreateReq estateDto) {
+        if (!isSameEstateExist(estateDto))
             throw new EntityAlreadyExistException(estateDto.getName());
 
         Estate estate = estateRepository.save(estateDto.toEntity());
 
-        return new EstateDto.DetailResponse(estate);
+        return estate;
     }
 
     @Transactional(readOnly = true)
@@ -36,14 +36,14 @@ public class EstateInfoService {
     }
 
 
-    public EstateDto.DetailResponse getEstateById(long id) {
+    public Estate getEstateById(long id) {
         Optional<Estate> optionalEstate = estateRepository.findById(id);
         optionalEstate.orElseThrow(() -> new NoSuchEntityException(id));
 
-        return new EstateDto.DetailResponse(optionalEstate.get());
+        return optionalEstate.get();
     }
 
-    public EstateDto.DetailResponse updateEstateInfo(long id, EstateDto.UpdateReq estateDto) { // User를 update할때는...?
+    public Estate updateEstateInfo(long id, EstateDto.UpdateReq estateDto) { // User를 update할때는...?
         /*
             수정 페이지를 생각해보면
              ------+--+---+---+---+~~~
@@ -65,15 +65,15 @@ todo                       취소, 확인
 
 //      userRepository.save(user) // TODO | save 안하는 이유 알아내기~~ --> EntityManager는 Entity의 변경사항을 자동으로 감시하여 반영한다.
 
-        return new EstateDto.DetailResponse(estate);
+        return estate;
     }
 
-    public EstateDto.DetailResponse deleteEstateInfo(Long id) {
+    public Estate deleteEstateInfo(Long id) {
         Optional<Estate> optional = estateRepository.findById(id);
         Estate estate = optional.orElseThrow(() -> new NoSuchEntityException(id));
 
         estateRepository.deleteById(id);
 
-        return new EstateDto.DetailResponse(estate);
+        return estate;
     }
 }

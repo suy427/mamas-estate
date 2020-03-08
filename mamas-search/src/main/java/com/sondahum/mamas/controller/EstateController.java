@@ -28,7 +28,7 @@ public class EstateController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EstateDto.DetailResponse createEstate(@RequestBody @Valid EstateDto.CreateReq estateDto) {
-        return estateInfoService.createEstateInfo(estateDto);
+        return new EstateDto.DetailResponse(estateInfoService.createEstateInfo(estateDto));
     }
 
     @GetMapping
@@ -42,19 +42,19 @@ public class EstateController {
     @GetMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public EstateDto.DetailResponse getEstateDetail(@PathVariable final long id) {
-        return estateInfoService.getEstateById(id);
+        return new EstateDto.DetailResponse(estateInfoService.getEstateById(id));
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public EstateDto.DetailResponse updateEstateInfo(@PathVariable final long id, @RequestBody final EstateDto.UpdateReq dto) {
-        return estateInfoService.updateEstateInfo(id, dto);
+        return new EstateDto.DetailResponse(estateInfoService.updateEstateInfo(id, dto));
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public EstateDto.DetailResponse deleteContract(@PathVariable final long id) {
-        return estateInfoService.deleteEstateInfo(id);
+        return new EstateDto.DetailResponse(estateInfoService.deleteEstateInfo(id));
     }
 
 

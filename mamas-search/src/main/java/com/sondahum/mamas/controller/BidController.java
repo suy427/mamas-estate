@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RestController
-@RequestMapping("/bid")
 @Slf4j
 @RequiredArgsConstructor
+@RestController
+@RequestMapping("/bid")
 public class BidController {
 
     private final BidInfoService bidInfoService;
@@ -25,7 +25,7 @@ public class BidController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BidDto.DetailResponse createBid(@RequestBody @Valid BidDto.CreateReq bidDto) {
-        return bidInfoService.createBid(bidDto);
+        return new BidDto.DetailResponse(bidInfoService.createBid(bidDto));
     }
 
     @GetMapping
@@ -39,18 +39,18 @@ public class BidController {
     @GetMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public BidDto.DetailResponse getEstateDetail(@PathVariable final long id) {
-        return bidInfoService.getBidById(id);
+        return new BidDto.DetailResponse(bidInfoService.getBidById(id));
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public BidDto.DetailResponse updateBidInfo(@PathVariable final long id, @RequestBody final BidDto.UpdateReq dto) {
-        return bidInfoService.updateBidInfo(id, dto);
+        return new BidDto.DetailResponse(bidInfoService.updateBidInfo(id, dto));
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public BidDto.DetailResponse deleteBid(@PathVariable final long id) {
-        return bidInfoService.deleteBidInfo(id);
+        return new BidDto.DetailResponse(bidInfoService.deleteBidInfo(id));
     }
 }
