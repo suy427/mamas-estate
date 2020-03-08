@@ -4,6 +4,8 @@ import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.dto.EstateDto;
 import com.sondahum.mamas.domain.estate.EstateInfoService;
 import com.sondahum.mamas.domain.estate.EstateSearchService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -15,27 +17,23 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/estate")
+@RequiredArgsConstructor
+@Slf4j
 public class EstateController {
 
-    private static final Logger logger =  LoggerFactory.getLogger(EstateController.class);
     private final EstateInfoService estateInfoService;
     private final EstateSearchService estateSearchService;
 
 
-    EstateController(EstateInfoService estateInfoService, EstateSearchService estateSearchService) {
-        this.estateInfoService = estateInfoService;
-        this.estateSearchService = estateSearchService;
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EstateDto.DetailResponse createEstate(@RequestBody @Valid EstateDto.CreateReq estateDto) {
-        return estateInfoService.createEstateInfo(estateDto);
+        return new EstateDto.DetailResponse(estateInfoService.createEstateInfo(estateDto));
     }
 
     @GetMapping
     public Page<EstateDto.SearchResponse> searchEstates( // 이걸로 검색과 전체 유저 불러오기 가능
-                                                         @RequestParam(name = "value", required = false) final EstateDto.SearchReq query,
+                                                         @RequestParam(name = "query", required = false) final EstateDto.SearchReq query,
                                                          final PageRequest pageRequest
     ) {
         return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(EstateDto.SearchResponse::new);
@@ -44,19 +42,19 @@ public class EstateController {
     @GetMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public EstateDto.DetailResponse getEstateDetail(@PathVariable final long id) {
-        return estateInfoService.getEstateById(id);
+        return new EstateDto.DetailResponse(estateInfoService.getEstateById(id));
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public EstateDto.DetailResponse updateEstateInfo(@PathVariable final long id, @RequestBody final EstateDto.UpdateReq dto) {
-        return estateInfoService.updateEstateInfo(id, dto);
+        return new EstateDto.DetailResponse(estateInfoService.updateEstateInfo(id, dto));
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public EstateDto.DetailResponse deleteContract(@PathVariable final long id) {
-        return estateInfoService.deleteEstateInfo(id);
+        return new EstateDto.DetailResponse(estateInfoService.deleteEstateInfo(id));
     }
 
 

@@ -4,7 +4,7 @@ import lombok.*;
 
 import javax.persistence.Embeddable;
 import java.time.LocalDate;
-
+import java.time.LocalDateTime;
 
 
 public class Range {
@@ -12,6 +12,9 @@ public class Range {
     @Embeddable
     @Getter
     @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Price {
         private Long minimum;
         private Long maximum;
@@ -33,18 +36,18 @@ public class Range {
     @Getter
     @Setter
     public static class Date {
-        private LocalDate minimum;
-        private LocalDate maximum;
+        private LocalDateTime minimum;
+        private LocalDateTime maximum;
 
         public boolean isIn(Range.Date range) {
-            LocalDate from = range.minimum;
-            LocalDate to = range.maximum;
+            LocalDateTime from = range.minimum;
+            LocalDateTime to = range.maximum;
 
             return from.compareTo(minimum) <= 0 && maximum.compareTo(to) <= 0;
         }
 
-        public boolean isIn(LocalDate data) {
-               return minimum.compareTo(data) <= 0 && maximum.compareTo(data) >= 0;
+        public boolean isIn(LocalDateTime date) {
+               return minimum.compareTo(date) <= 0 && maximum.compareTo(date) >= 0;
         }
     }
 

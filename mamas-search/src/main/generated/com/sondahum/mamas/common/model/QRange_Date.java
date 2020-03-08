@@ -19,9 +19,9 @@ public class QRange_Date extends BeanPath<Range.Date> {
 
     public static final QRange_Date date = new QRange_Date("date");
 
-    public final DatePath<java.time.LocalDate> maximum = createDate("maximum", java.time.LocalDate.class);
+    public final DateTimePath<java.time.LocalDateTime> maximum = createDateTime("maximum", java.time.LocalDateTime.class);
 
-    public final DatePath<java.time.LocalDate> minimum = createDate("minimum", java.time.LocalDate.class);
+    public final DateTimePath<java.time.LocalDateTime> minimum = createDateTime("minimum", java.time.LocalDateTime.class);
 
     public QRange_Date(String variable) {
         super(Range.Date.class, forVariable(variable));

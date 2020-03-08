@@ -5,7 +5,7 @@ import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.estate.model.ContractType;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.model.EstateType;
-import com.sondahum.mamas.domain.estate.model.Status;
+import com.sondahum.mamas.domain.estate.model.EstateStatus;
 import com.sondahum.mamas.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +23,7 @@ public class EstateDto {
         private Address address;
         private String area;
         private String ownerName;
-        private Status status;
+        private EstateStatus status;
         private EstateType estateType;
         private ContractType contractType;
         private Range.Price ownerRequirePriceRange;
@@ -54,7 +54,7 @@ public class EstateDto {
         private Address address;
         private Double area;
 //        private String ownerName;
-        private Status status;
+        private EstateStatus status;
         private EstateType estateType;
         private ContractType contractType;
         private Range.Price ownerRequirePriceRange;
@@ -66,7 +66,7 @@ public class EstateDto {
         private String name;
         private String address;
         private Range.Area area;
-        private Status status;
+        private EstateStatus status;
         private Range.Price ownerRequirePriceRange;
         private Range.Price marketPriceRange;
         private ContractType contractType;
@@ -79,7 +79,7 @@ public class EstateDto {
         private Long id;
         private String name;
         private String address3; // most detailed address
-        private Status status;
+        private EstateStatus status;
         private EstateType estateType;
         private ContractType contractType;
 
@@ -94,13 +94,15 @@ public class EstateDto {
 
     }
 
+
+    @Getter
     public static class DetailResponse {
         private Long id;
         private String name;
         private Address address;
         private String area;
         private String ownerName;
-        private Status status;
+        private EstateStatus status;
         private EstateType estateType;
         private ContractType contractType;
         private Range.Price ownerRequirePriceRange;

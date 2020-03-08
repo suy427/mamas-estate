@@ -1,19 +1,20 @@
 package com.sondahum.mamas.domain.bid;
 
+import com.sondahum.mamas.common.model.BaseEntity;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.model.Action;
+import com.sondahum.mamas.domain.bid.model.BidStatus;
 import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.estate.model.EstateStatus;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.dto.BidDto;
-import com.sondahum.mamas.dto.ContractDto;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -22,14 +23,14 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "bid")
-public class Bid implements Serializable, Comparable<Bid> {
+public class Bid extends BaseEntity implements Comparable<Bid> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bid_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -37,7 +38,7 @@ public class Bid implements Serializable, Comparable<Bid> {
     @Enumerated(EnumType.STRING)
     private Action action;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "estate_id", nullable = false)
     private Estate estate;
 
@@ -47,13 +48,9 @@ public class Bid implements Serializable, Comparable<Bid> {
             , @AttributeOverride(name = "maximum", column = @Column(name = "max_price"))})
     private Range.Price priceRange;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    @CreatedDate
-    private LocalDate createdDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    @LastModifiedDate
-    private LocalDate modifiedDate;
+    private BidStatus status;
+
 
 
     public void updateBidInfo(BidDto.UpdateReq bidDto) {

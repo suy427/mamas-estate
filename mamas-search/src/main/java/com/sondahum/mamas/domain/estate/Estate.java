@@ -1,21 +1,19 @@
 package com.sondahum.mamas.domain.estate;
 
+import com.sondahum.mamas.common.model.BaseEntity;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.estate.model.Address;
 import com.sondahum.mamas.domain.estate.model.ContractType;
 import com.sondahum.mamas.domain.estate.model.EstateType;
-import com.sondahum.mamas.domain.estate.model.Status;
+import com.sondahum.mamas.domain.estate.model.EstateStatus;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.dto.EstateDto;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -25,11 +23,9 @@ import java.util.List;
 @Table(name = "estate")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Estate implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "estate_id"))
+public class Estate extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "estate_id")
-    private Long id;
 
     @Column(name = "estate_name")
     private String name;
@@ -62,24 +58,18 @@ public class Estate implements Serializable {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private EstateStatus status;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "bid_id")
     private List<Bid> bidList;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner")
     private User owner;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    @CreatedDate
-    private LocalDate createdDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    @LastModifiedDate
-    private LocalDate modifiedDate;
-
+    @Column(name = "registered_date")
+    private LocalDateTime registeredDate;
 
 
     public void updateEstateInfo(EstateDto.UpdateReq dto) {

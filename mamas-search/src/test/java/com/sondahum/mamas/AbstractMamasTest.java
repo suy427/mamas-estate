@@ -1,5 +1,6 @@
 package com.sondahum.mamas;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.bid.Bid;
@@ -7,20 +8,28 @@ import com.sondahum.mamas.domain.estate.model.Address;
 import com.sondahum.mamas.domain.estate.model.ContractType;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.model.EstateType;
-import com.sondahum.mamas.domain.user.model.Phone;
 import com.sondahum.mamas.domain.user.model.Role;
 import com.sondahum.mamas.domain.user.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Random;
 
-public abstract class AbstractMamasSearchTest {
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = MamasEstateApplicationStarter.class)
+public abstract class AbstractMamasTest {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
     private Random random = new Random();
+    protected MockMvc mockMvc;
+    protected final ObjectMapper mapper = new ObjectMapper();
 
     /******************************
      *
@@ -33,11 +42,11 @@ public abstract class AbstractMamasSearchTest {
     }
 
     @Test
-    protected Phone randomPhoneNumberGenerator() {
+    protected String randomPhoneNumberGenerator() {
         String middle = RandomStringUtils.randomNumeric(4);
         String last = RandomStringUtils.randomNumeric(4);
 
-        return Phone.builder().first("010").middle(middle).last(last).build();
+        return "010"+middle+last;
     }
 
     @Test

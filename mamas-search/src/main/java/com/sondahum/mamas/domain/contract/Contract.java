@@ -1,16 +1,13 @@
 package com.sondahum.mamas.domain.contract;
 
+import com.sondahum.mamas.common.model.BaseEntity;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.dto.ContractDto;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -19,44 +16,38 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "contract")
-public class Contract implements Serializable, Comparable<Contract> {
+@AttributeOverride(name = "id", column = @Column(name = "contract_id"))
+public class Contract extends BaseEntity implements Comparable<Contract> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "contract_id")
-    private Long id;
-
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "seller", nullable = false)
     private User seller;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "buyer", nullable = false)
     private User buyer;
 
     @Column(name = "price", nullable = false)
     private Long price;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "estate_id", nullable = false)
     private Estate estate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    @CreatedDate
-    private LocalDate createdDate;
+    private LocalDateTime contractedDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
-    @LastModifiedDate
-    private LocalDate modifiedDate;
+    private LocalDateTime expireDate;
+
+
 
     public void updateContractInfo(ContractDto.UpdateReq contractDto) {
         this.price = contractDto.getPrice();
-        this.createdDate = contractDto.getContractedDate();
+        this.contractedDate = contractDto.getContractedDate();
     }
 
     @Override
     public int compareTo(Contract o) {
-        return this.createdDate.compareTo(o.getCreatedDate());
+        return this.contractedDate.compareTo(o.getCreatedDate());
     }
 
 

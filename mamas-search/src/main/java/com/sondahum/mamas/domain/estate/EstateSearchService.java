@@ -3,7 +3,7 @@ package com.sondahum.mamas.domain.estate;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.sondahum.mamas.common.model.Range;
-import com.sondahum.mamas.domain.estate.model.Status;
+import com.sondahum.mamas.domain.estate.model.EstateStatus;
 import com.sondahum.mamas.dto.EstateDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -67,7 +67,7 @@ public class EstateSearchService extends QuerydslRepositorySupport {
         return estate.area.between(areaRange.getMinimum(), areaRange.getMaximum());
     }
 
-    private BooleanExpression status(Status status) {
+    private BooleanExpression status(EstateStatus status) {
         if (status == null) return null;
 
         return estate.status.eq(status);
@@ -95,7 +95,7 @@ public class EstateSearchService extends QuerydslRepositorySupport {
         }
     }
 
-    private BooleanExpression owner(String name) {
+    private BooleanExpression owner(String name) { // todo 이거도 join하면 좋은가..?
         if (StringUtils.isEmpty(name)) return null;
 
         return estate.owner.name.likeIgnoreCase("%"+name+"%");

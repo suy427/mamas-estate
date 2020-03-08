@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ContractDto {
@@ -22,19 +23,23 @@ public class ContractDto {
         @NotEmpty(message = "계약한 부동산 이름을 입력해주세요.")
         private String estate;
         private Long price;
-        private LocalDate contractedDate;
+        private LocalDateTime contractedDate;
+        private LocalDateTime expireDate;
 
-        public Contract toEntity() {// 얘는 들어갈때 유효성검사를 다 해줘야할듯.
-            User seller = User.builder().name(this.seller).build();
-            User buyer = User.builder().name(this.buyer).build();
+        public Contract toEntity() {
+            User seller = User.builder()
+                    .name(this.seller).build();
+            User buyer = User.builder()
+                    .name(this.buyer).build();
             Estate estate = Estate.builder().name(this.estate).build();
 
             return Contract.builder()
+                    .seller(seller)
                     .buyer(buyer)
                     .estate(estate)
                     .price(price)
-                    .seller(seller)
-                    .createdDate(contractedDate).build();
+                    .contractedDate(contractedDate)
+                    .expireDate(expireDate).build();
         }
     }
 
@@ -48,7 +53,7 @@ public class ContractDto {
 //        @NotEmpty(message = "변경할 부동산 이름을 입력해주세요.")
 //        private String estate;
         private Long price;
-        private LocalDate contractedDate;
+        private LocalDateTime contractedDate;
     }
 
     @Getter
@@ -61,13 +66,15 @@ public class ContractDto {
         private List<Sort.Order> sortOrders;
     }
 
+
+    @Getter
     public static class DetailResponse {
         private Long id;
         private String seller;
         private String buyer;
         private String estate;
         private Long price;
-        private LocalDate contractedDate;
+        private LocalDateTime contractedDate;
 
         public DetailResponse(Contract contract) {
             this.id = contract.getId();

@@ -10,6 +10,10 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
 
+    // https://mvnrepository.com/artifact/org.mockito/mockito-all
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
 
 
     // spring boot test... 위에거랑 뭐가 다르지..?ㅎㅎ
@@ -47,6 +51,10 @@ dependencies {
 
     // random string generator (for test)
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 
