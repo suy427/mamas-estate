@@ -2,8 +2,7 @@ package com.sondahum.mamas.domain.user;
 
 
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
-import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
-import com.sondahum.mamas.domain.user.exception.NoSuchUserException;
+import com.sondahum.mamas.domain.user.exception.NotEnoughInfoException;
 import com.sondahum.mamas.domain.user.exception.UserAlreadyExistException;
 import com.sondahum.mamas.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -30,32 +29,27 @@ public class UserInfoService {
      * --> '그냥 그대로 name, phone, role만 등록시킴'
      */
     public User createUserInfo(UserDto.CreateReq userDto) {
-        if (!isSamePersonExist(userDto))
-            throw new UserAlreadyExistException(userDto.getName());// TODO 이름이 같으면 A,B표시 등등 생각해보기
+        if (userDto.getName().isEmpty() && userDto.getPhone().isEmpty())
+            throw new NotEnoughInfoException(userDto.getName(), userDto.getPhone());
 
-        User user = userRepository.save(userDto.toEntity());
+        String existInfo = userExist(userDto);
 
-        return user;
-    }
+        if (!existInfo.isEmpty())
+            throw new UserAlreadyExistException(existInfo);// TODO 이름이 같으면 A,B표시 등등 생각해보기
 
-    @Transactional(readOnly = true)
-    public boolean isSamePersonExist(UserDto.CreateReq userDto) {
-        Optional<User> optionalUser =
-                userRepository.findByNameAndPhone(userDto.getName(), userDto.getPhone());
-
-        return optionalUser.isPresent();
+        return userRepository.save(userDto.toEntity());
     }
 
     public User getUserById(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
-        optionalUser.orElseThrow(() -> new NoSuchUserException(id));
+        optionalUser.orElseThrow(() -> new NoSuchEntityException(id));
 
         return optionalUser.get();
     }
 
     public User updateUserInfo(Long id, UserDto.UpdateReq userDto) {
         Optional<User> optional = userRepository.findById(id);
-        User user = optional.orElseThrow(() -> new NoSuchUserException(id));
+        User user = optional.orElseThrow(() -> new NoSuchEntityException(id));
 
         user.updateUserInfo(userDto);// 예제에 보면 따로 repository에 변경된 entity를 save하지 않는다.
 
@@ -64,10 +58,23 @@ public class UserInfoService {
 
     public User deleteUserInfo(Long id) {
         Optional<User> optional = userRepository.findById(id);
-        User user = optional.orElseThrow(() -> new NoSuchUserException(id));
+        User user = optional.orElseThrow(() -> new NoSuchEntityException(id));
 
         userRepository.deleteById(id);
 
         return user;
+    }
+
+    @Transactional(readOnly = true)
+    public String userExist(UserDto.CreateReq userDto) {
+        Optional<User> optionalUser;
+
+        if (userDto.getName().isEmpty()) { // 폰번호만 입력한 경우
+            optionalUser = userRepository.findByPhone(userDto.getPhone());
+            return optionalUser.map(user -> user.phone).orElse(null);
+        } else { // 이름만 등록한 경우
+            optionalUser = userRepository.findByName(userDto.getName());
+            return optionalUser.map(user -> user.name).orElse(null);
+        }
     }
 }

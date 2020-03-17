@@ -1,7 +1,6 @@
 package com.sondahum.mamas.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sondahum.mamas.AbstractMamasTest;
+import com.sondahum.mamas.TestValueGenerator;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.BidInfoService;
@@ -12,7 +11,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -24,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class BidControllerTest extends AbstractMamasTest {
+public class BidControllerTest extends TestValueGenerator {
 
     @InjectMocks
     private final BidController bidController;

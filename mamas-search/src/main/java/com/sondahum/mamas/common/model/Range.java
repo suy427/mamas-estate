@@ -32,9 +32,9 @@ public class Range {
     }
 
 
-    @Embeddable
     @Getter
     @Setter
+    @Embeddable
     public static class Date {
         private LocalDateTime minimum;
         private LocalDateTime maximum;
@@ -52,9 +52,9 @@ public class Range {
     }
 
 
-    @Embeddable
     @Getter
     @Setter
+    @Embeddable
     public static class Area {
         private Double minimum;
         private Double maximum;

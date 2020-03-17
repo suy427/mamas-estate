@@ -1,6 +1,14 @@
 package com.sondahum.mamas.domain.user.exception;
 
-public class UserAlreadyExistException extends RuntimeException{
-    public UserAlreadyExistException(String name) {
-    }
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+
+@Getter
+@AllArgsConstructor
+public class UserAlreadyExistException extends RuntimeException {
+
+    private String reason;
+
 }

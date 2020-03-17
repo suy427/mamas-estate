@@ -1,6 +1,6 @@
 package com.sondahum.mamas.repository;
 
-import com.sondahum.mamas.AbstractMamasTest;
+import com.sondahum.mamas.TestValueGenerator;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.BidRepository;
@@ -22,7 +22,7 @@ import java.util.List;
 @DataJpaTest
 @RunWith(SpringRunner.class)
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class BidRepositoryTest extends AbstractMamasTest {
+public class BidRepositoryTest extends TestValueGenerator {
 
     @Autowired
     UserRepository userRepository;

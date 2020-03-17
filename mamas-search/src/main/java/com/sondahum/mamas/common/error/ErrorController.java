@@ -33,32 +33,6 @@ class ErrorController {
         return buildError(userNotFound);
     }
 
-    @ExceptionHandler(value = {NoSuchEntityException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    protected ErrorResponse estateNotFoundExceptionHandler(NoSuchEntityException e) {
-        final ErrorCode estateNotFound = ErrorCode.CAN_NOT_FOUND_SUCH_ESTATE;
-        log.error(estateNotFound.getMessage(), e.getId());
-        return buildError(estateNotFound);
-    }
-
-    @ExceptionHandler(value = {NoSuchEntityException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    protected ErrorResponse bidNotFoundExceptionHandler(NoSuchEntityException e) {
-        final ErrorCode bidNotFound = ErrorCode.CAN_NOT_FOUND_SUCH_BID;
-        log.error(bidNotFound.getMessage(), e.getId());
-        return buildError(bidNotFound);
-    }
-
-    @ExceptionHandler(value = {NoSuchEntityException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    protected ErrorResponse contractNotFoundExceptionHandler(NoSuchEntityException e) {
-        final ErrorCode contractNotFound = ErrorCode.CAN_NOT_FOUND_SUCH_CONTRACT;
-        log.error(contractNotFound.getMessage(), e.getId());
-        return buildError(contractNotFound);
-    }
-
-
-
 
     /**********************************
      *
