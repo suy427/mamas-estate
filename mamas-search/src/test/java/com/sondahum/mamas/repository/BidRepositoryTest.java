@@ -1,5 +1,6 @@
 package com.sondahum.mamas.repository;
 
+import com.sondahum.mamas.AbstractTestHelper;
 import com.sondahum.mamas.TestValueGenerator;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.bid.Bid;
@@ -15,14 +16,15 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static com.sondahum.mamas.TestValueGenerator.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 @DataJpaTest
 @RunWith(SpringRunner.class)
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class BidRepositoryTest extends TestValueGenerator {
+public class BidRepositoryTest {
 
     @Autowired
     UserRepository userRepository;

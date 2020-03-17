@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -16,22 +17,59 @@ import java.util.stream.Collectors;
 
 
 @Slf4j
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @SpringBootTest(classes = MamasEstateApplicationStarter.class)
 public abstract class AbstractTestHelper {
 
     protected MockMvc mockMvc;
     protected final ObjectMapper mapper = new ObjectMapper();
 
-    class RequestValuesHandler {
+    private class RequestValues {}
+    private class PathValues extends RequestValues { List<Object> values = new ArrayList<>();}
+    private class ParameterValues extends RequestValues {Map<String, Object> values = new LinkedHashMap<>();}
+    private class MultipartValues extends RequestValues {List<Object> values = new ArrayList<>();}
+    private class BodyValues extends RequestValues {Object values = null;}
+    private class HeaderValues extends RequestValues {Object values = null;}
+    private class ResponseHandler extends RequestValues {Closure closureForResponse = null;}
 
-        class RequestValues {}
-        class PathValues extends RequestValues { List<Object> values = new ArrayList<>();}
-        class ParameterValues extends RequestValues {MultiValueMap<String, Object> values = new LinkedMultiValueMap<>();}
-        class MultipartValues extends RequestValues {List<MockMultipartFile> values = new ArrayList<>();}
-        class BodyValues extends RequestValues {Object values = null;}
-        class HeaderValues extends RequestValues {MultiValueMap<String, Object> values = null;}
-        class ResponseHandler extends RequestValues {Closure closureForResponse = null;}
+    protected ParameterValues parameterValues(Map<String, Object> valueMap){
+        ParameterValues o = new ParameterValues();
+        o.values = valueMap;
+        return o;
+    }
+
+    protected BodyValues bodyValues(Map<String, Object> valueMap){
+        BodyValues o = new BodyValues();
+        o.values = valueMap;
+        return o;
+    }
+
+    protected HeaderValues headerValues(Map<String, Object> valueMap){
+        HeaderValues o = new HeaderValues();
+        o.values = valueMap;
+        return o;
+    }
+
+    protected PathValues pathValues(Object... values){
+        PathValues o = new PathValues();
+        o.values = Arrays.asList(values);
+        return o;
+    }
+
+    protected MultipartValues multipartValues(Object... values){
+        MultipartValues o = new MultipartValues();
+        o.values = Arrays.asList(values);
+        return o;
+    }
+
+    protected ResponseHandler responseHandler(Closure closureForResponse){
+        ResponseHandler o = new ResponseHandler();
+        o.closureForResponse = closureForResponse;
+        return o;
+    }
+
+
+    class RequestValuesHandler {
 
         PathValues pathValues;
         ParameterValues paramValues;
@@ -41,7 +79,7 @@ public abstract class AbstractTestHelper {
         ResponseHandler responseHandler;
 
 
-        RequestValuesHandler() { }
+        RequestValuesHandler() {}
 
         RequestValuesHandler(RequestValues... values) {
             for (RequestValues valueObject : values) {
@@ -68,10 +106,7 @@ public abstract class AbstractTestHelper {
             return generateParams(this.paramValues.values);
         }
 
-        String getBodyString() throws Exception {
-            return mapper.writeValueAsString(this.bodyValues.values);
-//            return toJsonString(this.bodyValues.values);
-        }
+        String getBodyString() throws Exception { return mapper.writeValueAsString(this.bodyValues.values); }
 
         List<MockMultipartFile> getMultipartFileList() {
             return this.multipartValues.values;
@@ -116,18 +151,6 @@ public abstract class AbstractTestHelper {
                 }
             }
             return concatKeyListValueMap;
-//
-//            parameters.keySet().each{ String key ->
-//                String concatKey = (prevKey) ? prevKey + '.' + key : key
-//                def value = parameters[key]
-//                if (value instanceof Map)
-//                    generateConcatKeyParams(value, concatKey, concatKeyListValueMap)
-//                else{
-//                    List<String> valueList = (value instanceof List) ? value : [value]
-//                    concatKeyListValueMap[concatKey] = valueList.collect{ String.valueOf(it) }
-//                }
-//            }
-//            return concatKeyListValueMap
         }
     }
 }

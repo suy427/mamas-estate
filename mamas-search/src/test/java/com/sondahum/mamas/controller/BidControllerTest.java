@@ -1,5 +1,6 @@
 package com.sondahum.mamas.controller;
 
+import com.sondahum.mamas.AbstractTestHelper;
 import com.sondahum.mamas.TestValueGenerator;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.Bid;
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class BidControllerTest extends TestValueGenerator {
+public class BidControllerTest extends AbstractTestHelper {
 
     @InjectMocks
     private final BidController bidController;

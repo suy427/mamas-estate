@@ -1,5 +1,6 @@
 package com.sondahum.mamas.repository;
 
+import com.sondahum.mamas.AbstractTestHelper;
 import com.sondahum.mamas.TestValueGenerator;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateRepository;
@@ -14,13 +15,15 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static com.sondahum.mamas.TestValueGenerator.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @DataJpaTest
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class EstateRepositoryTest extends TestValueGenerator {
+public class EstateRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
