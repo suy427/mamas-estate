@@ -24,10 +24,9 @@ import java.util.Random;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MamasEstateApplicationStarter.class)
-public abstract class AbstractMamasTest {
+public class TestValueGenerator {
 
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
-    private Random random = new Random();
+    private static Random random = new Random();
     protected MockMvc mockMvc;
     protected final ObjectMapper mapper = new ObjectMapper();
 
@@ -37,12 +36,12 @@ public abstract class AbstractMamasTest {
      *
      *******************************/
     @Test
-    public String randomStringGenerator(int length) {
+    public static String randomStringGenerator(int length) {
         return RandomStringUtils.randomAlphanumeric(length);
     }
 
     @Test
-    protected String randomPhoneNumberGenerator() {
+    public static String randomPhoneNumberGenerator() {
         String middle = RandomStringUtils.randomNumeric(4);
         String last = RandomStringUtils.randomNumeric(4);
 
@@ -50,7 +49,7 @@ public abstract class AbstractMamasTest {
     }
 
     @Test
-    protected Address randomAddressGenerator() {
+    public static Address randomAddressGenerator() {
         return Address.builder()
                 .address1(randomStringGenerator(5))
                 .address2(randomStringGenerator(5))
@@ -58,19 +57,19 @@ public abstract class AbstractMamasTest {
     }
 
     @Test
-    protected Long randomIdGenerator() {
+    public static Long randomIdGenerator() {
         return random.nextLong();
     }
 
     @Test
-    protected Integer randomNumbersGenerator(int length) {
+    public static Integer randomNumbersGenerator(int length) {
         return random.nextInt(length);
     }
 
     @Test
-    protected Range.Area randomAreaGenerator() {
-        Double min = Double.parseDouble(RandomStringUtils.randomNumeric(3));
-        Double max = Double.parseDouble(RandomStringUtils.randomNumeric(3));
+    public static Range.Area randomAreaGenerator() {
+        double min = Double.parseDouble(RandomStringUtils.randomNumeric(3));
+        double max = Double.parseDouble(RandomStringUtils.randomNumeric(3));
 
         while (max < min)
             max = Double.parseDouble(RandomStringUtils.randomNumeric(3));
@@ -82,34 +81,34 @@ public abstract class AbstractMamasTest {
     }
 
     @Test
-    protected Role randomRoleGenerator() {
+    public static Role randomRoleGenerator() {
         return Role.findByValue(random.nextInt(3) + 1);
     }
 
     @Test
-    protected Action randomActionGenerator() {
+    public static Action randomActionGenerator() {
         return Action.findByValue(random.nextInt(3) + 1);
     }
 
     @Test
-    protected Names randomNameGenerator() {
+    public static Names randomNameGenerator() {
         return Names.findByValue(random.nextInt(29)+1);
     }
 
     @Test
-    protected ContractType randomContractTypeGenerator() {
+    public static ContractType randomContractTypeGenerator() {
         return ContractType.findByValue(random.nextInt(3) + 1);
     }
 
     @Test
-    protected EstateType randomEstateTypeGenerator() {
+    public static EstateType randomEstateTypeGenerator() {
         return EstateType.findByValue(random.nextInt(4) + 1);
     }
 
     @Test
-    protected Range.Price randomPriceRangeGenerator() {
-        Long min = Long.parseLong(RandomStringUtils.randomNumeric(8));
-        Long max = Long.parseLong(RandomStringUtils.randomNumeric(8));
+    public static Range.Price randomPriceRangeGenerator() {
+        long min = Long.parseLong(RandomStringUtils.randomNumeric(8));
+        long max = Long.parseLong(RandomStringUtils.randomNumeric(8));
 
         while (max < min)
             max = Long.parseLong(RandomStringUtils.randomNumeric(8));
@@ -125,7 +124,7 @@ public abstract class AbstractMamasTest {
      *      USER INFO GENERATOR
      *
      ********************************/
-    protected User userInfoGenerator() {
+    public static User userInfoGenerator() {
         return User.builder()
                 .name(randomNameGenerator().name)
                 .phone(randomPhoneNumberGenerator())
@@ -138,7 +137,7 @@ public abstract class AbstractMamasTest {
      *
      ********************************/
     @Test
-    protected Estate estateInfoGenerator(User owner) { // TODO 값 채워넣기
+    public static Estate estateInfoGenerator(User owner) { // TODO 값 채워넣기
         return Estate.builder()
                 .address(randomAddressGenerator())
                 .area(random.nextDouble())
@@ -156,7 +155,7 @@ public abstract class AbstractMamasTest {
      *
      ********************************/
     @Test
-    protected Bid bidInfoGenerator(User user, Action action, Estate estate) {
+    public static Bid bidInfoGenerator(User user, Action action, Estate estate) {
         return Bid.builder()
                 .user(user)
                 .estate(estate)
