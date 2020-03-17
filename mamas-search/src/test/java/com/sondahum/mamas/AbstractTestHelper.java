@@ -1,5 +1,6 @@
 package com.sondahum.mamas;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import groovy.lang.Closure;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.runner.RunWith;
@@ -11,6 +12,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -19,15 +21,16 @@ import java.util.*;
 public abstract class AbstractTestHelper {
 
     protected MockMvc mockMvc;
+    protected final ObjectMapper mapper = new ObjectMapper();
 
     class RequestValuesHandler {
 
         class RequestValues {}
         class PathValues extends RequestValues { List<Object> values = new ArrayList<>();}
-        class ParameterValues extends RequestValues {MultiValueMap<String, String> values = new LinkedMultiValueMap<>();}
-        class MultipartValues extends RequestValues {List<Object> values = new ArrayList<>();}
+        class ParameterValues extends RequestValues {MultiValueMap<String, Object> values = new LinkedMultiValueMap<>();}
+        class MultipartValues extends RequestValues {List<MockMultipartFile> values = new ArrayList<>();}
         class BodyValues extends RequestValues {Object values = null;}
-        class HeaderValues extends RequestValues {Object values = null;}
+        class HeaderValues extends RequestValues {MultiValueMap<String, Object> values = null;}
         class ResponseHandler extends RequestValues {Closure closureForResponse = null;}
 
         PathValues pathValues;
@@ -65,8 +68,9 @@ public abstract class AbstractTestHelper {
             return generateParams(this.paramValues.values);
         }
 
-        String getBodyString() {
-            return toJsonString(this.bodyValues.values);
+        String getBodyString() throws Exception {
+            return mapper.writeValueAsString(this.bodyValues.values);
+//            return toJsonString(this.bodyValues.values);
         }
 
         List<MockMultipartFile> getMultipartFileList() {
@@ -81,7 +85,7 @@ public abstract class AbstractTestHelper {
             return responseHandler.closureForResponse;
         }
 
-        static MultiValueMap<String, String> generateParams(Map<String, String> parameters) {
+        MultiValueMap<String, String> generateParams(MultiValueMap<String, Object> parameters) {
             MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
 
             if (!parameters.isEmpty()){
@@ -92,36 +96,38 @@ public abstract class AbstractTestHelper {
             return multiValueMap;
         }
 
-        static Map<String, List<String>> generateConcatKeyParams(Map<String, String> parameters){
+        Map<String, List<String>> generateConcatKeyParams(MultiValueMap<String, Object> parameters) {
             Map<String, List<String>> concatKeyListValueMap = new LinkedHashMap<>();
             return generateConcatKeyParams(parameters, "", concatKeyListValueMap);
         }
 
-        static Map<String, List<String>> generateConcatKeyParams(
-                Map<String, Object> parameters, String prevKey, Map<String, List<String>> concatKeyListValueMap)
+        Map<String, List<String>> generateConcatKeyParams (
+                MultiValueMap<String, Object> parameters, String prevKey, Map<String, List<String>> concatKeyListValueMap)
         {
             for (String key : parameters.keySet()) {
                 String concatKey = prevKey.equals("") ? prevKey+"."+key : key;
                 Object value = parameters.get(key);
 
                 if (value instanceof Map) {
-                    generateConcatKeyParams(value, concatKey, concatKeyListValueMap);
+                    generateConcatKeyParams((MultiValueMap<String, Object>) value, concatKey, concatKeyListValueMap);
                 } else {
-                    List<String> valueList = (value instanceof List) ? value : ;
+                    List<String> valueList = (value instanceof List) ? (List<String>)value : new ArrayList<>(Arrays.asList(value.toString()));
+                    concatKeyListValueMap.put(concatKey, valueList.stream().map(String::valueOf).collect(Collectors.toList()));
                 }
             }
-
-            parameters.keySet().each{ String key ->
-                String concatKey = (prevKey) ? prevKey + '.' + key : key
-                def value = parameters[key]
-                if (value instanceof Map)
-                    generateConcatKeyParams(value, concatKey, concatKeyListValueMap)
-                else{
-                    List<String> valueList = (value instanceof List) ? value : [value]
-                    concatKeyListValueMap[concatKey] = valueList.collect{ String.valueOf(it) }
-                }
-            }
-            return concatKeyListValueMap
+            return concatKeyListValueMap;
+//
+//            parameters.keySet().each{ String key ->
+//                String concatKey = (prevKey) ? prevKey + '.' + key : key
+//                def value = parameters[key]
+//                if (value instanceof Map)
+//                    generateConcatKeyParams(value, concatKey, concatKeyListValueMap)
+//                else{
+//                    List<String> valueList = (value instanceof List) ? value : [value]
+//                    concatKeyListValueMap[concatKey] = valueList.collect{ String.valueOf(it) }
+//                }
+//            }
+//            return concatKeyListValueMap
         }
     }
 }
