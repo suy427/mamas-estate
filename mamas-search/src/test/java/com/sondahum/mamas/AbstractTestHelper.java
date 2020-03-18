@@ -5,14 +5,24 @@ import groovy.lang.Closure;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultHandler;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @Slf4j
@@ -29,7 +39,7 @@ public abstract class AbstractTestHelper {
     private class MultipartValues extends RequestValues {List<Object> values = new ArrayList<>();}
     private class BodyValues extends RequestValues {Object values = null;}
     private class HeaderValues extends RequestValues {Object values = null;}
-    private class ResponseHandler extends RequestValues {Closure closureForResponse = null;}
+    private class ResponseHandler extends RequestValues {Closure<MockHttpServletResponse> closureForResponse = null;}
 
     protected ParameterValues parameterValues(Map<String, Object> valueMap){
         ParameterValues o = new ParameterValues();
@@ -61,7 +71,7 @@ public abstract class AbstractTestHelper {
         return o;
     }
 
-    protected ResponseHandler responseHandler(Closure closureForResponse){
+    protected ResponseHandler responseHandler(Closure<MockHttpServletResponse> closureForResponse){
         ResponseHandler o = new ResponseHandler();
         o.closureForResponse = closureForResponse;
         return o;
@@ -107,15 +117,11 @@ public abstract class AbstractTestHelper {
 
         String getBodyString() throws Exception { return mapper.writeValueAsString(this.bodyValues.values); }
 
-        List<MockMultipartFile> getMultipartFileList() {
-            return this.multipartValues.values;
-        }
-
         MultiValueMap<String, String> getHeaders() {
             return generateParams(this.headerValues.values);
         }
 
-        Closure getClosureForResponse() {
+        Closure<MockHttpServletResponse> getClosureForResponse() {
             return responseHandler.closureForResponse;
         }
 
@@ -151,5 +157,32 @@ public abstract class AbstractTestHelper {
             }
             return concatKeyListValueMap;
         }
+    }
+
+    String requestGet(String url, ResultHandler resultHandlerForDocument, RequestValuesHandler valuesHandler) throws Exception {
+        //- Request
+        ResultActions resultActions = mockMvc
+                .perform(
+                        RestDocumentationRequestBuilders
+                                .get(url, valuesHandler.getPathArray())
+                                .params(valuesHandler.getParams())
+                                .headers(new HttpHeaders(valuesHandler.getHeaders()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk());
+
+        //- Document or Something
+        if (resultHandlerForDocument != null){
+            resultActions.andDo(resultHandlerForDocument);
+        }
+        //- Response
+        MvcResult mvcResult = resultActions.andReturn();
+        if (valuesHandler.getClosureForResponse() != null)
+            valuesHandler.getClosureForResponse().call(mvcResult.getResponse());
+
+        String jsonString = mvcResult.getResponse().getContentAsString();
+
+        return jsonString;
     }
 }
