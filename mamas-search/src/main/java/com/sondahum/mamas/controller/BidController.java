@@ -23,7 +23,6 @@ public class BidController {
 
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public BidDto.DetailResponse createBid(@RequestBody @Valid BidDto.CreateReq bidDto) {
         return new BidDto.DetailResponse(bidInfoService.createBid(bidDto));
     }
@@ -37,19 +36,16 @@ public class BidController {
     }
 
     @GetMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
     public BidDto.DetailResponse getEstateDetail(@PathVariable final long id) {
         return new BidDto.DetailResponse(bidInfoService.getBidById(id));
     }
 
     @PutMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
     public BidDto.DetailResponse updateBidInfo(@PathVariable final long id, @RequestBody final BidDto.UpdateReq dto) {
         return new BidDto.DetailResponse(bidInfoService.updateBidInfo(id, dto));
     }
 
     @DeleteMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
     public BidDto.DetailResponse deleteBid(@PathVariable final long id) {
         return new BidDto.DetailResponse(bidInfoService.deleteBidInfo(id));
     }

@@ -27,7 +27,6 @@ public class ContractController {
 
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ContractDto.DetailResponse createContract(@RequestBody @Valid ContractDto.CreateReq userDto) {
         return new ContractDto.DetailResponse(contractInfoService.createContractInfo(userDto));
     }
@@ -41,19 +40,16 @@ public class ContractController {
     }
 
     @GetMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
     public ContractDto.DetailResponse getEstateDetail(@PathVariable final long id) {
         return new ContractDto.DetailResponse(contractInfoService.getContractById(id));
     }
 
     @PutMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
     public ContractDto.DetailResponse updateContractInfo(@PathVariable final long id, @RequestBody final ContractDto.UpdateReq dto) {
         return new ContractDto.DetailResponse(contractInfoService.updateContractInfo(id, dto));
     }
 
     @DeleteMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
     public ContractDto.DetailResponse deleteUser(@PathVariable final long id) {
         return new ContractDto.DetailResponse(contractInfoService.deleteContractInfo(id));
     }

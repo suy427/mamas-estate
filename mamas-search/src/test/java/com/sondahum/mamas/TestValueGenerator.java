@@ -124,6 +124,7 @@ public class TestValueGenerator {
      *      USER INFO GENERATOR
      *
      ********************************/
+    @Test
     public static User userInfoGenerator() {
         return User.builder()
                 .name(randomNameGenerator().name)
