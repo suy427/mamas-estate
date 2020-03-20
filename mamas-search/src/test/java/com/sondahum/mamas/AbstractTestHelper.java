@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -19,10 +20,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -54,7 +60,7 @@ public abstract class AbstractTestHelper {
 
     void playground() {
 
-        rt.postForLocation()
+
 
 
     }
@@ -216,5 +222,144 @@ public abstract class AbstractTestHelper {
         MvcResult mvcResult = resultActions.andReturn();
 
         return mvcResult.getResponse();
+    }
+
+    public class MultiValueMapConverter {
+        private MultiValueMap<String, Object> multiValueMap;
+
+        private Object bean;
+
+        public MultiValueMapConverter(Object bean) {
+            this.multiValueMap = new LinkedMultiValueMap<>();
+            this.bean = bean;
+        }
+
+        public MultiValueMap convert() throws Exception {
+            this.addMultiValueFromBean(this.multiValueMap, "", this.bean);
+            return this.multiValueMap;
+        }
+
+
+        private boolean isPrimitiveType(Object object) {
+            if ((object instanceof String) ||
+                    (object instanceof Integer) ||
+                    (object instanceof Float) ||
+                    (object instanceof Void) ||
+                    (object instanceof Boolean) ||
+                    (object instanceof Long)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        private MultiValueMap addMultiValueFromBean( /* IntrospectionException, InvocationTargetException, IllegalAccessException, NoSuchMethodException */
+                MultiValueMap multiValueMap, String name, Object object) throws Exception{
+            MultiValueMap mvm = multiValueMap;
+
+            Field[] fields = object.getClass().getDeclaredFields();
+
+            for (Field field : fields) {
+                String _name = (name.equals("")) ? field.getName() : name + "." + field.getName();
+                Object value = new PropertyDescriptor(field.getName(), object.getClass()).getReadMethod().invoke(object);
+
+                if (value == null) {
+//                return mvm;
+                } else {
+
+//            if (!this.isPrimitiveType(value)) {
+//                mvm = this.addMultiValueFromBean(mvm, _name, value);
+//            } else {
+                    if (value instanceof Map) {
+                        mvm = this.addMultiValueFromMap(multiValueMap, _name, (Map) value);
+                    } else if (value instanceof Iterable) {
+                        mvm = this.addMultiValueFromIterable(multiValueMap, _name, (Iterable) value);
+                    } else if (value instanceof MultipartFile) {
+                        MultipartFile multipartFile = (MultipartFile) value;
+                        ByteArrayResource resource = null;
+
+//                        static File byteArrayToFile(byte[] buff, String filePath, String fileName) {
+//                            if ((filePath == null || "".equals(filePath))
+//                                    || (fileName == null || "".equals(fileName))) { return null; }
+//
+//                            FileOutputStream fos = null;
+//
+//                            File fileDir = new File(filePath);
+//                            if (!fileDir.exists()) {
+//                                fileDir.mkdirs();
+//                            }
+//                            File destFile = new File(filePath + fileName);
+//
+//                            try {
+//                                fos = new FileOutputStream(destFile);
+//                                fos.write(buff);
+//                                fos.close();
+//                            } catch (IOException e) {
+//                                log.error("Exception position : FileUtil - binaryToFile(String binaryFile, String filePath, String fileName)");
+//                            }
+//
+//                            return destFile;
+//                        }
+                        try {
+                            resource = new ByteArrayResource(multipartFile.getBytes()){
+                                @Override
+                                public String getFilename() throws IllegalStateException {
+                                    return multipartFile.getOriginalFilename();
+                                }
+                            };
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        mvm.add(_name, resource);
+                    } else {
+                        value = new PropertyDescriptor(field.getName(), object.getClass()).getReadMethod().invoke(object);
+                        mvm.add(_name, value);
+                    }
+//            }
+                }
+            }
+
+
+            return mvm;
+        }
+
+        private MultiValueMap addMultiValueFromIterable( /*NoSuchMethodException, IntrospectionException, IllegalAccessException, InvocationTargetException */
+                MultiValueMap multiValueMap, String name, Iterable iterable) throws Exception {
+            MultiValueMap mvm = multiValueMap;
+
+            int i = 0;
+            for (Object object : iterable) {
+                String _name = name + "[" + i + "]";
+                if (object instanceof Map) {
+                    mvm = this.addMultiValueFromMap(mvm, _name, (Map) object);
+                } else if (object instanceof Iterable) {
+                    mvm = this.addMultiValueFromIterable(mvm, _name, (Iterable) object);
+                } else {
+                    mvm = this.addMultiValueFromBean(mvm, _name, object);
+                    i++;
+                }
+
+            }
+            return mvm;
+        }
+
+        private MultiValueMap addMultiValueFromMap(MultiValueMap multiValueMap, String name, Map map) {
+            MultiValueMap mvm = multiValueMap;
+            Set<String> keys = map.keySet();
+
+            for (String key : keys) {
+                String _name = name + "." + key;
+
+                Object value = map.get(key);
+                if (value instanceof Map) {
+                    mvm = this.addMultiValueFromMap(mvm, _name, (Map) value);
+                } else if (value instanceof Iterable) {
+                } else {
+                    mvm.add(_name, value);
+                }
+            }
+
+            return mvm;
+        }
     }
 }
