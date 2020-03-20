@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,6 +25,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -38,19 +40,33 @@ public abstract class AbstractTestHelper {
 
     private class RequestValues {}
     private class PathValues extends RequestValues { List<Object> pathValueList = new ArrayList<>();}
-    private class ParameterValues extends RequestValues {MultiValueMap<String, Object> parameterValueMap = new LinkedMultiValueMap<>();} // 얘는 MultiValueMap이 될 아이다.
-    private class HeaderValues extends RequestValues {MultiValueMap<String, Object> headerValueMap = new LinkedMultiValueMap<>();}
-    private class MultipartValues extends RequestValues {List<Object> multiPartValueList = new ArrayList<>();}
+    private class ParameterValues extends RequestValues {MultiValueMap<String, String> parameterValueMap = new LinkedMultiValueMap<>();} // 얘는 MultiValueMap이 될 아이다.
+    private class HeaderValues extends RequestValues {MultiValueMap<String, String> headerValueMap = new LinkedMultiValueMap<>();}
+    private class MultipartValues extends RequestValues {List<MockMultipartFile> multiPartValueList = new ArrayList<>();}
     private class BodyValues extends RequestValues {Object values = null;}
     private class ResponseHandler extends RequestValues {Consumer<MockHttpServletResponse> responseConsumer = null;}
 
-    protected ParameterValues parameterValues(Map<String, Object> parameterValueMap){
+    protected ParameterValues parameterValues(Map<String, String> parameterValueMap){
         ParameterValues parameterValues = new ParameterValues();
         parameterValues.parameterValueMap = convertToMultiValueMap(parameterValueMap);
         return parameterValues;
     }
 
-    private MultiValueMap<String, Object> convertToMultiValueMap(Map<String, Object> map) {
+    protected HeaderValues headerValues(Map<String, String> headerValueMap){
+        HeaderValues headerValues = new HeaderValues();
+        headerValues.headerValueMap = convertToMultiValueMap(headerValueMap);
+        return headerValues;
+    }
+
+    protected BodyValues bodyValues(Map<String, Object> valueMap){
+        BodyValues o = new BodyValues();
+        o.values = valueMap;
+        return o;
+    }
+
+
+    // todo map --> multivaluemap
+    private MultiValueMap<String, String> convertToMultiValueMap(Map<String, String> map) {
         MultiValueMap<String, String> ret = new LinkedMultiValueMap<>();
         List<Object> li1 = new ArrayList<>();
 
@@ -60,19 +76,9 @@ public abstract class AbstractTestHelper {
             } else {
                 ret.add(key, (String)value);
             }
-                });
+        });
 
         return null;
-    }
-
-    protected BodyValues bodyValues(Map<String, Object> valueMap){
-        BodyValues o = new BodyValues();
-        o.values = valueMap;
-        return o;
-    }
-
-    protected HeaderValues headerValues(Map<String, Object> headerValueMap){
-        return convertToMultiValueMap(headerValueMap);
     }
 
     protected PathValues pathValues(Object... values){
@@ -81,7 +87,7 @@ public abstract class AbstractTestHelper {
         return o;
     }
 
-    protected MultipartValues multipartValues(Object... values){
+    protected MultipartValues multipartValues(MockMultipartFile... values){
         MultipartValues o = new MultipartValues();
         o.multiPartValueList = Arrays.asList(values);
         return o;
@@ -146,63 +152,13 @@ public abstract class AbstractTestHelper {
             }
         }
 
-        List<Object> getPathArray() {
-            return this.pathValues.pathValueList;
-        }
-
-        MultiValueMap<String, String> getParams() {
-            return generateParams(this.paramValues.parameterValueMap);
-        }
-
+        List<Object> getPathArray() { return this.pathValues.pathValueList; }
+        MultiValueMap<String, String> getParams() { return this.paramValues.parameterValueMap; }
         String getBodyString() throws Exception { return mapper.writeValueAsString(this.bodyValues.values); }
+        MultiValueMap<String, String> getHeaders() { return this.headerValues.headerValueMap; }
+        List<MockMultipartFile> getMultipartFileList(){ return this.multipartValues.multiPartValueList; }
+        Consumer<MockHttpServletResponse> getConsumerForResponse() { return responseHandler.responseConsumer; }
 
-        MultiValueMap<String, String> getHeaders() {
-            return generateParams(this.headerValues.headerValueMap);
-        }
-
-        Consumer<MockHttpServletResponse> getConsumerForResponse() {
-            return responseHandler.responseConsumer;
-        }
-
-        /**
-         * generateParams, generateConcatKeyParams, generateConcatKeyParams
-         * 이거 세개가 한 세트이다!!!!
-         * 이거 전체가 Map<String, Object> 를 MultiValueMap<String, String> 으로 바꾸는 애다.
-         *                         이 Object는 결국 List<String>이다.
-         */
-        public MultiValueMap<String, String> generateParams(Map<String, Object> parameterMap) { // Map<String, Object>를 MultiValueMap으로
-            MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-
-            if (!parameterMap.isEmpty()) {
-                Map<String, List<String>> listValueMap = generateConcatKeyParams(parameterMap);
-
-                multiValueMap.putAll(listValueMap);
-            }
-            return multiValueMap;
-        }
-
-        public Map<String, List<String>> generateConcatKeyParams(Map<String, Object> parameterMap) {
-            Map<String, List<String>> concatKeyListValueMap = new LinkedHashMap<>();
-            return generateConcatKeyParams(parameterMap, "", concatKeyListValueMap);
-        }
-
-        public Map<String, List<String>> generateConcatKeyParams (
-                Map<String, Object> parameterMap, String prevKey, Map<String, List<String>> concatKeyListValueMap)
-                // 여기서 parameterMap은 key: object혹은 key: list로 올 수 있다.
-        {
-            for (String key : parameterMap.keySet()) { // 이거는 혹시 계층 구조를 나타낼려고 .붙여서 계속 잇는건가..?
-                String concatKey = prevKey.equals("") ? prevKey+"."+key : key;
-                Object value = parameterMap.get(key);
-
-                if (value instanceof Map) {
-                    generateConcatKeyParams((Map<String, Object>) value, concatKey, concatKeyListValueMap);
-                } else {
-                    List<String> valueList = (value instanceof List) ? (List<String>)value : new ArrayList<>(Arrays.asList(value.toString()));
-                    concatKeyListValueMap.put(concatKey, valueList.stream().map(String::valueOf).collect(Collectors.toList()));
-                }
-            }
-            return concatKeyListValueMap;
-        }
     }
 
     MockHttpServletResponse requestGet(String url, ResultHandler resultHandlerForDocument, RequestValuesHandler valuesHandler) throws Exception {
@@ -226,6 +182,30 @@ public abstract class AbstractTestHelper {
         MvcResult mvcResult = resultActions.andReturn();
         if (valuesHandler.getConsumerForResponse() != null)
             valuesHandler.getConsumerForResponse().accept(mvcResult.getResponse());
+
+        return mvcResult.getResponse();
+    }
+
+    MockHttpServletResponse requestPost(String url, ResultHandler resultHandlerForDocument, RequestValuesHandler valuesHandler) throws Exception {
+        //Request
+        ResultActions resultActions = mockMvc
+                .perform(
+                        post(url, valuesHandler.getPathArray())
+                                .params(valuesHandler.getParams())
+                                .content(valuesHandler.getBodyString())
+                                .headers(new HttpHeaders(valuesHandler.getHeaders()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+//                    .with(securityContext(secc))
+                )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk());
+        //- Document or Something
+        if (resultHandlerForDocument != null) {
+            resultActions.andDo(resultHandlerForDocument);
+        }
+        //Response
+        MvcResult mvcResult = resultActions.andReturn();
 
         return mvcResult.getResponse();
     }
