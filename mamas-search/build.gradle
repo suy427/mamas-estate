@@ -10,28 +10,21 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
 
-    // https://mvnrepository.com/artifact/org.mockito/mockito-all
+    // mockito
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
-
+    // jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
 
 
     // spring boot test... 위에거랑 뭐가 다르지..?ㅎㅎ
-    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+    // spring configuration processor
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+    // spring rest doc
     compile "org.springframework.restdocs:spring-restdocs-mockmvc:${springRestDocVersion}"
-
-
     // spring data jpa
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springDataJpaVersion
 
-//    ############################
-
-//          QUERY DSL 봉인...
-
-//    ############################
 
     // QueryDSL-JPA
     compile group: 'com.querydsl', name: 'querydsl-jpa', version: '4.2.2'
@@ -53,18 +46,15 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 }
 
-test {
-    useJUnitPlatform()
-}
-
-
-//    ############################
-
-//          QUERY DSL 봉인...
-
-//    ############################
-//
 def querydslSrcDir = 'src/main/generated'
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', querydslSrcDir]
+        }
+    }
+}
 
 querydsl {
     library = "com.querydsl:querydsl-apt"
@@ -78,12 +68,4 @@ compileQuerydsl{
 
 configurations {
     querydsl.extendsFrom compileClasspath
-}
-
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/main/java', querydslSrcDir]
-        }
-    }
 }

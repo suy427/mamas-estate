@@ -1,6 +1,6 @@
 package com.sondahum.mamas.repository;
 
-import com.sondahum.mamas.AbstractTestHelper;
+
 import com.sondahum.mamas.TestValueGenerator;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateRepository;
@@ -22,7 +22,7 @@ import java.util.List;
 
 @DataJpaTest
 @RunWith(SpringRunner.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class EstateRepositoryTest {
 
     @Autowired

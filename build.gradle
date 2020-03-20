@@ -10,7 +10,7 @@ buildscript {
         springBootVersion = '2.2.2.RELEASE'
         springRestDocVersion = '2.0.4.RELEASE'
         springDataJpaVersion = '2.2.4.RELEASE'
-        springRestDocsversion = "2.0.4.RELEASE"
+        springRestDocsVersion = '2.0.4.RELEASE'
     }
 
     repositories {
@@ -61,14 +61,13 @@ subprojects {
         testCompileOnly 'org.projectlombok:lombok:1.18.12'
         testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 
-        // Use the awesome Spock testing and specification framework
-        testImplementation 'org.spockframework:spock-core:1.2-groovy-2.5'
-        testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
-    }
+        //todo junit5 부터는 테스트 코드 작성을 위한 api모듈과 돌리기 위한 engine모듈이 별도로 존재한다.
 
-    test {
-        useJUnitPlatform()
+        // junit vintage
+        testCompileOnly 'junit:junit:4.12'
+        // junit vintage engine
+        testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.6.0'
+
     }
 }
 

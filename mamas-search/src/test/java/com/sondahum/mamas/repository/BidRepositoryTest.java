@@ -1,7 +1,5 @@
 package com.sondahum.mamas.repository;
 
-import com.sondahum.mamas.AbstractTestHelper;
-import com.sondahum.mamas.TestValueGenerator;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.BidRepository;
@@ -9,6 +7,7 @@ import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateRepository;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.user.UserRepository;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,6 @@ public class BidRepositoryTest {
     BidRepository bidRepository;
     @Autowired
     EstateRepository estateRepository;
-    @Autowired TestEntityManager entityManager;
 
     /**
      * scenario
@@ -46,8 +44,10 @@ public class BidRepositoryTest {
      *   2) bid의 action이 'sell' 일 경우 owner가 bid의 주인인 user여야함. // 그나마 간단
      *   3) bid의 action이 'buy'이고
      */
+
+    @Ignore(value = "not now")
     @Test
-    void bidInfoCascadeTest() throws Exception {
+    void bidInfoCascadeTest() {
         List<User> initialCreatedOwnerGroup = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             initialCreatedOwnerGroup.add(userInfoGenerator());

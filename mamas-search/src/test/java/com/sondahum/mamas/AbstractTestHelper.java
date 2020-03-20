@@ -2,6 +2,7 @@ package com.sondahum.mamas;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,6 +39,9 @@ public abstract class AbstractTestHelper {
 
     protected MockMvc mockMvc;
     protected final ObjectMapper mapper = new ObjectMapper();
+    protected RestTemplate rt = new RestTemplate();
+
+
 
     private class RequestValues {}
     private class PathValues extends RequestValues { List<Object> pathValueList = new ArrayList<>();}
@@ -45,6 +50,15 @@ public abstract class AbstractTestHelper {
     private class MultipartValues extends RequestValues {List<MockMultipartFile> multiPartValueList = new ArrayList<>();}
     private class BodyValues extends RequestValues {Object values = null;}
     private class ResponseHandler extends RequestValues {Consumer<MockHttpServletResponse> responseConsumer = null;}
+
+
+    void playground() {
+
+        rt.postForLocation()
+
+
+    }
+
 
     protected ParameterValues parameterValues(Map<String, String> parameterValueMap){
         ParameterValues parameterValues = new ParameterValues();
@@ -66,16 +80,12 @@ public abstract class AbstractTestHelper {
 
 
     // todo map --> multivaluemap
+    // multivaluemap은 query로 list를 표현하지 못하기 때문에 쓰는거다...?
     private MultiValueMap<String, String> convertToMultiValueMap(Map<String, String> map) {
         MultiValueMap<String, String> ret = new LinkedMultiValueMap<>();
-        List<Object> li1 = new ArrayList<>();
 
         map.forEach( (key, value) -> {
-            if (!(value instanceof String)) {
 
-            } else {
-                ret.add(key, (String)value);
-            }
         });
 
         return null;
@@ -132,7 +142,6 @@ public abstract class AbstractTestHelper {
         HeaderValues headerValues;
         ResponseHandler responseHandler;
 
-
         public RequestValuesHandler() {}
 
         public RequestValuesHandler(RequestValues... values) {
@@ -158,7 +167,6 @@ public abstract class AbstractTestHelper {
         MultiValueMap<String, String> getHeaders() { return this.headerValues.headerValueMap; }
         List<MockMultipartFile> getMultipartFileList(){ return this.multipartValues.multiPartValueList; }
         Consumer<MockHttpServletResponse> getConsumerForResponse() { return responseHandler.responseConsumer; }
-
     }
 
     MockHttpServletResponse requestGet(String url, ResultHandler resultHandlerForDocument, RequestValuesHandler valuesHandler) throws Exception {

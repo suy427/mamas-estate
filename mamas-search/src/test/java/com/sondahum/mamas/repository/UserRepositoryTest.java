@@ -1,6 +1,6 @@
 package com.sondahum.mamas.repository;
 
-import com.sondahum.mamas.AbstractTestHelper;
+
 import com.sondahum.mamas.TestValueGenerator;
 import com.sondahum.mamas.domain.bid.BidRepository;
 import com.sondahum.mamas.domain.estate.EstateRepository;

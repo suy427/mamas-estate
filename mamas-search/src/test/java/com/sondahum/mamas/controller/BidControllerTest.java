@@ -1,19 +1,30 @@
 package com.sondahum.mamas.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sondahum.mamas.AbstractTestHelper;
+import com.sondahum.mamas.MamasEstateApplicationStarter;
 import com.sondahum.mamas.TestValueGenerator;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.BidInfoService;
+import com.sondahum.mamas.domain.bid.BidSearchService;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.dto.BidDto;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.DispatcherServlet;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -26,17 +37,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BidControllerTest extends AbstractTestHelper {
 
     @InjectMocks
-    private final BidController bidController;
+    private BidController bidController;
     @Mock
     private BidInfoService bidInfoService;
 
 
-    BidControllerTest(BidController bidController) {
-        this.bidController = bidController;
-    }
-
     @Before
-    public void setup() throws Exception {
+    public void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(bidController).build();
     }
 
@@ -50,7 +57,7 @@ public class BidControllerTest extends AbstractTestHelper {
                         .action(Action.BUY).build();
 
         ResultActions resultActions = requestCreateBid(dto);
-        resultActions.andExpect(status().isCreated());
+        resultActions.andExpect(status().isOk());
     }
 
     @Test
@@ -112,12 +119,14 @@ public class BidControllerTest extends AbstractTestHelper {
                 .andDo(print());
     }
 
+
     private ResultActions requestUpdateBid(BidDto.UpdateReq dto) throws Exception {
         return mockMvc.perform(put("/bid/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(dto)))
                 .andDo(print());
     }
+
 
     private ResultActions requestDeleteBid(BidDto.UpdateReq dto) throws Exception {
         return mockMvc.perform(delete("/bid/1")
@@ -126,12 +135,14 @@ public class BidControllerTest extends AbstractTestHelper {
                 .andDo(print());
     }
 
+
     private ResultActions requestGetBid(BidDto.UpdateReq dto) throws Exception {
         return mockMvc.perform(get("/bid/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(dto)))
                 .andDo(print());
     }
+
 
     Range.Price buildPrice(Long min, Long max) {
         return Range.Price.builder().minimum(min).maximum(max).build();
