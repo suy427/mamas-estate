@@ -1,22 +1,3 @@
-class LibCore {
-    constructor() {
-        this.context = this.setContext()
-    }
-
-    setContext() {
-        $.getElementsByName('ctx')[0].getAttribute('content');
-    }
-
-    getURL(url) {return this.context+url}
-
-    loadData(url, params, callbackWhenSuccess, callbackWhenFail) {
-        this.getXHR().request(callbackWhenSuccess)
-    }
-
-
-}
-
-
 function loadData(url, params, callbackWhenSuccess){
     getXHR(url, params).request(callbackWhenSuccess);
 }
@@ -43,3 +24,24 @@ function clearClick() {
     document.getElementById('mapType').value = 1
     document.getElementById('nodeSize').value = 5
 }
+
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+    'use strict'
+
+    window.addEventListener('load', function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.filter.call(forms, function (form) {
+            form.addEventListener('submit', function (event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    }, false)
+}());

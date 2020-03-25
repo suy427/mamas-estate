@@ -1,11 +1,10 @@
-XHR = function (url, header, body) {
+XHR = function (url, method, header, body) {
     this.url = null;
-    this.callbackWhenSuccess = null;
-    this.callbackWhenError = null;
-    this.defaultCallback = null;
     this.method = null;
     this.body = {};
     this.header = {};
+
+    this.setUrl(url).setMethod(method).setHeader(header).setBody(body);
 };
 
 XHR.prototype.setUrl = function (url) {
@@ -51,18 +50,18 @@ XHR.prototype.setUrlWithQueryString = function () {
     this.url += ('?' + queryString);
 };
 
-XHR.prototype.setSuccessCallback = function(callback) {
-    this.callbackWhenSuccess = callback;
+XHR.prototype.setSuccessCallback = function (callback) {
+    this.prototype.callbackWhenSuccess = callback;
     return this;
 };
 
-XHR.prototype.setErrorCallback = function(callback) {
-    this.callbackWhenError = callback;
+XHR.prototype.setErrorCallback = function (callback) {
+    this.prototype.callbackWhenError = callback;
     return this;
 };
 
-XHR.prototype.defaultCallback = function(callback) {
-    this.defaultCallback = callback;
+XHR.prototype.setDefaultCallback = function (callback) {
+    this.prototype.defaultCallback = callback;
     return this;
 };
 
@@ -78,8 +77,19 @@ XHR.prototype.request = function () {
             this.header['Content-Type'] = 'application/json';
     }
 
-    xhr.onload = function(event) {
-
+    // onreadystatuschange라는 리스너도 있는데 xhr객체는 요청 과정에 따라 4가지 상태를 가지고 4번째가 DONE이다.
+    // onload는 DONE일때의 리스너다. 순서대로 하자면 UNSET, OPENED, HEADERS_RECEIVED, DONE이다.
+    xhr.onload = function (event) {
+        var response = xhr.responseText;
+        if (xhr.status === 200 || xhr.status === 201) {
+            if (this.callbackWhenSuccess)
+                this.callbackWhenSuccess(response);
+        } else {
+            if (this.callbackWhenError)
+                this.callbackWhenError(response);
+        }
+        if (this.defaultCallback)
+            this.defaultCallback(response);
     };
 
     xhr.open(this.method, this.url);

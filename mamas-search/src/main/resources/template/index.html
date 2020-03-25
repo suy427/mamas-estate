@@ -27,44 +27,8 @@
     //  Main script
     //
     ////////////////////////////////////////////////// -->
-    <script type="text/javascript">
-        function popup(url, itemId, mapType, nodeSize){
-            if(mapType == 3 || mapType == 4 || mapType == 5) {
-                itemId = encodeURIComponent(itemId);
-            }
-            var newUrl = url + "?itemId="+itemId+"&mapType="+mapType+"&nodeSize="+nodeSize
-            /** New PopWindow **/
-            var popWindow = window.open(newUrl, "VIS_WINDOW", "width=910, height=550, scrollbars=no");
-            //- EVENT: When popup is loaded
-            // popWindow.addEventListener('load', function(e){
-            //     console.error('check');
-            //     popWindow.render(data, {
-            //         extendsPanelHideItemList: VisNetworkMan.EXTENDSPANEL_TOGGLE_POPWINDOW
-            //     });
-            // });
-            //- EVENT: When popup is closed
-            window.addEventListener('unload', function(){
-                if (popWindow && !popWindow.closed){
-                    popWindow.close();
-                }
-            });
-        }
-    </script>
 
-    <script>
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === xhr.DONE) {
-                if (xhr.status === 200 || xhr.status === 201) {
-                    console.log(xhr.responseText);
-                } else {
-                    console.log(xhr.responseText);
-                }
-            }
-        };
-        xhr.open("GET", "http://localhost:8080/mamas");
-        xhr.send();
-    </script>
+
 </head>
 
 
