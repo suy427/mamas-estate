@@ -4,61 +4,21 @@
 
 
 <head>
-    <title>고객관리 페이지</title>
-    <meta charset="UTF-8" />
+    <title th:text="${pageName}">관리 페이지</title>
+
+    <meta charset="UTF-8">
+    <meta name="X-UA-Compatible" content="IE=Edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <!-- ContextPath -->
-    <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}" />
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}"/> <!-- todo 이 서블릿은 어떤 서블릿일까..? 이따 찍어보자 -->
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 
-    <script th:src="@{/js/client-info.js}" ></script>
-    <script th:src="@{/js/estate-info.js}" ></script>
-    <script>
-        var _ctx = document.getElementsByName('ctx')[0].getAttribute('content');
-        function getURL(url){ return _ctx+ url; }
+    <script th:src="@{/js/client-info.js}"></script>
+    <script th:src="@{/js/estate-info.js}"></script>
 
-        function loadData(url, params, callbackWhenSuccess){
-            getXHR(url, params).request(callbackWhenSuccess);
-        }
-
-        function getRecommends(url, itemId, mapType, nodeSize){
-            loadData(url, {type: Number(mapType), id: itemId, size: Number(nodeSize)},
-                function(data) {
-                    var recommendations = document.getElementById('recommendation-result');
-                    var datas = data
-                    var result = ''
-                    for(var i in datas) {
-                        result += (result ? ", " : "") + datas[i].label
-                    }
-                    recommendations.innerHTML = result;
-                }
-            )
-        }
-
-        function clearClick() {
-            //////// test sample view
-            var recommendations = document.getElementById('recommendation-result');
-            recommendations.innerHTML = '추천어는 여기에..';
-            document.getElementById('itemId').value = 'GNM000101'
-            document.getElementById('mapType').value = 1
-            document.getElementById('nodeSize').value = 5
-        }
-    </script>
-
-    <!-- //////////////////////////////////////////////////
-    //
-    //  Style
-    //
-    ////////////////////////////////////////////////// -->
-    <style>
-        body { margin:0; }
-        button { font-size:12px; font-weight:bold; cursor:pointer; }
-        #button-div {
-            position: absolute;
-            right: 20px;
-            bottom: 5px;
-        }
-    </style>
 
 
 
@@ -90,47 +50,25 @@
             });
         }
     </script>
+
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === xhr.DONE) {
+                if (xhr.status === 200 || xhr.status === 201) {
+                    console.log(xhr.responseText);
+                } else {
+                    console.log(xhr.responseText);
+                }
+            }
+        };
+        xhr.open("GET", "http://localhost:8080/mamas");
+        xhr.send();
+    </script>
 </head>
 
 
-<body style="text-align:center">
-<br/><br/><br/>
-
-<div id="info-display" style="display:inline-block; border:3px solid black; border-radius:15px;">
-    <br>
-    <input id="itemId" type="text" value="GNM000101"/>
-
-    <select id="mapType">
-        <option value="1" selected="selected">1  </option>
-        <option value="2">2  </option>
-        <option value="3">3  </option>
-        <option value="4">4  </option>
-        <option value="5">5  </option>
-        <option value="6">6  </option>
-        <option value="7">7  </option>
-        <option value="8">8  </option>
-    </select>
-    Node Size <input id="nodeSize" type="text" value="5" /><br><br>
-    <div id="recommends" style="text-align: left">
-        추천 데이터 ==> <span id="recommendation-result">추천어는 여기에..</span><br><br><br>
-    </div>
-
-    <div id="button-div">
-    <button style="width:60px; height:20px;" onclick="popup(getURL('/sample/view/data-map-popup-all'), document.getElementById('itemId').value, document.getElementById('mapType').value, document.getElementById('nodeSize').value);">
-        검색
-    </button>
-    <button style="width:60px; height:20px;" onclick="getRecommends(getURL('/api/data/get-data-list-for-recommendation'), document.getElementById('itemId').value, document.getElementById('mapType').value, document.getElementById('nodeSize').value);">
-        수정
-    </button>
-    <button style="width:60px; height:20px;" onclick="clearClick();">
-        지우기
-    </button>
-
-    </div>
-</div>
-<br/>
-<br/>
-
+<body>
 
 </body>
 

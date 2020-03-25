@@ -58,14 +58,6 @@ public abstract class AbstractTestHelper {
     private class ResponseHandler extends RequestValues {Consumer<MockHttpServletResponse> responseConsumer = null;}
 
 
-    void playground() {
-
-
-
-
-    }
-
-
     protected ParameterValues parameterValues(Map<String, String> parameterValueMap){
         ParameterValues parameterValues = new ParameterValues();
         parameterValues.parameterValueMap = convertToMultiValueMap(parameterValueMap);
