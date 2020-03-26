@@ -11,7 +11,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="robots" content="noindex, nofollow">
     <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}"/> <!-- todo 이 서블릿은 어떤 서블릿일까..? 이따 찍어보자 -->
-
+    <script>
+        var _ctx = document.getElementsByName('ctx')[0].getAttribute('content');
+        function getURL(url) {
+            return _ctx + url;
+        }
+    </script>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 

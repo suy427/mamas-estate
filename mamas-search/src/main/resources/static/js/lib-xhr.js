@@ -50,22 +50,8 @@ XHR.prototype.setUrlWithQueryString = function () {
     this.url += ('?' + queryString);
 };
 
-XHR.prototype.setSuccessCallback = function (callback) {
-    this.prototype.callbackWhenSuccess = callback;
-    return this;
-};
 
-XHR.prototype.setErrorCallback = function (callback) {
-    this.prototype.callbackWhenError = callback;
-    return this;
-};
-
-XHR.prototype.setDefaultCallback = function (callback) {
-    this.prototype.defaultCallback = callback;
-    return this;
-};
-
-XHR.prototype.request = function () {
+XHR.prototype.request = function (callbackWhenSuccess, callbackWhenError) {
     var xhr = new XMLHttpRequest();
 
     if (this.method === 'GET') {
@@ -79,17 +65,15 @@ XHR.prototype.request = function () {
 
     // onreadystatuschange라는 리스너도 있는데 xhr객체는 요청 과정에 따라 4가지 상태를 가지고 4번째가 DONE이다.
     // onload는 DONE일때의 리스너다. 순서대로 하자면 UNSET, OPENED, HEADERS_RECEIVED, DONE이다.
-    xhr.onload = function (event) {
+    xhr.onload = function () {
         var response = xhr.responseText;
         if (xhr.status === 200 || xhr.status === 201) {
-            if (this.callbackWhenSuccess)
-                this.callbackWhenSuccess(response);
+            if (callbackWhenSuccess)
+                callbackWhenSuccess(response);
         } else {
-            if (this.callbackWhenError)
-                this.callbackWhenError(response);
+            if (callbackWhenError)
+                callbackWhenError(response)
         }
-        if (this.defaultCallback)
-            this.defaultCallback(response);
     };
 
     xhr.open(this.method, this.url);
