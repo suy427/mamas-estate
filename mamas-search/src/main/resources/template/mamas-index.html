@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
 
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
@@ -30,33 +31,23 @@
     <meta name="theme-color" content="#563d7c">
 
     <script>
-        function onlyNumber(event) {
+        function onlyNumber(event) { // 한글은 눌러짐... 미친.. 한글은 event가 안먹는듯...
             if (event.keyCode < 48 || event.keyCode > 57) {
                 event.returnValue = false;
             }
         }
     </script>
 
-    <script>
-        var table = document.getElementById('owningestate-table');
-        resizableGrid(table);
-
-        $(function () {
-            $("table").resiableColumns({
-                store: window.store
-            });
-        });
-    </script>
-
     <style>
         .dataTables_scrollBody::-webkit-scrollbar {
             display: none;
         }
+
         .dataTables_scrollBody {
             -ms-overflow-style: none;
             position: relative;
             overflow: auto;
-            max-height: 20vh;
+            max-height: 15vh;
             width: 100%;
         }
 
@@ -65,12 +56,8 @@
         }
 
         .table-body-header {
-            width: 122px;
-            /*padding-top: 0;*/
-            /*padding-bottom: 0;*/
-            /*border-top-width: 0;*/
-            /*border-bottom-width: 0;*/
-            /*height: 0;*/
+            width: 112px;
+            height: 10px;
         }
 
         .dataTables_scrollHead {
@@ -91,6 +78,26 @@
         table.dataTable thead .sorting_desc_disabled:after,
         table.dataTable thead .sorting_desc_disabled:before {
             bottom: .5em;
+        }
+    </style>
+
+    <style>
+        .owning-list-buttons {
+            position: absolute;
+            top: 9%;
+            right: 1%
+        }
+
+        .contract-list-buttons {
+            position: absolute;
+            top: 9%;
+            right: 1%
+        }
+
+        .bid-list-buttons {
+            position: absolute;
+            top: 9%;
+            right: 1%
         }
     </style>
 
@@ -142,16 +149,14 @@
                 <div class="col-md-5 offset-sm-1">
                     <label for="username">전화번호</label>
                     <div class="row">
-                        <input type="tel" class="form-control col-sm-3" id="phone-first" minlength="2" maxlength="4"
-                               onkeypress="onlyNumber(event)"
-                               value="010" required>
+                        <input type="tel" class="form-control col-sm-3 phone" id="phone-first" minlength="2"
+                               maxlength="4" value="010" onkeypress="onlyNumber(event)" required>
                         <span> - </span>
-                        <input type="tel" class="form-control col-sm-3" id="phone-middle" minlength="2" maxlength="4"
-                               onkeypress="onlyNumber(event)" required>
+                        <input type="tel" class="form-control col-sm-3 phone" id="phone-middle" minlength="2"
+                               maxlength="4" onkeypress="onlyNumber(event)" required>
                         <span> - </span>
-                        <input type="tel" class="form-control col-sm-3" id="phone-last" minlength="2" maxlength="4"
-                               onkeypress="onlyNumber(event)"
-                               required>
+                        <input type="tel" class="form-control col-sm-3 phone" id="phone-last" minlength="2"
+                               maxlength="4" onkeypress="onlyNumber(event)" required>
                         <div class="invalid-feedback">
                             전화번호를 입력해주세요
                         </div>
@@ -170,214 +175,658 @@
             </div> <!--  첫째줄 완성..ㅠㅠㅠ  -->
 
             <br>
-            <label for="owningestate-table"> 보유 매물 정보 (10 / 100)
-                <button class="btn btn-sm btn-info" style="position: absolute; top:8%; right: 6%">등록</button>
-                <button class="btn btn-sm btn-danger" style="position: absolute; top:8%; right: 1%">삭제</button>
-            </label>
 
-            <div class="mb-3 dataTables_scroll">
-                <div class="dataTables_scrollHead">
-                    <div class="dataTables_scrollHeadInner"
-                         style="box-sizing: content-box;">
-                        <table class="table table-striped table-bordered table-sm dataTable" role="grid"
-                               style="margin-left: 0;">
+            <div class="owning-list-group">
+                <div class="owning-list-label">
+                    <label for="owningestate-table"> 보유 매물 정보 (10 / 100)
+                        <div class="owning-list-buttons">
+                            <button class="btn btn-sm btn-info">등록</button>
+                            <button class="btn btn-sm btn-danger">삭제</button>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="mb-3 dataTables_scroll">
+                    <div class="dataTables_scrollHead">
+                        <div class="dataTables_scrollHeadInner" style="box-sizing: content-box;">
+                            <table class="table table-striped table-bordered table-sm dataTable" role="grid"
+                                   style="margin-left: 0;">
+                                <thead>
+                                <tr role="row">
+                                    <th class="th-sm sorting_desc table-head-header" tabindex="0" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Name : activate to sort column ascending" aria-sort="descending">
+                                        번호
+                                    </th>
+                                    <th class="th-sm sorting_desc table-head-header" tabindex="0" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Name : activate to sort column ascending">
+                                        이름
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Position : activate to sort column ascending">
+                                        주소
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Office : activate to sort column ascending">
+                                        거래상태
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Age : activate to sort column ascending">
+                                        대기자
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Start date : activate to sort column ascending">
+                                        구분
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Start date : activate to sort column ascending">
+                                        등록일
+                                    </th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="dataTables_scrollBody">
+                        <table id="owningestate-table" class="table table-hover table-bordered table-sm">
                             <thead>
-                            <tr role="row">
-                                <th class="th-sm sorting_desc table-head-header" tabindex="0" rowspan="1" colspan="1"
-                                    aria-label="Name : activate to sort column ascending" aria-sort="descending">
-                                    번호
-                                </th>
-                                <th class="th-sm sorting_desc table-head-header" tabindex="0" rowspan="1" colspan="1"
-                                    aria-label="Name : activate to sort column ascending">
-                                    이름
-                                </th>
-                                <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
-                                    aria-label="Position : activate to sort column ascending">
-                                    주소
-                                </th>
-                                <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
-                                    aria-label="Office : activate to sort column ascending">
-                                    거래상태
-                                </th>
-                                <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
-                                    aria-label="Age : activate to sort column ascending">
-                                    대기자
-                                </th>
-                                <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
-                                    aria-label="Start date : activate to sort column ascending">
-                                    구분
-                                </th>
-                                <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
-                                    aria-label="Start date : activate to sort column ascending">
-                                    등록일
-                                </th>
+                            <tr>
+                                <th class="th-sm sorting_asc table-body-header">번호</th>
+                                <th class="th-sm sorting table-body-header">이름</th>
+                                <th class="th-sm sorting table-body-header">주소</th>
+                                <th class="th-sm sorting table-body-header">거래상태</th>
+                                <th class="th-sm sorting table-body-header">대기자</th>
+                                <th class="th-sm sorting table-body-header">구분</th>
+                                <th class="th-sm sorting table-body-header">등록일</th>
                             </tr>
                             </thead>
+                            <tbody>
+                            <tr tabindex="0">
+                                <th scope="row">1</th>
+                                <td>Tiger Nixon</td>
+                                <td>System Architect</td>
+                                <td>Edinburgh</td>
+                                <td>61</td>
+                                <td>2011/04/25</td>
+                                <td>$320,800</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">2</th>
+                                <td>Garrett Winters</td>
+                                <td>Accountant</td>
+                                <td>Tokyo</td>
+                                <td>63</td>
+                                <td>2011/07/25</td>
+                                <td>$170,750</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">3</th>
+                                <td>Ashton Cox</td>
+                                <td>Junior Technical Author</td>
+                                <td>San Francisco</td>
+                                <td>66</td>
+                                <td>2009/01/12</td>
+                                <td>$86,000</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">4</th>
+                                <td>Cedric Kelly</td>
+                                <td>Senior Javascript Developer</td>
+                                <td>Edinburgh</td>
+                                <td>22</td>
+                                <td>2012/03/29</td>
+                                <td>$433,060</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">5</th>
+                                <td>Airi Satou</td>
+                                <td>Accountant</td>
+                                <td>Tokyo</td>
+                                <td>33</td>
+                                <td>2008/11/28</td>
+                                <td>$162,700</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">6</th>
+                                <td>Brielle Williamson</td>
+                                <td>Integration Specialist</td>
+                                <td>New York</td>
+                                <td>61</td>
+                                <td>2012/12/02</td>
+                                <td>$372,000</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">7</th>
+                                <td>Herrod Chandler</td>
+                                <td>Sales Assistant</td>
+                                <td>San Francisco</td>
+                                <td>59</td>
+                                <td>2012/08/06</td>
+                                <td>$137,500</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">8</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">9</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">10</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">11</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">12</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">13</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">14</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">15</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">16</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
-                <br>
+            </div>
 
-                <div class="dataTables_scrollBody">
-                    <table id="owningestate-table" class="table table-hover table-bordered table-sm">
-                        <thead>
-                        <tr>
-                            <th class="th-sm sorting_asc table-body-header">번호</th>
-                            <th class="th-sm sorting table-body-header">이름</th>
-                            <th class="th-sm sorting table-body-header">주소</th>
-                            <th class="th-sm sorting table-body-header">거래상태</th>
-                            <th class="th-sm sorting table-body-header">대기자</th>
-                            <th class="th-sm sorting table-body-header">구분</th>
-                            <th class="th-sm sorting table-body-header">등록일</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr tabindex="0">
-                            <th scope="row">1</th>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">2</th>
-                            <td>Garrett Winters</td>
-                            <td>Accountant</td>
-                            <td>Tokyo</td>
-                            <td>63</td>
-                            <td>2011/07/25</td>
-                            <td>$170,750</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">3</th>
-                            <td>Ashton Cox</td>
-                            <td>Junior Technical Author</td>
-                            <td>San Francisco</td>
-                            <td>66</td>
-                            <td>2009/01/12</td>
-                            <td>$86,000</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">4</th>
-                            <td>Cedric Kelly</td>
-                            <td>Senior Javascript Developer</td>
-                            <td>Edinburgh</td>
-                            <td>22</td>
-                            <td>2012/03/29</td>
-                            <td>$433,060</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">5</th>
-                            <td>Airi Satou</td>
-                            <td>Accountant</td>
-                            <td>Tokyo</td>
-                            <td>33</td>
-                            <td>2008/11/28</td>
-                            <td>$162,700</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">6</th>
-                            <td>Brielle Williamson</td>
-                            <td>Integration Specialist</td>
-                            <td>New York</td>
-                            <td>61</td>
-                            <td>2012/12/02</td>
-                            <td>$372,000</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">7</th>
-                            <td>Herrod Chandler</td>
-                            <td>Sales Assistant</td>
-                            <td>San Francisco</td>
-                            <td>59</td>
-                            <td>2012/08/06</td>
-                            <td>$137,500</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">8</th>
-                            <td>Rhona Davidson</td>
-                            <td>Integration Specialist</td>
-                            <td>Tokyo</td>
-                            <td>55</td>
-                            <td>2010/10/14</td>
-                            <td>$327,900</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">9</th>
-                            <td>Rhona Davidson</td>
-                            <td>Integration Specialist</td>
-                            <td>Tokyo</td>
-                            <td>55</td>
-                            <td>2010/10/14</td>
-                            <td>$327,900</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">10</th>
-                            <td>Rhona Davidson</td>
-                            <td>Integration Specialist</td>
-                            <td>Tokyo</td>
-                            <td>55</td>
-                            <td>2010/10/14</td>
-                            <td>$327,900</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">11</th>
-                            <td>Rhona Davidson</td>
-                            <td>Integration Specialist</td>
-                            <td>Tokyo</td>
-                            <td>55</td>
-                            <td>2010/10/14</td>
-                            <td>$327,900</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">12</th>
-                            <td>Rhona Davidson</td>
-                            <td>Integration Specialist</td>
-                            <td>Tokyo</td>
-                            <td>55</td>
-                            <td>2010/10/14</td>
-                            <td>$327,900</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">13</th>
-                            <td>Rhona Davidson</td>
-                            <td>Integration Specialist</td>
-                            <td>Tokyo</td>
-                            <td>55</td>
-                            <td>2010/10/14</td>
-                            <td>$327,900</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">14</th>
-                            <td>Rhona Davidson</td>
-                            <td>Integration Specialist</td>
-                            <td>Tokyo</td>
-                            <td>55</td>
-                            <td>2010/10/14</td>
-                            <td>$327,900</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">15</th>
-                            <td>Rhona Davidson</td>
-                            <td>Integration Specialist</td>
-                            <td>Tokyo</td>
-                            <td>55</td>
-                            <td>2010/10/14</td>
-                            <td>$327,900</td>
-                        </tr>
-                        <tr tabindex="0">
-                            <th scope="row">16</th>
-                            <td>Rhona Davidson</td>
-                            <td>Integration Specialist</td>
-                            <td>Tokyo</td>
-                            <td>55</td>
-                            <td>2010/10/14</td>
-                            <td>$327,900</td>
-                        </tr>
-                        </tbody>
-                    </table>
+            <div class="contract-list-group">
+                <div class="contract-list-label">
+                    <label for="contract-table"> 계약 이력 (10 / 100)
+                        <div class="contract-list-buttons">
+                            <button class="btn btn-sm btn-info">등록</button>
+                            <button class="btn btn-sm btn-danger">삭제</button>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="mb-3 dataTables_scroll">
+                    <div class="dataTables_scrollHead">
+                        <div class="dataTables_scrollHeadInner" style="box-sizing: content-box;">
+                            <table class="table table-striped table-bordered table-sm dataTable" role="grid"
+                                   style="margin-left: 0;">
+                                <thead>
+                                <tr role="row">
+                                    <th class="th-sm sorting_desc table-head-header" tabindex="0" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Name : activate to sort column ascending" aria-sort="descending">
+                                        번호
+                                    </th>
+                                    <th class="th-sm sorting_desc table-head-header" tabindex="0" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Name : activate to sort column ascending">
+                                        이름
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Position : activate to sort column ascending">
+                                        주소
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Office : activate to sort column ascending">
+                                        거래상태
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Age : activate to sort column ascending">
+                                        대기자
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Start date : activate to sort column ascending">
+                                        구분
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Start date : activate to sort column ascending">
+                                        등록일
+                                    </th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="dataTables_scrollBody">
+                        <table id="contract-table" class="table table-hover table-bordered table-sm">
+                            <thead>
+                            <tr>
+                                <th class="th-sm sorting_asc table-body-header">번호</th>
+                                <th class="th-sm sorting table-body-header">이름</th>
+                                <th class="th-sm sorting table-body-header">주소</th>
+                                <th class="th-sm sorting table-body-header">거래상태</th>
+                                <th class="th-sm sorting table-body-header">대기자</th>
+                                <th class="th-sm sorting table-body-header">구분</th>
+                                <th class="th-sm sorting table-body-header">등록일</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr tabindex="0">
+                                <th scope="row">1</th>
+                                <td>Tiger Nixon</td>
+                                <td>System Architect</td>
+                                <td>Edinburgh</td>
+                                <td>61</td>
+                                <td>2011/04/25</td>
+                                <td>$320,800</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">2</th>
+                                <td>Garrett Winters</td>
+                                <td>Accountant</td>
+                                <td>Tokyo</td>
+                                <td>63</td>
+                                <td>2011/07/25</td>
+                                <td>$170,750</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">3</th>
+                                <td>Ashton Cox</td>
+                                <td>Junior Technical Author</td>
+                                <td>San Francisco</td>
+                                <td>66</td>
+                                <td>2009/01/12</td>
+                                <td>$86,000</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">4</th>
+                                <td>Cedric Kelly</td>
+                                <td>Senior Javascript Developer</td>
+                                <td>Edinburgh</td>
+                                <td>22</td>
+                                <td>2012/03/29</td>
+                                <td>$433,060</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">5</th>
+                                <td>Airi Satou</td>
+                                <td>Accountant</td>
+                                <td>Tokyo</td>
+                                <td>33</td>
+                                <td>2008/11/28</td>
+                                <td>$162,700</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">6</th>
+                                <td>Brielle Williamson</td>
+                                <td>Integration Specialist</td>
+                                <td>New York</td>
+                                <td>61</td>
+                                <td>2012/12/02</td>
+                                <td>$372,000</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">7</th>
+                                <td>Herrod Chandler</td>
+                                <td>Sales Assistant</td>
+                                <td>San Francisco</td>
+                                <td>59</td>
+                                <td>2012/08/06</td>
+                                <td>$137,500</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">8</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">9</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">10</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">11</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">12</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">13</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">14</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">15</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">16</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bid-list-group">
+                <div class="bid-list-label">
+                    <label for="bid-table"> 호가 이력 (10 / 100)
+                        <div class="bid-list-buttons">
+                            <button class="btn btn-sm btn-info">등록</button>
+                            <button class="btn btn-sm btn-danger">삭제</button>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="mb-3 dataTables_scroll">
+                    <div class="dataTables_scrollHead">
+                        <div class="dataTables_scrollHeadInner" style="box-sizing: content-box;">
+                            <table class="table table-striped table-bordered table-sm dataTable" role="grid"
+                                   style="margin-left: 0;">
+                                <thead>
+                                <tr role="row">
+                                    <th class="th-sm sorting_desc table-head-header" tabindex="0" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Name : activate to sort column ascending" aria-sort="descending">
+                                        번호
+                                    </th>
+                                    <th class="th-sm sorting_desc table-head-header" tabindex="0" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Name : activate to sort column ascending">
+                                        이름
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Position : activate to sort column ascending">
+                                        주소
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Office : activate to sort column ascending">
+                                        거래상태
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Age : activate to sort column ascending">
+                                        대기자
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Start date : activate to sort column ascending">
+                                        구분
+                                    </th>
+                                    <th class="th-sm sorting table-head-header" tabindex="0" rowspan="1" colspan="1"
+                                        aria-label="Start date : activate to sort column ascending">
+                                        등록일
+                                    </th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="dataTables_scrollBody">
+                        <table id="bid-table" class="table table-hover table-bordered table-sm">
+                            <thead>
+                            <tr>
+                                <th class="th-sm sorting_asc table-body-header">번호</th>
+                                <th class="th-sm sorting table-body-header">이름</th>
+                                <th class="th-sm sorting table-body-header">주소</th>
+                                <th class="th-sm sorting table-body-header">거래상태</th>
+                                <th class="th-sm sorting table-body-header">대기자</th>
+                                <th class="th-sm sorting table-body-header">구분</th>
+                                <th class="th-sm sorting table-body-header">등록일</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr tabindex="0">
+                                <th scope="row">1</th>
+                                <td>Tiger Nixon</td>
+                                <td>System Architect</td>
+                                <td>Edinburgh</td>
+                                <td>61</td>
+                                <td>2011/04/25</td>
+                                <td>$320,800</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">2</th>
+                                <td>Garrett Winters</td>
+                                <td>Accountant</td>
+                                <td>Tokyo</td>
+                                <td>63</td>
+                                <td>2011/07/25</td>
+                                <td>$170,750</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">3</th>
+                                <td>Ashton Cox</td>
+                                <td>Junior Technical Author</td>
+                                <td>San Francisco</td>
+                                <td>66</td>
+                                <td>2009/01/12</td>
+                                <td>$86,000</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">4</th>
+                                <td>Cedric Kelly</td>
+                                <td>Senior Javascript Developer</td>
+                                <td>Edinburgh</td>
+                                <td>22</td>
+                                <td>2012/03/29</td>
+                                <td>$433,060</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">5</th>
+                                <td>Airi Satou</td>
+                                <td>Accountant</td>
+                                <td>Tokyo</td>
+                                <td>33</td>
+                                <td>2008/11/28</td>
+                                <td>$162,700</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">6</th>
+                                <td>Brielle Williamson</td>
+                                <td>Integration Specialist</td>
+                                <td>New York</td>
+                                <td>61</td>
+                                <td>2012/12/02</td>
+                                <td>$372,000</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">7</th>
+                                <td>Herrod Chandler</td>
+                                <td>Sales Assistant</td>
+                                <td>San Francisco</td>
+                                <td>59</td>
+                                <td>2012/08/06</td>
+                                <td>$137,500</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">8</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">9</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">10</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">11</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">12</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">13</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">14</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">15</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            <tr tabindex="0">
+                                <th scope="row">16</th>
+                                <td>Rhona Davidson</td>
+                                <td>Integration Specialist</td>
+                                <td>Tokyo</td>
+                                <td>55</td>
+                                <td>2010/10/14</td>
+                                <td>$327,900</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
