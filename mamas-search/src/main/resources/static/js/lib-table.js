@@ -28,105 +28,192 @@
  *   </DIV TABLE-GROUP>
  * </DIV [NAME]-LIST-GROUP>
  */
-function ListMaker(name) {
-    this.listName = name + '-list-group';
-    this.listGroupDiv = newElement('div', {"name": this.listName + '-list-group'});
+function ListGroup(name) {
+    this.listGroupDiv = newElement(
+        'div',
+        {
+            "class": name + '-list-group'
+        }
+    );
 }
 
-ListMaker.prototype.getList = function () {
+ListGroup.prototype.getList = function () {
     return this.listGroupDiv;
 };
 
-ListMaker.InfoLabel = function (labelName) {
-    this.labelName = labelName;
-    this.labelDiv = newElement('div', {"name": this.labelName + '-list-label'});
-    this.listGroupDiv.append(this.labelDiv);
+ListGroup.prototype.setLabelDiv = function (labelDiv) {
+    this.listGroupDiv.append(labelDiv);
 };
 
-ListMaker.InfoLabel.prototype.setLabel = function (tableName, labelText) {
-    var label = newElement("label", {"for": tableName}, labelText);
+ListGroup.prototype.setTable = function (table) {
+    this.listGroupDiv.append(table);
+};
+
+function LabelDiv(name) {
+    this.labelDiv = newElement(
+        'div',
+        {
+            "class": name + '-list-labelDiv'
+        }
+    );
+}
+
+LabelDiv.prototype.setLabel = function (label) {
     this.labelDiv.append(label);
-
-    return this;
 };
 
-ListMaker.InfoLabel.prototype.setButtons = function (buttonNumber, buttonInfo) {
-    if (buttonNumber < 1)
+LabelDiv.prototype.getLabelDiv = function () {
+    return this.labelDiv;
+};
+
+Label = function (master, text) {
+    this.label = newElement(
+        'label',
+        {
+            "for": master
+        },
+        text
+    );
+};
+
+Label.prototype.setButtons = function (buttonDiv) {
+    this.label.append(buttonDiv);
+};
+
+Label.prototype.getLabel = function () {
+    return this.label;
+};
+
+Buttons = function (name, buttonInfo) {
+    if (buttonInfo.length < 1)
         return;
 
-    var buttonDiv = newElement("div", {"class": "[[]]"});
-
-    for (var buttonName in buttonInfo) {// [[{attributes}, text], [{attributes}, text], [{attributes}, text]]
-        var button = newElement("button", buttonInfo[0][buttonName], buttonInfo[1]);
+    var buttonDiv = newElement(
+        "div",
+        {
+            "class": name + "-label-button-div"
+        }
+    );
+    /**
+     * buttonInfo = [
+     *      button_1: [{
+     *          att1: value1,
+     *          att2: value2,
+     *          ...
+     *          },
+     *          inner_text
+     *      ],
+     *      button_2: [{
+     *          att1: value1,
+     *          att2: value2,
+     *          ...
+     *          },
+     *          inner_text
+     *      ],
+     *      ...
+     *  ]
+     */
+    for (var buttonName in buttonInfo) {
+        var button = newElement(
+            "button",
+            buttonInfo[buttonName][0],
+            buttonInfo[buttonName][1]
+        );
         buttonDiv.append(button);
     }
-
-    var label = this.labelDiv.find('label');
-
-    label.append(buttonDiv);
-    return this;
 };
 
-ListMaker.Table = function (name, columns) {
-    this.tableName = name;
+Buttons.prototype.getButtons = function () {
+    return this.buttonDiv; // TODO 얜 또 왜이래..?ㅠ
+};
+
+TableDiv = function (name) {
     this.tableDiv = newElement(
         'div',
         {
             "name": name + '-table-group',
             "class": "mb-3 dataTables_scroll"
-        });
+        }
+    );
+};
+
+TableDiv.prototype.setTable = function (tableHead, tableBody) {
+    this.tableDiv.append(tableHead);
+    this.tableDiv.append('<br>');
+    this.tableDiv.append(tableBody);
+};
+
+TableDiv.prototype.getTableDiv = function () {
+    return this.tableDiv;
+};
+
+TableHeadDiv = function (outerAttributes, innerAttributes) {
+    this.tableHeadDiv = newElement(
+        'div',
+        outerAttributes
+    );
+    this.tableHeadInnerDiv = newElement(
+        'div',
+        innerAttributes
+    );
+    this.tableHeadDiv.append(this.tableHeadInnerDiv);
+};
+
+TableHeadDiv.prototype.setTableHead = function(tableHead) {
+    this.tableHeadInnerDiv.append(tableHead);
+};
+
+TableHead = function (columns) {
+    this.attributes = {
+        "class": "table table-striped table-bordered table-sm dataTable",
+        "role": "grid",
+        "style": "margin-left: 0;" // TODO 이건 Style이야~
+    };
     this.columns = columns;
+    this.tableHead = newElement(
+        'table',
+        this.attributes,
+    );
+    this.thead = newElement('thead');
+    this.addThead(this.attributes);
+    this.tableHead.append(this.thead);
 };
 
-ListMaker.Table.prototype.addColumns = function(row, columns) {
-    if (columns) {
-        for (var column in columns) {
-            var td = document.createElement('td');
-            td.innerText = column;
-            row.append(td);
-        }
-    } else {
-        throw 'no column info to make!'
-    }
-};
-
-ListMaker.Table.prototype.addRows = function(table, rows) {
-    if (rows) {
-        for (var row in rows) {
-            var tr = document.createElement('tr');
-            this.addColumns(tr, row);
-
-            table.append(tr);
-        }
-    } else {
-        throw 'no row info to make!'
-    }
-};
-
-ListMaker.Table.prototype.addHead = function(attributes) {
-    let columns = this.columns;
-    var thead = document.createElement('thead');
-
+TableHead.prototype.addThead = function () {
+    var columns = this.columns;
+    var thead = this.thead;
+    var attributes = {
+        "class": "th-sm sorting table-head-header",
+        "tabindex": "0",
+        "rowspan": "1",
+        "colspan": "1"
+    };
     var tr = document.createElement('tr');
     tr.setAttribute('role', 'row');
 
     for (var column in columns) {
         var th = document.createElement('th');
-        for (var name in attributes) {
+        for (var name in this.attributes) {
             th.setAttribute(name, attributes[name]);
         }
         th.innerText = column;
-
         tr.append(th);
     }
     thead.append(tr);
 };
 
-ListMaker.Table.prototype.addBody = function() {
-    var tbody = document.createElement('tbody');
+TableBody = function (columns) {
+    this.attributes = {};
+    this.tbody = newElement('tbody');
+    this.addTbody(this.attributes);
 };
 
-ListMaker.Table.prototype.setTableHead = function (headerInfo) {
+
+TableBody.prototype.addTbody = function (attributes) {
+    var tbody = this.tbody;
+};
+
+ListGroup.prototype.setTableHead = function (headerInfo) {
     var tableHeadDiv = newElement(
         'div',
         {
@@ -152,8 +239,8 @@ ListMaker.Table.prototype.setTableHead = function (headerInfo) {
         }
     );
 
-    var thead = this.addHead();
-    var tbody = this.addBody();
+    var thead = this.addThead();
+    var tbody = this.addTbody(bodyAttributes);
 
     table.append(thead);
     table.append(tbody);
@@ -165,6 +252,32 @@ ListMaker.Table.prototype.setTableHead = function (headerInfo) {
     return this;
 };
 
-ListMaker.Table.prototype.setTableBody = function () {
+ListGroup.prototype.setTableBody = function () {
 
+};
+
+
+ListGroup.prototype.addColumns = function (row, columns) {
+    if (columns) {
+        for (var column in columns) {
+            var td = document.createElement('td');
+            td.innerText = column;
+            row.append(td);
+        }
+    } else {
+        throw 'no column info to make!'
+    }
+};
+
+ListGroup.prototype.addRows = function (table, rows) {
+    if (rows) {
+        for (var row in rows) {
+            var tr = document.createElement('tr');
+            this.addColumns(tr, row);
+
+            table.append(tr);
+        }
+    } else {
+        throw 'no row info to make!'
+    }
 };
