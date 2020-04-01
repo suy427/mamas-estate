@@ -28,37 +28,36 @@
  *   </DIV TABLE-GROUP>
  * </DIV [NAME]-LIST-GROUP>
  */
-
-function TableMaker(tableName, columnNumber) {
-    this.tableName = tableName+'-list-group';
-    this.columnNumber = columnNumber;
-    this.columns;
-    this.totalDiv = newElement(this.tableName);
+function ListMaker(name) {
+    this.listName = name + '-list-group';
+    this.listGroupDiv = newElement('div', {"name": this.listName + '-list-group'});
 }
 
-
-
-TableMaker.InfoLabel = function (labelName) {
-    this.labelName = labelName;
-    this.labelDiv = newElement(this.labelName);
+ListMaker.prototype.getList = function () {
+    return this.listGroupDiv;
 };
 
-TableMaker.InfoLabel.prototype.setLabel = function (tableName) {
-    var label = newElement("label", '[[name]]', {"for": tableName});
+ListMaker.InfoLabel = function (labelName) {
+    this.labelName = labelName;
+    this.labelDiv = newElement('div', {"name": this.labelName + '-list-label'});
+    this.listGroupDiv.append(this.labelDiv);
+};
 
+ListMaker.InfoLabel.prototype.setLabel = function (tableName, labelText) {
+    var label = newElement("label", {"for": tableName}, labelText);
     this.labelDiv.append(label);
 
     return this;
 };
 
-TableMaker.InfoLabel.prototype.setButtons = function (buttonNumber, buttonInfo) {
+ListMaker.InfoLabel.prototype.setButtons = function (buttonNumber, buttonInfo) {
     if (buttonNumber < 1)
         return;
 
-    var buttonDiv = newElement("div", '[[name]]');
+    var buttonDiv = newElement("div", {"class": "[[]]"});
 
-    for (var buttonName in buttonInfo) {
-        var button = newElement("button", buttonName, buttonInfo[buttonName]);
+    for (var buttonName in buttonInfo) {// [[{attributes}, text], [{attributes}, text], [{attributes}, text]]
+        var button = newElement("button", buttonInfo[0][buttonName], buttonInfo[1]);
         buttonDiv.append(button);
     }
 
@@ -68,29 +67,104 @@ TableMaker.InfoLabel.prototype.setButtons = function (buttonNumber, buttonInfo) 
     return this;
 };
 
-TableMaker.Table = function(tableName) {
-    this.tableDiv = newElement();
+ListMaker.Table = function (name, columns) {
+    this.tableName = name;
+    this.tableDiv = newElement(
+        'div',
+        {
+            "name": name + '-table-group',
+            "class": "mb-3 dataTables_scroll"
+        });
+    this.columns = columns;
 };
 
-TableMaker.Table.prototype.setTableHeader = function (columns) {
-    var tableHeaderInner = newElement(this.tableName+'header-head', );
-    if (this.totalElement.children('.infolabel')) {
-
-        this.totalElement.append(tableHeaderInner)
-    } else {
-        this.totalElement.prepend(tableHeaderInner)
-    }
-
-    if (columns.length === this.columnNumber) {
+ListMaker.Table.prototype.addColumns = function(row, columns) {
+    if (columns) {
         for (var column in columns) {
-            co
+            var td = document.createElement('td');
+            td.innerText = column;
+            row.append(td);
         }
     } else {
-        throw 'Illegal Column Number Information'
+        throw 'no column info to make!'
     }
-
 };
 
-TableMaker.Table.prototype.setTableBody = function () {
+ListMaker.Table.prototype.addRows = function(table, rows) {
+    if (rows) {
+        for (var row in rows) {
+            var tr = document.createElement('tr');
+            this.addColumns(tr, row);
+
+            table.append(tr);
+        }
+    } else {
+        throw 'no row info to make!'
+    }
+};
+
+ListMaker.Table.prototype.addHead = function(attributes) {
+    let columns = this.columns;
+    var thead = document.createElement('thead');
+
+    var tr = document.createElement('tr');
+    tr.setAttribute('role', 'row');
+
+    for (var column in columns) {
+        var th = document.createElement('th');
+        for (var name in attributes) {
+            th.setAttribute(name, attributes[name]);
+        }
+        th.innerText = column;
+
+        tr.append(th);
+    }
+    thead.append(tr);
+};
+
+ListMaker.Table.prototype.addBody = function() {
+    var tbody = document.createElement('tbody');
+};
+
+ListMaker.Table.prototype.setTableHead = function (headerInfo) {
+    var tableHeadDiv = newElement(
+        'div',
+        {
+            "name": this.tableName + '-header-head',
+            "class": "dataTables_scrollHead"
+        });
+
+    var tableHeadInnerDiv = newElement(
+        'div',
+        {
+            "name": this.tableName + '-header-head-inner',
+            "class": "dataTables_scrollHeadInner",
+            "style": "box-sizing: content-box;"
+        }
+    );
+
+    var table = newElement(
+        'table',
+        {
+            "class": "table table-striped table-bordered table-sm dataTable",
+            "role": "grid",
+            "style": "margin-left: 0;"
+        }
+    );
+
+    var thead = this.addHead();
+    var tbody = this.addBody();
+
+    table.append(thead);
+    table.append(tbody);
+
+    tableHeadInnerDiv.append(table);
+    tableHeadDiv.append(tableHeadInnerDiv);
+    this.tableDiv.append(tableHeadDiv);
+
+    return this;
+};
+
+ListMaker.Table.prototype.setTableBody = function () {
 
 };

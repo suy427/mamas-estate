@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TEST</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>Mamas Estate</title>
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/form-validation.css" rel="stylesheet">
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/checkout/">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="/docs/4.4/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" href="/docs/4.4/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/docs/4.4/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="/docs/4.4/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="/docs/4.4/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
+    <link rel="icon" href="/docs/4.4/assets/img/favicons/favicon.ico">
+
+    <meta name="msapplication-config" content="/docs/4.4/assets/img/favicons/browserconfig.xml">
+    <meta name="theme-color" content="#563d7c">
+
+</head>
+<body>
+
+<script>
+    function fe() {
+        var div = document.getElementById('test-div');
+        div.removeChild(div.lastChild);
+    }
+
+    function te() {
+        var table = document.createElement('table');
+        var thead = document.createElement('thead');
+        var tbody = document.createElement('tbody');
+
+        for (var i = 1; i <= 5; i++) {
+            var th = document.createElement('th');
+            th.innerText = '머리 '+i;
+            thead.append(th);
+        }
+
+        table.append(thead);
+
+        for (var j = 1; j <= 5; j++) {
+            var tr = document.createElement('tr');
+            for (var k = 1; k <= 5; k++) {
+                var td = document.createElement('td');
+                td.innerText = j+'. 몸'+k;
+                tr.append(td);
+            }
+            tbody.append(tr);
+        }
+        table.append(tbody);
+        table.setAttribute('class',"table table-hover");
+
+        var div = document.getElementById('test-div');
+        div.append(table);
+    }
+
+</script>
+
+<table class="table-bordered">
+    <tr>
+        <td>하나</td>
+        <td>하나</td>
+        <td>하나</td>
+        <td>하나</td>
+    </tr>
+    <tr>
+        <td>하나</td>
+        <td>하나</td>
+        <td>하나</td>
+        <td>하나</td>
+    </tr>
+    <tr>
+        <td>하나</td>
+        <td>하나</td>
+        <td>하나</td>
+        <td>하나</td>
+    </tr>
+</table>
+
+<div id="test-div">
+
+</div>
+<button name="aa" value="push" onclick="te()">눌러</button>
+<button name="aa" value="push" onclick="fe()">지워</button>
+</body>
+</html>

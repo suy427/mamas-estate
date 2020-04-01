@@ -17,12 +17,11 @@ function getRecommends(url, itemId, mapType, nodeSize){
     )
 }
 
-function newElement(type, elementName, attributes, inner) {
+function newElement(type, attributes, inner) {
     if (!elementName)
         throw "Can not Create New Element With No Name";
 
     var element = document.createElement(type);
-    element.setAttribute("name", elementName);
 
     for (var attributeName in attributes) {
         element.setAttribute(attributeName, attributes[attributeName])

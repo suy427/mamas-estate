@@ -52,7 +52,7 @@ XHR.prototype.setUrlWithQueryString = function () {
 
 
 XHR.prototype.request = function (callbackWhenSuccess, callbackWhenError) {
-    var xhr = new XMLHttpRequest();
+    var xhr = Object.create(XMLHttpRequest);
 
     if (this.method === 'GET') {
         this.setUrlWithQueryString();
