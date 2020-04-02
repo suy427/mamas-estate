@@ -18,10 +18,7 @@ function getRecommends(url, itemId, mapType, nodeSize){
 }
 
 function newElement(type, attributes, inner) {
-    if (!elementName)
-        throw "Can not Create New Element With No Name";
-
-    var element = document.createElement(type);
+     var element = document.createElement(type);
 
     for (var attributeName in attributes) {
         element.setAttribute(attributeName, attributes[attributeName])
@@ -32,6 +29,13 @@ function newElement(type, attributes, inner) {
     return element;
 }
 
+var a = newElement(
+    'div',
+    {"class": "why"},
+    "안돼?"
+);
+
+console.log(a);
 
 URLS = {
     INDEX_PAGE: getURL(''),

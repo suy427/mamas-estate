@@ -28,6 +28,20 @@
  *   </DIV TABLE-GROUP>
  * </DIV [NAME]-LIST-GROUP>
  */
+
+function newElement(type, attributes, inner) {
+    var element = document.createElement(type);
+
+    for (var attributeName in attributes) {
+        element.setAttribute(attributeName, attributes[attributeName])
+    }
+    if (inner) {
+        element.innerHTML = inner;
+    }
+    return element;
+}
+
+
 function ListGroup(name) {
     this.listGroupDiv = newElement(
         'div',
@@ -70,7 +84,7 @@ Label = function (master, text) {
     this.label = newElement(
         'label',
         {
-            "for": master
+            "for": master + '-table'
         },
         text
     );
@@ -149,23 +163,25 @@ TableDiv.prototype.getTableDiv = function () {
     return this.tableDiv;
 };
 
-TableHeadDiv = function (outerAttributes, innerAttributes) {
+TableHeadDiv = function () {
     this.tableHeadDiv = newElement(
         'div',
-        outerAttributes
+        {"class": "dataTables_scrollHead"}
     );
     this.tableHeadInnerDiv = newElement(
         'div',
-        innerAttributes
+        {
+            "class": "dataTables_scrollHeadInner",
+            "style": "box-sizing: content-box;"
+        }
     );
-    this.tableHeadDiv.append(this.tableHeadInnerDiv);
 };
 
-TableHeadDiv.prototype.setHeadTable = function(headTable) {
+TableHeadDiv.prototype.setHeadTable = function (headTable) {
     this.tableHeadInnerDiv.append(headTable);
 };
 
-TableHeadDiv.prototype.getTableHeadDiv = function() {
+TableHeadDiv.prototype.getTableHeadDiv = function () {
     return this.tableHeadDiv;
 };
 
@@ -208,23 +224,24 @@ HeadTable.prototype.addThead = function () {
     thead.append(tr);
 };
 
-TableBodyDiv = function (attributes) {
+TableBodyDiv = function () {
     this.tableBodyDiv = newElement(
         'div',
-        attributes
+        {"class": "dataTables_scrollBody"}
     );
 };
 
-TableBodyDiv.prototype.setBodyTable = function(bodyTable) {
+TableBodyDiv.prototype.setBodyTable = function (bodyTable) {
     this.tableBodyDiv.append(bodyTable);
 };
 
-TableBodyDiv.prototype.getTableBodyDiv = function() {
+TableBodyDiv.prototype.getTableBodyDiv = function () {
     return this.tableBodyDiv;
 };
 
-BodyTable = function(columns) {
+BodyTable = function (columns) {
     this.columns = columns;
+    this.rowNum = 0;
     this.attributes = {
         "id": "owningestate-table",
         "class": "table table-hover table-bordered table-sm"
@@ -243,42 +260,98 @@ BodyTable = function(columns) {
     this.table.append(this.tbody);
 };
 
-BodyTable.prototype.addThead = function() {
+BodyTable.prototype.addThead = function () {
     var columns = this.columns;
     var attributes = {"class": "th-sm sorting table-body-header"};
     var tr = newElement('tr');
     for (var column in columns) {
         var th = newElement('th', attributes, column);
-        this.tr.append(th);
+        tr.append(th);
     }
     this.thead.append(tr);
 };
 
 /// todo 여기서부터 하면됨.
-BodyTable.prototype.addTbody = function(rows) {
-    var columns = this.columns;
+BodyTable.prototype.addTbody = function (rows) {
+    var tbody = this.tbody;
 
-    var number = 0;
     for (var row in rows) {
-        number++;
-        var tr = newElement(
-            'tr',
-            {"tabindex":"0"},
-        );
-        var th = newElement(
-            'th',
-            {"scope": "row"},
-            number
-        );
-        tr.append(th);
-        for (var column in columns) {
-            var td = newElement(
-                'td',
-                {},
-                column
-            );
-            tr.append(td);
-        }
-        this.tbody.append(tr);
+        tbody.append(this.addRow(row));
     }
+    this.table.append(tbody);
 };
+
+BodyTable.prototype.addRow = function (row) {
+    var tr = newElement(
+        'tr',
+        {"tabindex": "0"}
+    );
+    var th = newElement(
+        'th',
+        {"scope": "row"},
+        ++this.rowNum
+    );
+    tr.append(th);
+
+    for (var column in row) {
+        var td = newElement(
+            'td',
+            {},
+            column
+        );
+        tr.append(td);
+    }
+
+    return tr;
+};
+
+var arr1 = [
+    ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
+    ["Ashton", "Junior", "San", "66", "2009", "$86"],
+    ["Ashton", "Junior", "San", "66", "2009", "$86"],
+    ["Ashton", "Junior", "San", "66", "2009", "$86"],
+    ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
+    ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
+    ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
+];
+
+function ListGroupMaker(name, columns, rows, labelText, buttonInfo) {
+    /* 전체 : label넣고, table넣고 */
+    this.listGroup = new ListGroup(name);
+
+    /* 라벨그룳 */
+    this.labelGroup = new LabelDiv(name);
+    this.label = new Label(name, labelText);
+    this.buttons = new Buttons(name, buttonInfo);
+    this.label.setButtons(this.buttons);
+
+    /* 라벨그룹에 라벨 넣기 */
+    this.labelGroup.setLabel(this.label);
+
+    /* 전체에 라벨그룹 넣기 */
+    this.listGroup.setLabelDiv(this.labelGroup);
+
+
+    /* 테이블 그룹 */
+    this.tableGroup = new TableDiv(name);
+
+    /* 헤드테이블 div 에 헤드 테이블 넣기 */
+    this.tableHead = new TableHeadDiv();
+    this.headTable = new HeadTable(columns);
+
+    this.tableHead.setHeadTable(this.headTable);
+
+    /* 바디 테이블 div 에 바디 테이블 넣기 */
+    this.tableBodyDiv = new TableBodyDiv();
+
+    this.bodyTable = new BodyTable(columns);
+    this.tableBodyDiv.setBodyTable(this.bodyTable);
+
+    /* 테이블 그룹에 헤드&바디 테이블 넣기 */
+    this.tableGroup.setTable(this.tableHead, this.tableBodyDiv);
+
+    /* 전체 그룹에 테이블 넣기 */
+    this.listGroup.setTable(this.tableGroup);
+
+    return this.listGroup;
+}

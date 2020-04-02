@@ -36,6 +36,30 @@
 </head>
 <body>
 
+<script src="../static/js/lib-table.js" ></script>
+<script src="../static/js/lib-core.js.js" ></script>
+<script>
+    var tRows = [
+        ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
+        ["Ashton", "Junior", "San", "66", "2009", "$86"],
+        ["Ashton", "Junior", "San", "66", "2009", "$86"],
+        ["Ashton", "Junior", "San", "66", "2009", "$86"],
+        ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
+        ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
+        ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
+    ];
+    var tCols = ["name","position","nation","age","start date", "salary"];
+    var tLabelText = "이사람들이 정말!!";
+    var tButtonInfo = {};
+
+    function dare() {
+        var result = new ListGroupMaker("dare", tCols, tRows, tLabelText, tButtonInfo);
+
+        var testDiv = document.getElementById('test-div');
+        testDiv.append(result);
+    }
+</script>
+
 <script>
     function fe() {
         var div = document.getElementById('test-div');
@@ -99,5 +123,6 @@
 </div>
 <button name="aa" value="push" onclick="te()">눌러</button>
 <button name="aa" value="push" onclick="fe()">지워</button>
+<button name="aa" value="push" onclick="dare()">과연</button>
 </body>
 </html>
