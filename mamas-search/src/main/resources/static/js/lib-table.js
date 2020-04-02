@@ -84,6 +84,26 @@ Label.prototype.getLabel = function () {
     return this.label;
 };
 
+
+/**
+ * buttonInfo = [
+ *      button_1: [{
+ *          att1: value1,
+ *          att2: value2,
+ *          ...
+ *          },
+ *          inner_text
+ *      ],
+ *      button_2: [{
+ *          att1: value1,
+ *          att2: value2,
+ *          ...
+ *          },
+ *          inner_text
+ *      ],
+ *      ...
+ *  ]
+ */
 Buttons = function (name, buttonInfo) {
     if (buttonInfo.length < 1)
         return;
@@ -94,25 +114,7 @@ Buttons = function (name, buttonInfo) {
             "class": name + "-label-button-div"
         }
     );
-    /**
-     * buttonInfo = [
-     *      button_1: [{
-     *          att1: value1,
-     *          att2: value2,
-     *          ...
-     *          },
-     *          inner_text
-     *      ],
-     *      button_2: [{
-     *          att1: value1,
-     *          att2: value2,
-     *          ...
-     *          },
-     *          inner_text
-     *      ],
-     *      ...
-     *  ]
-     */
+
     for (var buttonName in buttonInfo) {
         var button = newElement(
             "button",
@@ -137,10 +139,10 @@ TableDiv = function (name) {
     );
 };
 
-TableDiv.prototype.setTable = function (tableHead, tableBody) {
-    this.tableDiv.append(tableHead);
+TableDiv.prototype.setTable = function (tableHeadDiv, tableBodyDiv) {
+    this.tableDiv.append(tableHeadDiv);
     this.tableDiv.append('<br>');
-    this.tableDiv.append(tableBody);
+    this.tableDiv.append(tableBodyDiv);
 };
 
 TableDiv.prototype.getTableDiv = function () {
@@ -159,12 +161,16 @@ TableHeadDiv = function (outerAttributes, innerAttributes) {
     this.tableHeadDiv.append(this.tableHeadInnerDiv);
 };
 
-TableHeadDiv.prototype.setTableHead = function(tableHead) {
-    this.tableHeadInnerDiv.append(tableHead);
+TableHeadDiv.prototype.setHeadTable = function(headTable) {
+    this.tableHeadInnerDiv.append(headTable);
 };
 
-TableHead = function (columns) {
-    this.attributes = {
+TableHeadDiv.prototype.getTableHeadDiv = function() {
+    return this.tableHeadDiv;
+};
+
+HeadTable = function (columns) {
+    this.attributes = { // 얘는 table 태그의 attributes
         "class": "table table-striped table-bordered table-sm dataTable",
         "role": "grid",
         "style": "margin-left: 0;" // TODO 이건 Style이야~
@@ -175,14 +181,14 @@ TableHead = function (columns) {
         this.attributes,
     );
     this.thead = newElement('thead');
-    this.addThead(this.attributes);
+    this.addThead(); // <thead> 태그 붙이는거
     this.tableHead.append(this.thead);
 };
 
-TableHead.prototype.addThead = function () {
+HeadTable.prototype.addThead = function () {
     var columns = this.columns;
     var thead = this.thead;
-    var attributes = {
+    var attributes = { // 얘는 th들의 attributes
         "class": "th-sm sorting table-head-header",
         "tabindex": "0",
         "rowspan": "1",
@@ -202,82 +208,77 @@ TableHead.prototype.addThead = function () {
     thead.append(tr);
 };
 
-TableBody = function (columns) {
-    this.attributes = {};
-    this.tbody = newElement('tbody');
-    this.addTbody(this.attributes);
-};
-
-
-TableBody.prototype.addTbody = function (attributes) {
-    var tbody = this.tbody;
-};
-
-ListGroup.prototype.setTableHead = function (headerInfo) {
-    var tableHeadDiv = newElement(
+TableBodyDiv = function (attributes) {
+    this.tableBodyDiv = newElement(
         'div',
-        {
-            "name": this.tableName + '-header-head',
-            "class": "dataTables_scrollHead"
-        });
-
-    var tableHeadInnerDiv = newElement(
-        'div',
-        {
-            "name": this.tableName + '-header-head-inner',
-            "class": "dataTables_scrollHeadInner",
-            "style": "box-sizing: content-box;"
-        }
+        attributes
     );
+};
 
-    var table = newElement(
+TableBodyDiv.prototype.setBodyTable = function(bodyTable) {
+    this.tableBodyDiv.append(bodyTable);
+};
+
+TableBodyDiv.prototype.getTableBodyDiv = function() {
+    return this.tableBodyDiv;
+};
+
+BodyTable = function(columns) {
+    this.columns = columns;
+    this.attributes = {
+        "id": "owningestate-table",
+        "class": "table table-hover table-bordered table-sm"
+    };
+    this.table = newElement(
         'table',
-        {
-            "class": "table table-striped table-bordered table-sm dataTable",
-            "role": "grid",
-            "style": "margin-left: 0;"
-        }
+        this.attributes
     );
+    this.thead = newElement('thead');
+    this.addThead();
 
-    var thead = this.addThead();
-    var tbody = this.addTbody(bodyAttributes);
+    this.tbody = newElement('tbody');
+    this.addTbody();
 
-    table.append(thead);
-    table.append(tbody);
-
-    tableHeadInnerDiv.append(table);
-    tableHeadDiv.append(tableHeadInnerDiv);
-    this.tableDiv.append(tableHeadDiv);
-
-    return this;
+    this.table.append(this.thead);
+    this.table.append(this.tbody);
 };
 
-ListGroup.prototype.setTableBody = function () {
-
-};
-
-
-ListGroup.prototype.addColumns = function (row, columns) {
-    if (columns) {
-        for (var column in columns) {
-            var td = document.createElement('td');
-            td.innerText = column;
-            row.append(td);
-        }
-    } else {
-        throw 'no column info to make!'
+BodyTable.prototype.addThead = function() {
+    var columns = this.columns;
+    var attributes = {"class": "th-sm sorting table-body-header"};
+    var tr = newElement('tr');
+    for (var column in columns) {
+        var th = newElement('th', attributes, column);
+        this.tr.append(th);
     }
+    this.thead.append(tr);
 };
 
-ListGroup.prototype.addRows = function (table, rows) {
-    if (rows) {
-        for (var row in rows) {
-            var tr = document.createElement('tr');
-            this.addColumns(tr, row);
+/// todo 여기서부터 하면됨.
+BodyTable.prototype.addTbody = function(rows) {
+    var columns = this.columns;
 
-            table.append(tr);
+    var number = 0;
+    for (var row in rows) {
+        number++;
+        var tr = newElement(
+            'tr',
+            {"tabindex":"0"},
+        );
+        var th = newElement(
+            'th',
+            {"scope": "row"},
+            number
+        );
+        tr.append(th);
+        for (var column in columns) {
+            var td = newElement(
+                'td',
+                {},
+                column
+            );
+            tr.append(td);
         }
-    } else {
-        throw 'no row info to make!'
+        this.tbody.append(tr);
     }
 };
