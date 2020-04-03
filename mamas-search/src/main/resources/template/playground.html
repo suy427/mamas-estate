@@ -33,156 +33,168 @@
     <meta name="msapplication-config" content="/docs/4.4/assets/img/favicons/browserconfig.xml">
     <meta name="theme-color" content="#563d7c">
 
+
+    <script src="../static/js/lib-table.js" ></script>
+    <script src="../static/js/lib-core.js" ></script>
+    <script>
+        var tRows = [
+            ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
+            ["Ashton", "Junior", "San", "66", "2009", "$86"],
+            ["Ashton", "Junior", "San", "66", "2009", "$86"],
+            ["Ashton", "Junior", "San", "66", "2009", "$86"],
+            ["Ashton", "Junior", "San", "66", "2009", "$86"],
+            ["Ashton", "Junior", "San", "66", "2009", "$86"],
+            ["Ashton", "Junior", "San", "66", "2009", "$86"],
+            ["Ashton", "Junior", "San", "66", "2009", "$86"],
+            ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
+            ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
+            ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
+        ];
+        var tCols = ["number", "name","position","nation","age","start date", "salary"];
+        var tLabelText = "이사람들이 정말!!";
+        var tButtonInfo = {
+            "button_1": [{"class": "btn btn-sm btn-info"}, "버튼1"],
+            "button_2": [{"class": "btn btn-sm btn-danger"}, "버튼2"]
+        };
+
+        function dare() {
+            var result = new ListGroupMaker("dare", tCols, tRows, tLabelText, tButtonInfo);
+
+            var testDiv = document.getElementById('test-div');
+            testDiv.append(result.getListGroup());
+        }
+    </script>
+
+    <script>
+        function fe() {
+            var div = document.getElementById('test-div');
+            div.removeChild(div.lastChild);
+        }
+
+        function te() {
+            var table = document.createElement('table');
+            var thead = document.createElement('thead');
+            var tbody = document.createElement('tbody');
+
+            for (var i = 1; i <= 5; i++) {
+                var th = document.createElement('th');
+                th.innerText = '머리 '+i;
+                thead.append(th);
+            }
+
+            table.append(thead);
+
+            for (var j = 1; j <= 5; j++) {
+                var tr = document.createElement('tr');
+                for (var k = 1; k <= 5; k++) {
+                    var td = document.createElement('td');
+                    td.innerText = j+'. 몸'+k;
+                    tr.append(td);
+                }
+                tbody.append(tr);
+            }
+            table.append(tbody);
+            table.setAttribute('class',"table table-hover");
+
+            var div = document.getElementById('test-div');
+            div.append(table);
+        }
+
+    </script>
+
+    <style>
+        .dataTables_scrollBody::-webkit-scrollbar {
+            display: none;
+        }
+
+        .dataTables_scrollBody {
+            -ms-overflow-style: none;
+            position: relative;
+            overflow: auto;
+            max-height: 15vh;
+            width: 100%;
+        }
+
+        .table-head-header {
+            width: 112px;
+        }
+
+        .table-body-header {
+            width: 112px;
+            height: 10px;
+        }
+
+        .dataTables_scrollHead {
+            overflow: hidden;
+            position: relative;
+            border: 0;
+            width: 100%;
+        }
+
+        table.dataTable thead .sorting:after,
+        table.dataTable thead .sorting:before,
+        table.dataTable thead .sorting_asc:after,
+        table.dataTable thead .sorting_asc:before,
+        table.dataTable thead .sorting_asc_disabled:after,
+        table.dataTable thead .sorting_asc_disabled:before,
+        table.dataTable thead .sorting_desc:after,
+        table.dataTable thead .sorting_desc:before,
+        table.dataTable thead .sorting_desc_disabled:after,
+        table.dataTable thead .sorting_desc_disabled:before {
+            bottom: .5em;
+        }
+    </style>
+
+    <style>
+        .dare-label-button-div {
+            position: absolute;
+            top: 9%;
+            right: 1%
+        }
+
+        .contract-list-buttons {
+            position: absolute;
+            top: 9%;
+            right: 1%
+        }
+
+        .bid-list-buttons {
+            position: absolute;
+            top: 9%;
+            right: 1%
+        }
+    </style>
+
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+    <script>
+        $("#pppp").DataTable({
+            searching: true,
+            ordering: true,
+            paging: true
+        })
+    </script>
+
+
 </head>
 <body>
-
-<script src="../static/js/lib-table.js" ></script>
-<script src="../static/js/lib-core.js" ></script>
-<script>
-    var tRows = [
-        ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
-        ["Ashton", "Junior", "San", "66", "2009", "$86"],
-        ["Ashton", "Junior", "San", "66", "2009", "$86"],
-        ["Ashton", "Junior", "San", "66", "2009", "$86"],
-        ["Ashton", "Junior", "San", "66", "2009", "$86"],
-        ["Ashton", "Junior", "San", "66", "2009", "$86"],
-        ["Ashton", "Junior", "San", "66", "2009", "$86"],
-        ["Ashton", "Junior", "San", "66", "2009", "$86"],
-        ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
-        ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
-        ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
-    ];
-    var tCols = ["number", "name","position","nation","age","start date", "salary"];
-    var tLabelText = "이사람들이 정말!!";
-    var tButtonInfo = {};
-
-    function dare() {
-        var result = new ListGroupMaker("dare", tCols, tRows, tLabelText, tButtonInfo);
-
-        var testDiv = document.getElementById('test-div');
-        testDiv.append(result.getListGroup());
-    }
-</script>
-
-<script>
-    function fe() {
-        var div = document.getElementById('test-div');
-        div.removeChild(div.lastChild);
-    }
-
-    function te() {
-        var table = document.createElement('table');
-        var thead = document.createElement('thead');
-        var tbody = document.createElement('tbody');
-
-        for (var i = 1; i <= 5; i++) {
-            var th = document.createElement('th');
-            th.innerText = '머리 '+i;
-            thead.append(th);
-        }
-
-        table.append(thead);
-
-        for (var j = 1; j <= 5; j++) {
-            var tr = document.createElement('tr');
-            for (var k = 1; k <= 5; k++) {
-                var td = document.createElement('td');
-                td.innerText = j+'. 몸'+k;
-                tr.append(td);
-            }
-            tbody.append(tr);
-        }
-        table.append(tbody);
-        table.setAttribute('class',"table table-hover");
-
-        var div = document.getElementById('test-div');
-        div.append(table);
-    }
-
-</script>
-
-<style>
-    .dataTables_scrollBody::-webkit-scrollbar {
-        display: none;
-    }
-
-    .dataTables_scrollBody {
-        -ms-overflow-style: none;
-        position: relative;
-        overflow: auto;
-        max-height: 15vh;
-        width: 100%;
-    }
-
-    .table-head-header {
-        width: 112px;
-    }
-
-    .table-body-header {
-        width: 112px;
-        height: 10px;
-    }
-
-    .dataTables_scrollHead {
-        overflow: hidden;
-        position: relative;
-        border: 0;
-        width: 100%;
-    }
-
-    table.dataTable thead .sorting:after,
-    table.dataTable thead .sorting:before,
-    table.dataTable thead .sorting_asc:after,
-    table.dataTable thead .sorting_asc:before,
-    table.dataTable thead .sorting_asc_disabled:after,
-    table.dataTable thead .sorting_asc_disabled:before,
-    table.dataTable thead .sorting_desc:after,
-    table.dataTable thead .sorting_desc:before,
-    table.dataTable thead .sorting_desc_disabled:after,
-    table.dataTable thead .sorting_desc_disabled:before {
-        bottom: .5em;
-    }
-</style>
-
-<style>
-    .owning-list-buttons {
-        position: absolute;
-        top: 9%;
-        right: 1%
-    }
-
-    .contract-list-buttons {
-        position: absolute;
-        top: 9%;
-        right: 1%
-    }
-
-    .bid-list-buttons {
-        position: absolute;
-        top: 9%;
-        right: 1%
-    }
-</style>
-
-
-<style>
-    .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-
-    @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-            font-size: 3.5rem;
-        }
-    }
-</style>
-
-<table class="table-bordered">
+<table id="pppp" class="table-bordered">
     <tr>
         <td>하나</td>
         <td>하나</td>
@@ -207,9 +219,10 @@
 <button name="aa" value="push" onclick="fe()">지워</button>
 <button name="aa" value="push" onclick="dare()">과연</button>
 
-
 <div id="test-div">
 
 </div>
+
 </body>
+
 </html>

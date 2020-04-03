@@ -29,19 +29,6 @@
  * </DIV [NAME]-LIST-GROUP>
  */
 
-function newElement(type, attributes, inner) {
-    var element = document.createElement(type);
-
-    for (var attributeName in attributes) {
-        element.setAttribute(attributeName, attributes[attributeName])
-    }
-    if (inner) {
-        element.innerHTML = inner;
-    }
-    return element;
-}
-
-
 function ListGroup(name) {
     this.listGroupDiv = newElement(
         'div',
@@ -135,7 +122,7 @@ Buttons = function (name, buttonInfo) {
             buttonInfo[buttonName][0],
             buttonInfo[buttonName][1]
         );
-        buttonDiv.append(button);
+        this.buttonDiv.append(button);
     }
 };
 
@@ -322,7 +309,10 @@ var tRows = [
 ];
 var tCols = ["name","position","nation","age","start date", "salary"];
 var tLabelText = "이사람들이 정말!!";
-var tButtonInfo = {};
+var tButtonInfo = {
+    "button_1": [{"class": "btn btn-sm btn-info"}, "버튼1"],
+    "button_2": [{"class": "btn btn-sm btn-danger"}, "버튼2"]
+};
 
 function ListGroupMaker(name, columns, rows, labelText, buttonInfo) {
     /* 전체 : label넣고, table넣고 */
