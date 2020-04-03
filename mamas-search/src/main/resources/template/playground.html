@@ -37,10 +37,14 @@
 <body>
 
 <script src="../static/js/lib-table.js" ></script>
-<script src="../static/js/lib-core.js.js" ></script>
+<script src="../static/js/lib-core.js" ></script>
 <script>
     var tRows = [
         ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
+        ["Ashton", "Junior", "San", "66", "2009", "$86"],
+        ["Ashton", "Junior", "San", "66", "2009", "$86"],
+        ["Ashton", "Junior", "San", "66", "2009", "$86"],
+        ["Ashton", "Junior", "San", "66", "2009", "$86"],
         ["Ashton", "Junior", "San", "66", "2009", "$86"],
         ["Ashton", "Junior", "San", "66", "2009", "$86"],
         ["Ashton", "Junior", "San", "66", "2009", "$86"],
@@ -48,7 +52,7 @@
         ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
         ["Garrett", "Accountant", "Tokyo", "63", "2011", "$170"],
     ];
-    var tCols = ["name","position","nation","age","start date", "salary"];
+    var tCols = ["number", "name","position","nation","age","start date", "salary"];
     var tLabelText = "이사람들이 정말!!";
     var tButtonInfo = {};
 
@@ -56,7 +60,7 @@
         var result = new ListGroupMaker("dare", tCols, tRows, tLabelText, tButtonInfo);
 
         var testDiv = document.getElementById('test-div');
-        testDiv.append(result);
+        testDiv.append(result.getListGroup());
     }
 </script>
 
@@ -97,6 +101,87 @@
 
 </script>
 
+<style>
+    .dataTables_scrollBody::-webkit-scrollbar {
+        display: none;
+    }
+
+    .dataTables_scrollBody {
+        -ms-overflow-style: none;
+        position: relative;
+        overflow: auto;
+        max-height: 15vh;
+        width: 100%;
+    }
+
+    .table-head-header {
+        width: 112px;
+    }
+
+    .table-body-header {
+        width: 112px;
+        height: 10px;
+    }
+
+    .dataTables_scrollHead {
+        overflow: hidden;
+        position: relative;
+        border: 0;
+        width: 100%;
+    }
+
+    table.dataTable thead .sorting:after,
+    table.dataTable thead .sorting:before,
+    table.dataTable thead .sorting_asc:after,
+    table.dataTable thead .sorting_asc:before,
+    table.dataTable thead .sorting_asc_disabled:after,
+    table.dataTable thead .sorting_asc_disabled:before,
+    table.dataTable thead .sorting_desc:after,
+    table.dataTable thead .sorting_desc:before,
+    table.dataTable thead .sorting_desc_disabled:after,
+    table.dataTable thead .sorting_desc_disabled:before {
+        bottom: .5em;
+    }
+</style>
+
+<style>
+    .owning-list-buttons {
+        position: absolute;
+        top: 9%;
+        right: 1%
+    }
+
+    .contract-list-buttons {
+        position: absolute;
+        top: 9%;
+        right: 1%
+    }
+
+    .bid-list-buttons {
+        position: absolute;
+        top: 9%;
+        right: 1%
+    }
+</style>
+
+
+<style>
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
+    }
+</style>
+
 <table class="table-bordered">
     <tr>
         <td>하나</td>
@@ -118,11 +203,13 @@
     </tr>
 </table>
 
-<div id="test-div">
-
-</div>
 <button name="aa" value="push" onclick="te()">눌러</button>
 <button name="aa" value="push" onclick="fe()">지워</button>
 <button name="aa" value="push" onclick="dare()">과연</button>
+
+
+<div id="test-div">
+
+</div>
 </body>
 </html>
