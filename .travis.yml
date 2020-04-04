@@ -1,0 +1,37 @@
+
+# 1. Environment Setting
+language: java
+jdk: openjdk8
+os:
+  - linux
+
+# 2. clone my github repository
+
+# 3. before_install (if exists)
+
+# 4. install dependencies
+
+# 5. after_install
+
+# 6. before_script
+# before_script:
+# - mysql -e 'create database mamasdb'
+# - sudo service elasticsearch start
+# - sleep 5
+
+# 7. script
+script:
+  - ./gradlew clean build
+
+# 8. after_script (if succeed)
+after_success:
+  - coveralls
+
+branches:
+  only:
+    - feature/search
+    - trash/rebaser
+
+notifications:
+  email: sondahum@gmail.com
+  telegram: suy427
