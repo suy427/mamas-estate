@@ -1,5 +1,10 @@
-plugins{
+plugins {
+    id 'war'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+}
+
+bootWar {
+    mainClassName = 'com.sondahum.mamas.MamasEstateApplicationStarter'
 }
 
 dependencies {

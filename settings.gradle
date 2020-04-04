@@ -9,22 +9,4 @@
 
 rootProject.name = 'mamas-estate'
 include 'mamas-search'
-//include 'mamas-insight'
-
-enum MAMAS_MODULE {
-    SEARCH, INSIGHT
-}
-
-MAMAS_MODULE[] targets = getProperty('target').split(',').collect{ MAMAS_MODULE.valueOf(it.trim().toUpperCase()) }.toArray()
-
-setModule(targets)
-
-void setModule(MAMAS_MODULE... modules) {
-    if (modules.contains(MAMAS_MODULE.SEARCH)) {
-        include 'mamas-search'
-    }
-
-    if (modules.contains(MAMAS_MODULE.INSIGHT)) {
-        include 'mamas-insight'
-    }
-}
+include 'mamas-insight'
