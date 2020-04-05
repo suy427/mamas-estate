@@ -1,4 +1,7 @@
-# Mama's estate
+# Mama's estate  
+[![Build Status](https://travis-ci.org/suy427/mamas-estate.svg?branch=trash/rebaser)](https://travis-ci.org/suy427/mamas-estate) [![Coverage Status](https://coveralls.io/repos/github/suy427/mamas-estate/badge.svg?branch=trash/rebaser)](https://coveralls.io/github/suy427/mamas-estate?branch=trash/rebaser)  
+    
+simple management service for real-estate
 
 ## Tech Stack
 * Java (1.8)
