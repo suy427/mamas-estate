@@ -7,6 +7,7 @@ import com.sondahum.mamas.TestValueGenerator;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.BidInfoService;
+import com.sondahum.mamas.domain.bid.BidRepository;
 import com.sondahum.mamas.domain.bid.BidSearchService;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.dto.BidDto;
@@ -17,6 +18,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -38,8 +40,10 @@ public class BidControllerTest extends AbstractTestHelper {
 
     @InjectMocks
     private BidController bidController;
-    @Mock
-    private BidInfoService bidInfoService;
+//    @Mock
+//    private BidInfoService bidInfoService;
+//    @Mock
+//    private BidRepository bidRepository;
 
 
     @Before
@@ -105,7 +109,7 @@ public class BidControllerTest extends AbstractTestHelper {
         Bid bid = Bid.builder().action(dto.getAction()).priceRange(dto.getPrice()).build();
 
 
-        given(bidInfoService.updateBidInfo(anyLong(), any(BidDto.UpdateReq.class))).willReturn(bid);
+//        given(bidInfoService.updateBidInfo(anyLong(), any(BidDto.UpdateReq.class))).willReturn(bid);
 
         //when
         final ResultActions resultActions = requestUpdateBid(dto);

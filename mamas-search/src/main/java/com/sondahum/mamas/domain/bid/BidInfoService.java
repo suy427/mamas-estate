@@ -23,10 +23,6 @@ public class BidInfoService {
 
     private final BidRepository bidRepository;
 
-    @PersistenceContext
-    private final EntityManager em;
-
-
     public Bid createBid(BidDto.CreateReq bidDto) {
         if (isSameBidExist(bidDto))
             throw new EntityAlreadyExistException(bidDto.getUser());

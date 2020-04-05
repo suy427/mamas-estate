@@ -11,6 +11,7 @@ import com.sondahum.mamas.domain.estate.model.EstateType;
 import com.sondahum.mamas.domain.user.model.Role;
 import com.sondahum.mamas.domain.user.User;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -22,8 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Random;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = MamasEstateApplicationStarter.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringBootTest(classes = MamasEstateApplicationStarter.class)
+@Ignore
 public class TestValueGenerator {
 
     private static Random random = new Random();
@@ -35,12 +37,12 @@ public class TestValueGenerator {
      *      RANDOM INFO GENERATORS
      *
      *******************************/
-    @Test
+
     public static String randomStringGenerator(int length) {
         return RandomStringUtils.randomAlphanumeric(length);
     }
 
-    @Test
+
     public static String randomPhoneNumberGenerator() {
         String middle = RandomStringUtils.randomNumeric(4);
         String last = RandomStringUtils.randomNumeric(4);
@@ -48,7 +50,7 @@ public class TestValueGenerator {
         return "010"+middle+last;
     }
 
-    @Test
+
     public static Address randomAddressGenerator() {
         return Address.builder()
                 .address1(randomStringGenerator(5))
@@ -56,17 +58,17 @@ public class TestValueGenerator {
                 .address3(randomStringGenerator(5)).build();
     }
 
-    @Test
+
     public static Long randomIdGenerator() {
         return random.nextLong();
     }
 
-    @Test
+
     public static Integer randomNumbersGenerator(int length) {
         return random.nextInt(length);
     }
 
-    @Test
+
     public static Range.Area randomAreaGenerator() {
         double min = Double.parseDouble(RandomStringUtils.randomNumeric(3));
         double max = Double.parseDouble(RandomStringUtils.randomNumeric(3));
@@ -80,32 +82,32 @@ public class TestValueGenerator {
         return result;
     }
 
-    @Test
+
     public static Role randomRoleGenerator() {
         return Role.findByValue(random.nextInt(3) + 1);
     }
 
-    @Test
+
     public static Action randomActionGenerator() {
         return Action.findByValue(random.nextInt(3) + 1);
     }
 
-    @Test
+
     public static Names randomNameGenerator() {
         return Names.findByValue(random.nextInt(29)+1);
     }
 
-    @Test
+
     public static ContractType randomContractTypeGenerator() {
         return ContractType.findByValue(random.nextInt(3) + 1);
     }
 
-    @Test
+
     public static EstateType randomEstateTypeGenerator() {
         return EstateType.findByValue(random.nextInt(4) + 1);
     }
 
-    @Test
+
     public static Range.Price randomPriceRangeGenerator() {
         long min = Long.parseLong(RandomStringUtils.randomNumeric(8));
         long max = Long.parseLong(RandomStringUtils.randomNumeric(8));
@@ -124,7 +126,7 @@ public class TestValueGenerator {
      *      USER INFO GENERATOR
      *
      ********************************/
-    @Test
+
     public static User userInfoGenerator() {
         return User.builder()
                 .name(randomNameGenerator().name)
@@ -137,7 +139,7 @@ public class TestValueGenerator {
      *      ESTATE INFO GENERATOR
      *
      ********************************/
-    @Test
+
     public static Estate estateInfoGenerator(User owner) { // TODO 값 채워넣기
         return Estate.builder()
                 .address(randomAddressGenerator())
@@ -155,7 +157,7 @@ public class TestValueGenerator {
      *      BID INFO GENERATOR
      *
      ********************************/
-    @Test
+
     public static Bid bidInfoGenerator(User user, Action action, Estate estate) {
         return Bid.builder()
                 .user(user)

@@ -9,6 +9,7 @@ import lombok.*;
 import org.springframework.data.domain.Sort;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class BidDto {
@@ -23,7 +24,7 @@ public class BidDto {
         @NotEmpty(message = "등록할 매물의 이름을 입력해주세요.")
         private String estate;
         private Range.Price price;
-        @NotEmpty(message = "매매 종류를 입력해주세요.")
+        @NotNull(message = "매매 종류를 입력해주세요.")
         private Action action;
 
         public Bid toEntity() {
@@ -51,7 +52,7 @@ public class BidDto {
 //        @NotEmpty(message = "변경할 매물 정보를 입력해주세요.")
 //        private String estate;
         private Range.Price price;
-        @NotEmpty(message = "변경할 매매 종류를 입력해주세요..")
+        @NotNull(message = "변경할 매매 종류를 입력해주세요..")
         private Action action;
     }
 

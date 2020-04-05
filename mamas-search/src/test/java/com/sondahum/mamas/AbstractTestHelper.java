@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -41,12 +42,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = MamasEstateApplicationStarter.class)
+@AutoConfigureMockMvc
 public abstract class AbstractTestHelper {
 
     protected MockMvc mockMvc;
     protected final ObjectMapper mapper = new ObjectMapper();
     protected RestTemplate rt = new RestTemplate();
-
 
 
     private class RequestValues {}

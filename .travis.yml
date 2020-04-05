@@ -33,5 +33,6 @@ branches:
     - trash/rebaser
 
 notifications:
-  email: sondahum@gmail.com
-  telegram: suy427
+  webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
+
+cache: cargo
