@@ -1,4 +1,4 @@
-# Mama's estate  
+# mamas estate  
 [![Build Status](https://travis-ci.org/suy427/mamas-estate.svg?branch=master)](https://travis-ci.org/suy427/mamas-estate) [![Coverage Status](https://coveralls.io/repos/github/suy427/mamas-estate/badge.svg?branch=master)](https://coveralls.io/github/suy427/mamas-estate?branch=master)  
     
 simple management service for real-estate
@@ -8,29 +8,38 @@ simple management service for real-estate
 * Spring boot (2.2.2 RELEASE)
 * JPA (Hibernate)
 * QueryDSL
-* Spring Data Jpa (2.2x.4 RELEASE)  
+* Spring Data Jpa (2.2.4 RELEASE)  
 * Elasticsearch
 * Logstash
 
 
 ## Modules  
 - #### mamas-search
-  *
+  * basic client, estate CRUD service
+  * REST API with Spring Boot
+    
 - #### mamas-insight
-  *
+  * aggregation and visualization with ELK
 ---------------------------
-#### 고객관리
-* 고객 CRUD
-* 고객 검색 (이름, 번호, 역할)
+#### client management
+* basic client information CRUD
+* client search
+  - with basic personal information (name, phone number etc..)
+  - with activity tendency (trade tendency, possession tendency etc..)
 
-#### 매물관리
-* 매물 CRUD
-* 매물 검색 (이름, 주소, 평수, 매물타입, 거래타입, 주인, 거래상태, 가격)
-  * 사진, 지도 연동
+#### estate management
+* basic estate information CRUD
+  - include actual picture of estate
+  - linked with actual map
+    
+* estate search
+  - with basic estate information (name, address, area, type, owner, price etc..)
+  - with trade tendency (local tendency, price tendency etc..)
 
-#### 통계
-* 고객통계
-  * 많이 판매, 많이 구매, 최근 구매, 최근 내놓은사람, 매매자와 매수자 매칭(가격기준)
+#### aggregations
+* client data
+  - sailing tendency, purchase tendency, trade success tendency etc..
 
-* 매물 통계
-  * 호가 많은, 최근 나온, 동네정보, 매물간 거리
+* estate data
+  - bid tendency, local tendency, distance tendency etc..
+ 
