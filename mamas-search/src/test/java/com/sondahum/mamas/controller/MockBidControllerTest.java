@@ -3,11 +3,14 @@ package com.sondahum.mamas.controller;
 import com.sondahum.mamas.AbstractMockRequestHelper;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.Bid;
+import com.sondahum.mamas.domain.bid.BidInfoService;
+import com.sondahum.mamas.domain.bid.BidRepository;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.dto.BidDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -16,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,26 +27,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class BidControllerTest extends AbstractMockRequestHelper {
 
-    @InjectMocks
-    private BidController bidController;
+//    @InjectMocks
+//    private BidController bidController;
 //    @Mock
 //    private BidInfoService bidInfoService;
 //    @Mock
 //    private BidRepository bidRepository;
-
-
-    @Before
-    public void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(bidController).build();
-    }
+//
+//
+//    @Before
+//    public void setup() {
+//        mockMvc = MockMvcBuilders.standaloneSetup(bidController).build();
+//    }
 
     @Test
     public void SuccessCreateBid() throws Exception {
-        Map<String, String> requestBody =  new LinkedHashMap<>();
+        BidDto.CreateReq dto =
+                BidDto.CreateReq.builder()
+                        .user("김철수")
+                        .estate("로열팰리스 1003호")
+                        .action(Action.SELL).build();
 
-        requestGet(
+        String result = requestPost(
                 "/bid",
-                bodyValues()
+
         );
 
         ResultActions resultActions = requestCreateBid(dto);

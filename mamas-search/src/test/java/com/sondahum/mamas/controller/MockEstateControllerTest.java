@@ -6,15 +6,15 @@ import com.sondahum.mamas.domain.bid.BidInfoService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-public class EstateControllerTest {
+public class Mock {
 
     @InjectMocks
     private final EstateController estateController;
-    @Mock
+    @org.mockito.Mock
     private BidInfoService bidInfoService;
 
 
-    public EstateControllerTest(EstateController estateController) {
+    public Mock(EstateController estateController) {
         this.estateController = estateController;
     }
 }
