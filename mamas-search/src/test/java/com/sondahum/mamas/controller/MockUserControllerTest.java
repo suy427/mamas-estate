@@ -1,9 +1,9 @@
 package com.sondahum.mamas.controller;
 
 
-import com.sondahum.mamas.AbstractMockRequestHelper;
+import com.sondahum.mamas.testutil.AbstractMockRequestHelper;
 
-public class UserControllerTest extends AbstractMockRequestHelper {
+public class MockUserControllerTest extends AbstractMockRequestHelper {
 
 
 
