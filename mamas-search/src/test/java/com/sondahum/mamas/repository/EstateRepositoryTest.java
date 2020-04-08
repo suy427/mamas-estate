@@ -1,7 +1,6 @@
 package com.sondahum.mamas.repository;
 
 
-import com.sondahum.mamas.TestValueGenerator;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateRepository;
 import com.sondahum.mamas.domain.user.User;
@@ -11,11 +10,10 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.sondahum.mamas.TestValueGenerator.*;
+import static com.sondahum.mamas.testutil.TestValueGenerator.*;
 
 import java.util.ArrayList;
 import java.util.List;

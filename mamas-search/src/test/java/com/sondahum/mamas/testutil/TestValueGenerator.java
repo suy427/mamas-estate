@@ -1,6 +1,5 @@
-package com.sondahum.mamas;
+package com.sondahum.mamas.testutil;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.bid.Bid;
@@ -11,13 +10,6 @@ import com.sondahum.mamas.domain.estate.model.EstateType;
 import com.sondahum.mamas.domain.user.model.Role;
 import com.sondahum.mamas.domain.user.User;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Ignore;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Random;

@@ -1,4 +1,4 @@
-package com.sondahum.mamas;
+package com.sondahum.mamas.testutil;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.util.LinkedMultiValueMap;
