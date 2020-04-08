@@ -1,13 +1,9 @@
 package com.sondahum.mamas.controller;
 
 
-import com.sondahum.mamas.AbstractTestHelper;
-import com.sondahum.mamas.TestValueGenerator;
-import com.sondahum.mamas.domain.bid.BidInfoService;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.sondahum.mamas.AbstractMockRequestHelper;
 
-public class UserControllerTest extends AbstractTestHelper {
+public class UserControllerTest extends AbstractMockRequestHelper {
 
 
 

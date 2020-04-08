@@ -15,7 +15,8 @@ import java.util.Set;
 
 
 public class MultiValueMapConverter {
-    private MultiValueMap<String, Object> multiValueMap;
+
+    private MultiValueMap<String, String> multiValueMap;
     private Object bean;
 
     public MultiValueMapConverter(Object bean) {
@@ -28,18 +29,13 @@ public class MultiValueMapConverter {
         return multiValueMap;
     }
 
-
     private boolean isPrimitiveType(Object object) {
-        if ((object instanceof String) ||
+        return (object instanceof String) ||
                 (object instanceof Integer) ||
                 (object instanceof Float) ||
                 (object instanceof Void) ||
                 (object instanceof Boolean) ||
-                (object instanceof Long)) {
-            return true;
-        } else {
-            return false;
-        }
+                (object instanceof Long);
     }
 
     private MultiValueMap addMultiValueFromBean(MultiValueMap multiValueMap, String name, Object object)
@@ -124,7 +120,6 @@ public class MultiValueMapConverter {
                 mvm.add(_name, value);
             }
         }
-
         return mvm;
     }
 }

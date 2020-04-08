@@ -52,45 +52,11 @@ public class User extends BaseEntity {
     List<Contract> contractList = new ArrayList<>();
 
 
-
-//    public List<Contract> getSoldList() { // 이런것도 query로 해결하는게 나을 수 있다.
-//        return contractList.stream()
-//                .filter(contract -> contract.getSeller().id.equals(this.id))
-//                .collect(Collectors.toList());
-//
-//    }
-
-//    public List<Contract> getBoughtList() {
-//        return contractList.stream()
-//                .filter(contract -> contract.getBuyer().id.equals(this.id))
-//                .collect(Collectors.toList());
-//    }
-
-
-//    public List<Estate> getSellingList() {
-//        return estateList.stream()
-//                .filter(estate -> estate.getStatus() != Status.SOLD)
-//                .collect(Collectors.toList());
-//    }
-
-//    public List<Bid> getBuyingList() {
-//        return bidList.stream()
-//                .filter(
-//                        bid -> bid.getAction() == Action.BUY
-//                                && bid.getEstate().getStatus() == Status.ONSALE
-//                )
-//                .collect(Collectors.toList());
-//    }
-
     public List<Bid> getTradingList() {
         return getBidList().stream()
                 .filter(bid -> bid.getStatus() == BidStatus.ONGOING)
                 .collect(Collectors.toList());
     }
-
-//    public LocalDateTime getRecentBidDate() {
-//        return Collections.max(bidList).getCreatedDate();
-//    }
 
     public LocalDateTime getRecentContractedDate() { // TODO 괜찮은걸로 보이긴한데 좀 찝찝하기도함..ㅎ
         return Collections.max(contractList).getCreatedDate();

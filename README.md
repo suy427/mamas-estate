@@ -3,27 +3,6 @@
     
 simple management service for real-estate
 
-## EndPoints (REST API)
-##### context-path ```/mamas```
-- ##### User
-  - ```/user/{id}```
-  - ```/user/contract/{id}```
-  - ```/user/bid/{id}```
-  - ```/user/estate/{id}```
-- ##### Estate
-  - ```/estate/{id}```
-  - ```/estate/bid/{id}```
-  - ```/estate/owner```
-- ##### Contract
-  - d
-  - d
-  - d
-  - d
-- ##### Bid
-  - d
-  - d
-  - d
-  - d
    
 ## Tech Stack
 * Java (1.8)

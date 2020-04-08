@@ -23,14 +23,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Random;
 
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@SpringBootTest(classes = MamasEstateApplicationStarter.class)
-@Ignore
 public class TestValueGenerator {
 
     private static Random random = new Random();
     protected MockMvc mockMvc;
-    protected final ObjectMapper mapper = new ObjectMapper();
 
     /******************************
      *
@@ -57,7 +53,6 @@ public class TestValueGenerator {
                 .address2(randomStringGenerator(5))
                 .address3(randomStringGenerator(5)).build();
     }
-
 
     public static Long randomIdGenerator() {
         return random.nextLong();

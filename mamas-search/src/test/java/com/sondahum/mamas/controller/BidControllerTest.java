@@ -1,42 +1,27 @@
 package com.sondahum.mamas.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sondahum.mamas.AbstractTestHelper;
-import com.sondahum.mamas.MamasEstateApplicationStarter;
-import com.sondahum.mamas.TestValueGenerator;
+import com.sondahum.mamas.AbstractMockRequestHelper;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.Bid;
-import com.sondahum.mamas.domain.bid.BidInfoService;
-import com.sondahum.mamas.domain.bid.BidRepository;
-import com.sondahum.mamas.domain.bid.BidSearchService;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.dto.BidDto;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.DispatcherServlet;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class BidControllerTest extends AbstractTestHelper {
+public class BidControllerTest extends AbstractMockRequestHelper {
 
     @InjectMocks
     private BidController bidController;
@@ -53,12 +38,12 @@ public class BidControllerTest extends AbstractTestHelper {
 
     @Test
     public void SuccessCreateBid() throws Exception {
-        BidDto.CreateReq dto =
-                BidDto.CreateReq.builder()
-                        .user("김철수")
-                        .estate("로열팰리스 1003호")
-                        .price(buildPrice(100L, 1000L))
-                        .action(Action.BUY).build();
+        Map<String, String> requestBody =  new LinkedHashMap<>();
+
+        requestGet(
+                "/bid",
+                bodyValues()
+        );
 
         ResultActions resultActions = requestCreateBid(dto);
         resultActions.andExpect(status().isOk());
