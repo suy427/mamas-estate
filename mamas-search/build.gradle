@@ -62,7 +62,7 @@ sourceSets {
 }
 
 querydsl {
-    library = "com.querydsl:querydsl-apt"
+    library = "com.querydsl:querydsl-apt:4.2.2"
     jpa = true
     querydslSourcesDir = querydslSrcDir
 }
