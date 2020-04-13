@@ -32,7 +32,7 @@ public class UserRepositoryTest {
     EstateRepository estateRepository;
     @Autowired TestEntityManager entityManager;
 
-    @Test
+//    @Test
     void createUserTest() { // 잘 들어가는지 테스트
         List<User> actualUsers = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -57,12 +57,12 @@ public class UserRepositoryTest {
         System.out.println("");
     }
 
-    @Test
+//    @Test
     void deleteUserTest() {
 
     }
 
-    @Test
+//    @Test
     void updateUserTest() {
 
     }

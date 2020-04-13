@@ -6,7 +6,7 @@ import com.sondahum.mamas.testutil.AbstractMockRequestHelper;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-public class MockContractControllerTest extends AbstractMockRequestHelper {
+public class MockContractControllerTest {
 
 
 }

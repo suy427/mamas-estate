@@ -57,6 +57,7 @@ public class BidDto {
     }
 
     @Getter
+    @Builder
     public static class SearchReq {
         private String user;
         private String estate;

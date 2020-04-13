@@ -20,8 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -35,23 +34,19 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
     protected MockMvc mockMvc;
 
     /**
-     *
      * [ GET ]
-     *
      */
     public MockHttpServletResponse requestGet(String url, RequestValues... values) throws Exception {
         return requestGet(url, null, new RequestValueContainer(values));
     }
 
     public MockHttpServletResponse requestGet(
-            String url, ResultHandler resultHandlerForDocument, RequestValues... values) throws Exception
-    {
+            String url, ResultHandler resultHandlerForDocument, RequestValues... values) throws Exception {
         return requestGet(url, resultHandlerForDocument, new RequestValueContainer(values));
     }
 
     private MockHttpServletResponse requestGet(
-            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception
-    {
+            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception {
         MockHttpServletRequestBuilder request;
         if (valuesHandler.getPathArray() != null)
             request = RestDocumentationRequestBuilders.get(url, valuesHandler.getPathArray());
@@ -69,8 +64,7 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
         //- Request
         ResultActions resultActions = mockMvc
                 .perform(request)
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk());
+                .andDo(MockMvcResultHandlers.print());
 
         //- Document or Something
         if (resultHandlerForDocument != null) {
@@ -86,9 +80,7 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
 
 
     /**
-     *
      * [ POST ]
-     *
      */
     public MockHttpServletResponse requestPost(String url, RequestValues... values) throws Exception {
         RequestValueContainer requestValues = new RequestValueContainer(values);
@@ -99,8 +91,7 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
     }
 
     public MockHttpServletResponse requestPost(
-            String url, ResultHandler resultHandlerForDocument, RequestValues... values) throws Exception
-    {
+            String url, ResultHandler resultHandlerForDocument, RequestValues... values) throws Exception {
         RequestValueContainer requestValues = new RequestValueContainer(values);
         if (requestValues.multipartValues != null)
             return requestMultipartPost(url, resultHandlerForDocument, requestValues);
@@ -109,8 +100,7 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
     }
 
     private MockHttpServletResponse requestPost(
-            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception
-    {
+            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception {
         MockHttpServletRequestBuilder request;
         if (valuesHandler.getPathArray() != null)
             request = post(url, valuesHandler.getPathArray());
@@ -129,8 +119,8 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
         //Request
         ResultActions resultActions = mockMvc
                 .perform(request)
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk());
+                .andDo(MockMvcResultHandlers.print());
+
         //- Document or Something
         if (resultHandlerForDocument != null) {
             resultActions.andDo(resultHandlerForDocument);
@@ -143,13 +133,11 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
 
 
     /**
-     *
      * [ MultiPart ]
-     *
      */
     private MockHttpServletResponse requestMultipartPost(
-            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception
-    {
+            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception {
+
         //Request
         ResultActions resultActions = mockMvc
                 .perform(
@@ -159,10 +147,10 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
                                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                                 .accept(MediaType.APPLICATION_JSON)
                 )
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk());
+                .andDo(MockMvcResultHandlers.print());
+
         //- Document or Something
-        if (resultHandlerForDocument != null){
+        if (resultHandlerForDocument != null) {
             resultActions.andDo(resultHandlerForDocument);
         }
         //Response
@@ -170,9 +158,8 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
         return mvcResult.getResponse();
     }
 
-    private MockMultipartHttpServletRequestBuilder fileUpload (
-            String url, List<MockMultipartFile> multipartFileList, List<Object> pathArray)
-    {
+    private MockMultipartHttpServletRequestBuilder fileUpload(
+            String url, List<MockMultipartFile> multipartFileList, List<Object> pathArray) {
         MockMultipartHttpServletRequestBuilder mockBuilder = RestDocumentationRequestBuilders.fileUpload(url, pathArray);
         multipartFileList.forEach(mockBuilder::file);
 
@@ -181,37 +168,42 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
 
 
     /**
-     *
      * [ PUT ]
-     *
      */
     public MockHttpServletResponse requestPut(String url, RequestValues... values) throws Exception {
         return requestPut(url, null, new RequestValueContainer(values));
     }
 
     public MockHttpServletResponse requestPut(
-            String url, ResultHandler resultHandlerForDocument, RequestValues... values) throws Exception
-    {
+            String url, ResultHandler resultHandlerForDocument, RequestValues... values) throws Exception {
         return requestPut(url, resultHandlerForDocument, new RequestValueContainer(values));
     }
 
     private MockHttpServletResponse requestPut(
-            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception
-    {
-        //- Request
+            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception {
+
+        MockHttpServletRequestBuilder request;
+        if (valuesHandler.getPathArray() != null)
+            request = put(url, valuesHandler.getPathArray());
+        else
+            request = put(url);
+
+        if (valuesHandler.getRequestParameters() != null)
+            request = request.params(valuesHandler.getRequestParameters());
+        if (valuesHandler.getRequestBody() != null)
+            request = request.content(valuesHandler.getRequestBody());
+        if (valuesHandler.getHeaders() != null)
+            request = request.headers(new HttpHeaders(valuesHandler.getHeaders()));
+
+        request.contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+        //Request
         ResultActions resultActions = mockMvc
-                .perform(
-                        put(url, valuesHandler.getPathArray())
-                                .params(valuesHandler.getRequestParameters())
-                                .content(valuesHandler.getRequestBody())
-                                .headers(new HttpHeaders(valuesHandler.getHeaders()))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON)
-                )
-                .andDo( MockMvcResultHandlers.print() )
-                .andExpect(status().isOk());
+                .perform(request)
+                .andDo(MockMvcResultHandlers.print());
+
         //- Document or Something
-        if (resultHandlerForDocument != null){
+        if (resultHandlerForDocument != null) {
             resultActions.andDo(resultHandlerForDocument);
         }
         //- Response
@@ -220,38 +212,43 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
     }
 
     /**
-     *
      * [ DELETE ]
-     *
-     * */
+     */
     public MockHttpServletResponse requestDelete(String url, RequestValues... values) throws Exception {
         return requestDelete(url, null, new RequestValueContainer(values));
     }
 
     public MockHttpServletResponse requestDelete(
-            String url, ResultHandler resultHandlerForDocument, RequestValues... values) throws Exception
-    {
+            String url, ResultHandler resultHandlerForDocument, RequestValues... values) throws Exception {
         return requestDelete(url, resultHandlerForDocument, new RequestValueContainer(values));
     }
 
     private MockHttpServletResponse requestDelete(
-            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception
-    {
+            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception {
+
+        MockHttpServletRequestBuilder request;
+        if (valuesHandler.getPathArray() != null)
+            request = delete(url, valuesHandler.getPathArray());
+        else
+            request = delete(url);
+
+        if (valuesHandler.getRequestParameters() != null)
+            request = request.params(valuesHandler.getRequestParameters());
+        if (valuesHandler.getRequestBody() != null)
+            request = request.content(valuesHandler.getRequestBody());
+        if (valuesHandler.getHeaders() != null)
+            request = request.headers(new HttpHeaders(valuesHandler.getHeaders()));
+
+        request.contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
         //- Reqeust
         ResultActions resultActions = mockMvc
-                .perform(
-                        RestDocumentationRequestBuilders.
-                                delete(url, valuesHandler.getPathArray())
-                                .params(valuesHandler.getRequestParameters())
-                                .content(valuesHandler.getRequestBody())
-                                .headers(new HttpHeaders(valuesHandler.getHeaders()))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON)
-                )
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk());
+                .perform(request)
+                .andDo(MockMvcResultHandlers.print());
+
         //- Document or Something
-        if (resultHandlerForDocument != null){
+        if (resultHandlerForDocument != null) {
             resultActions.andDo(resultHandlerForDocument);
         }
         //- Response

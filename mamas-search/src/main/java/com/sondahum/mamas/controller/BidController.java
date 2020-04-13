@@ -38,7 +38,7 @@ public class BidController {
     }
 
     @GetMapping(value = "/{id}")
-    public BidDto.DetailResponse getEstateDetail(@PathVariable final long id) {
+    public BidDto.DetailResponse getBidDetail(@PathVariable final long id) {
         return new BidDto.DetailResponse(bidInfoService.getBidById(id));
     }
 

@@ -87,7 +87,6 @@ public class BidRepositoryTest {
         List<Estate> finalEstates = estateRepository.findAll();
         List<Bid> finalBids = bidRepository.findAll();
 
-
         System.out.println("break point");
     }
 
