@@ -1,8 +1,6 @@
 package com.sondahum.mamas.controller;
 
 import com.sondahum.mamas.domain.bid.BidRepository;
-import com.sondahum.mamas.domain.estate.Estate;
-import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.testutil.AbstractMockRequestHelper;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.Bid;
@@ -10,16 +8,11 @@ import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.dto.BidDto;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.mock.web.MockHttpServletResponse;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
-
-import static org.mockito.BDDMockito.given;
 
 
 public class MockBidControllerTest extends AbstractMockRequestHelper {
@@ -123,93 +116,93 @@ public class MockBidControllerTest extends AbstractMockRequestHelper {
     /*********************************
      *          조회 TEST
      *********************************/
-    @Test
-    public void 호가정보_조회() throws Exception {
-        MockHttpServletResponse result = requestGet("/bid/"+1);
-
-        System.out.println(result.getContentAsString());
-        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
-    }
-
-
-    /*********************************
-     *          검색 TEST
-     *********************************/
-    @Test
-    public void 유저로_검색() throws Exception {
-        BidDto.SearchReq query = BidDto.SearchReq.builder()
-                .user("김철수").build();
-
-       Map<String, String> pageRequest =
-               pageRequestBuilder("1", "5", "ASC");
-
-       MockHttpServletResponse result =
-                requestGet(
-                        "/bid",
-                        requestParameters(query),
-                        requestParameters(pageRequest)
-                );
-
-        System.out.println(result.getContentAsString());
-        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
-    }
-
-    @Test
-    public void 매물로_검색() throws Exception {
-        BidDto.SearchReq query = BidDto.SearchReq.builder()
-                .estate("행복아파트").build();
-
-        Map<String, String> pageRequest =
-                pageRequestBuilder("1", "5", "ASC");
-
-        MockHttpServletResponse result =
-                requestGet(
-                        "/bid",
-                        requestParameters(query),
-                        requestParameters(pageRequest)
-                );
-
-        System.out.println(result.getContentAsString());
-        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
-    }
-
-    @Test
-    public void 액션으로_검색() throws Exception {
-        BidDto.SearchReq query = BidDto.SearchReq.builder()
-                .action(Action.BUY).build();
-
-        Map<String, String> pageRequest =
-                pageRequestBuilder("1", "5", "ASC");
-
-        MockHttpServletResponse result =
-                requestGet(
-                        "/bid",
-                        requestParameters(query),
-                        requestParameters(pageRequest)
-                );
-
-        System.out.println(result.getContentAsString());
-        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
-    }
-
-    @Test
-    public void 가격으로_검색() throws Exception {
-        BidDto.SearchReq query = BidDto.SearchReq.builder()
-                .price(buildPrice(100L, 1000L)).build();
-
-        Map<String, String> pageRequest =
-                pageRequestBuilder("1", "5", "ASC");
-
-        MockHttpServletResponse result =
-                requestGet(
-                        "/bid",
-                        requestParameters(query),
-                        requestParameters(pageRequest)
-                );
-
-        System.out.println(result.getContentAsString());
-        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
-    }
+//    @Test
+//    public void 호가정보_조회() throws Exception {
+//        MockHttpServletResponse result = requestGet("/bid/"+1);
+//
+//        System.out.println(result.getContentAsString());
+//        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
+//    }
+//
+//
+//    /*********************************
+//     *          검색 TEST
+//     *********************************/
+//    @Test
+//    public void 유저로_검색() throws Exception {
+//        BidDto.SearchReq query = BidDto.SearchReq.builder()
+//                .user("김철수").build();
+//
+//       Map<String, String> pageRequest =
+//               pageRequestBuilder("1", "5", "ASC");
+//
+//       MockHttpServletResponse result =
+//                requestGet(
+//                        "/bid",
+//                        requestParameters(query),
+//                        requestParameters(pageRequest)
+//                );
+//
+//        System.out.println(result.getContentAsString());
+//        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
+//    }
+//
+//    @Test
+//    public void 매물로_검색() throws Exception {
+//        BidDto.SearchReq query = BidDto.SearchReq.builder()
+//                .estate("행복아파트").build();
+//
+//        Map<String, String> pageRequest =
+//                pageRequestBuilder("1", "5", "ASC");
+//
+//        MockHttpServletResponse result =
+//                requestGet(
+//                        "/bid",
+//                        requestParameters(query),
+//                        requestParameters(pageRequest)
+//                );
+//
+//        System.out.println(result.getContentAsString());
+//        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
+//    }
+//
+//    @Test
+//    public void 액션으로_검색() throws Exception {
+//        BidDto.SearchReq query = BidDto.SearchReq.builder()
+//                .action(Action.BUY).build();
+//
+//        Map<String, String> pageRequest =
+//                pageRequestBuilder("1", "5", "ASC");
+//
+//        MockHttpServletResponse result =
+//                requestGet(
+//                        "/bid",
+//                        requestParameters(query),
+//                        requestParameters(pageRequest)
+//                );
+//
+//        System.out.println(result.getContentAsString());
+//        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
+//    }
+//
+//    @Test
+//    public void 가격으로_검색() throws Exception {
+//        BidDto.SearchReq query = BidDto.SearchReq.builder()
+//                .price(buildPrice(100L, 1000L)).build();
+//
+//        Map<String, String> pageRequest =
+//                pageRequestBuilder("1", "5", "ASC");
+//
+//        MockHttpServletResponse result =
+//                requestGet(
+//                        "/bid",
+//                        requestParameters(query),
+//                        requestParameters(pageRequest)
+//                );
+//
+//        System.out.println(result.getContentAsString());
+//        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
+//    }
 
     private Range.Price buildPrice(Long min, Long max) {
         return Range.Price.builder().minimum(min).maximum(max).build();
