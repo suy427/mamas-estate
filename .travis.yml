@@ -1,6 +1,6 @@
 # 1. Environment Setting
 language: java
-jdk: openjdk8
+jdk: oraclejdk8
 os:
   - linux
 
@@ -25,10 +25,8 @@ before_script:
 
 # 7. script
 script:
-  - gradle clean
-  - gradle build -x test
   - ./gradlew clean
-  - ./gradlew build -x test
+  - ./gradlew build
 
 # 8. after_script (if succeed)
 after_success:
