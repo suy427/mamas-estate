@@ -20,6 +20,7 @@ dependencies {
     // jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
 
+    compile 'org.postgresql:postgresql:9.2-1004-jdbc41'
 
     // spring boot test... 위에거랑 뭐가 다르지..?ㅎㅎ
     testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")

@@ -14,12 +14,13 @@ os:
 
   # 6. before_script
 services:
-  - mysql
+  - postgresql
 #  - elasticsearch
 
 before_script:
   - gradle wrap
-  - mysql -e 'CREATE DATABASE mamasdb;'
+  - psql -c 'create database mamasdb;' -U postgres
+#  - mysql -e 'CREATE DATABASE mamasdb;'
 #  - sudo service elasticsearch start
 #  - sleep 5
 
