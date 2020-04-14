@@ -18,7 +18,7 @@ services:
 #  - elasticsearch
 
 before_install:
-  - sudo service mysql
+#  - sudo service mysql
   - mysql -e 'CREATE DATABASE mamasdb;'
 
 before_script:
