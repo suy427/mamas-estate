@@ -17,8 +17,12 @@ services:
   - mysql
 #  - elasticsearch
 
+before_install:
+  - sudo service mysql
+  - mysql -e 'CREATE DATABASE mamasdb;'
+
 before_script:
-  - gradle wrap
+#  - gradle wrap
   - mysql -e 'CREATE DATABASE mamasdb;'
 #  - sudo service elasticsearch start
 #  - sleep 5
@@ -40,5 +44,3 @@ branches:
 notifications:
   email: false
   webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
-
-cache: cargo
