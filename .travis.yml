@@ -1,6 +1,6 @@
 # 1. Environment Setting
 language: java
-jdk: oraclejdk8
+jdk: openjdk8
 os:
   - linux
 
