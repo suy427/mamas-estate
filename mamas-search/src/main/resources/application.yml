@@ -4,6 +4,9 @@ server:
     context-path: /mamas
 
 spring:
+  profiles:
+    active: [local, test]
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/mamasdb
@@ -19,11 +22,11 @@ spring:
       hibernate.enable_lazy_load_no_trans: true
       hibernate.format_sql: true
 
-#  http:
-#    encoding:
-#      charset: UTF-8
-#      enabled: true
-#      force: true
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 
 #logging:
 #  level:
