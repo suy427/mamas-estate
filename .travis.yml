@@ -22,15 +22,15 @@ before_install:
   - mysql -e 'CREATE DATABASE mamasdb;'
 
 before_script:
-#  - gradle wrap
-  - mysql -e 'CREATE DATABASE mamasdb;'
+  - gradle wrap
+#  - mysql -e 'CREATE DATABASE mamasdb;'
 #  - sudo service elasticsearch start
 #  - sleep 5
 
 # 7. script
 script:
-  - ./gradlew clean
-  - ./gradlew build
+  - gradle clean build
+  - ./gradlew clean build
 
 # 8. after_script (if succeed)
 after_success:
