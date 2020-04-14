@@ -19,7 +19,7 @@ services:
 
 before_script:
   - gradle wrap
-  - mysql -e 'create database mamasdb'
+  - mysql -e 'CREATE DATABASE mamasdb;'
 #  - sudo service elasticsearch start
 #  - sleep 5
 
