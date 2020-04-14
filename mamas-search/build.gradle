@@ -45,18 +45,30 @@ dependencies {
     // mysql-connector
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
 
-
-
     // random string generator (for test)
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor ('org.projectlombok:lombok:1.18.12'
+            , 'com.querydsl:querydsl-apt:4.2.2:jpa'
+            , "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final",
+            "javax.annotation:javax.annotation-api:1.3.2"
+    )
+    // lombok - for test
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+
 }
 
-def querydslSrcDir = 'src/main/generated'
+def generated = 'src/main/generated'
 
 sourceSets {
     main {
         java {
-            srcDirs = ['src/main/java', querydslSrcDir]
+            srcDirs += [generated]
         }
     }
 }
@@ -64,7 +76,15 @@ sourceSets {
 querydsl {
     library = "com.querydsl:querydsl-apt:4.2.2"
     jpa = true
-    querydslSourcesDir = querydslSrcDir
+    querydslSourcesDir = generated
+}
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(generated)
+}
+
+clean.doLast {
+    file(generated).deleteDir()
 }
 
 compileQuerydsl{
