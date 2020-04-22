@@ -5,6 +5,7 @@
 //import com.sondahum.mamas.domain.estate.EstateRepository;
 //import com.sondahum.mamas.domain.user.User;
 //import com.sondahum.mamas.domain.user.UserRepository;
+//import com.sondahum.mamas.domain.user.model.Role;
 //import org.hamcrest.CoreMatchers;
 //import org.junit.Assert;
 //import org.junit.jupiter.api.Test;
@@ -15,13 +16,13 @@
 //import org.springframework.test.context.junit4.SpringRunner;
 //
 //import static com.sondahum.mamas.testutil.TestValueGenerator.*;
+//import static org.mockito.BDDMockito.given;
 //
 //import java.util.ArrayList;
 //import java.util.List;
 //
 //@DataJpaTest
 //@RunWith(SpringRunner.class)
-////@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 //public class UserRepositoryTest {
 //
 //    @Autowired
@@ -30,9 +31,8 @@
 //    BidRepository bidRepository;
 //    @Autowired
 //    EstateRepository estateRepository;
-//    @Autowired TestEntityManager entityManager;
 //
-////    @Test
+//    @Test
 //    void createUserTest() { // 잘 들어가는지 테스트
 //        List<User> actualUsers = new ArrayList<>();
 //        for (int i = 0; i < 10; i++) {
@@ -55,6 +55,8 @@
 //            Assert.assertThat(actual.getRole(), CoreMatchers.is(saved.getRole()));
 //        }
 //        System.out.println("");
+//        User user = User.builder().name("김철수").phone("010-3002-9543").role(Role.MAMA).build();
+//
 //    }
 //
 ////    @Test

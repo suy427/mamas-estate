@@ -14,20 +14,18 @@ os:
 
   # 6. before_script
 services:
-  - mysql
+#  - mysql
 #  - elasticsearch
 
 before_script:
-  - gradle wrap
-  - mysql -uroot -e 'create database if not exists mamasdb;'
-#  - mysql -e 'CREATE DATABASE mamasdb;'
+#  - mysql -uroot -e 'create database if not exists mamasdb;'
+#  - mysql -uroot -e 'show databaes;'
 #  - sudo service elasticsearch start
 #  - sleep 5
 
 # 7. script
 script:
-  - ./gradlew clean
-  - ./gradlew build
+  - ./gradlew clean build
 
 # 8. after_script (if succeed)
 after_success:

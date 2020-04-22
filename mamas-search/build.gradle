@@ -44,7 +44,7 @@ dependencies {
     // h2 database
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
     // mysql-connector
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+//    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
 
     // random string generator (for test)
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
