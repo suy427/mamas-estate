@@ -24,7 +24,6 @@ class UserController {
 
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public UserDto.DetailResponse createUser(@RequestBody @Valid UserDto.CreateReq userDto) {
         return new UserDto.DetailResponse(userInfoService.createUserInfo(userDto));
     }
@@ -38,19 +37,16 @@ class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
     public UserDto.DetailResponse getUserDetail(@PathVariable final long id) {
         return new UserDto.DetailResponse(userInfoService.getUserById(id));
     }
 
     @PutMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
     public UserDto.DetailResponse updateUserInfo(@PathVariable final long id, @RequestBody final UserDto.UpdateReq dto) {
         return new UserDto.DetailResponse(userInfoService.updateUserInfo(id, dto));
     }
 
     @DeleteMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
     public UserDto.DetailResponse deleteUser(@PathVariable final long id) {
         return new UserDto.DetailResponse(userInfoService.deleteUserInfo(id));
     }

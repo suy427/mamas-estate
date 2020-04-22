@@ -1,5 +1,6 @@
 package com.sondahum.mamas.controller;
 
+import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.BidInfoService;
 import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.common.model.PageRequest;
@@ -23,9 +24,9 @@ public class BidController {
 
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public BidDto.DetailResponse createBid(@RequestBody @Valid BidDto.CreateReq bidDto) {
-        return new BidDto.DetailResponse(bidInfoService.createBid(bidDto));
+        Bid created = bidInfoService.createBid(bidDto);
+        return new BidDto.DetailResponse(created);
     }
 
     @GetMapping
@@ -37,19 +38,16 @@ public class BidController {
     }
 
     @GetMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public BidDto.DetailResponse getEstateDetail(@PathVariable final long id) {
+    public BidDto.DetailResponse getBidDetail(@PathVariable final long id) {
         return new BidDto.DetailResponse(bidInfoService.getBidById(id));
     }
 
     @PutMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
     public BidDto.DetailResponse updateBidInfo(@PathVariable final long id, @RequestBody final BidDto.UpdateReq dto) {
         return new BidDto.DetailResponse(bidInfoService.updateBidInfo(id, dto));
     }
 
     @DeleteMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
     public BidDto.DetailResponse deleteBid(@PathVariable final long id) {
         return new BidDto.DetailResponse(bidInfoService.deleteBidInfo(id));
     }

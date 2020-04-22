@@ -51,12 +51,8 @@ public class Bid extends BaseEntity implements Comparable<Bid> {
 
     private BidStatus status;
 
-
-
     public void updateBidInfo(BidDto.UpdateReq bidDto) {
-//        this.user.setName(bidDto.getUser());      // todo 이런식으로 여기서 user나 estate를 수정해도 되는건가...
-//        this.estate.setName(bidDto.getEstate());
-        this.action = Action.findByName(bidDto.getAction());
+        this.action = bidDto.getAction();
         this.priceRange = bidDto.getPrice();
     }
 

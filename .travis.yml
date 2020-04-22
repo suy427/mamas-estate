@@ -1,0 +1,41 @@
+# 1. Environment Setting
+language: java
+jdk: openjdk8
+os:
+  - linux
+
+  # 2. clone my github repository
+
+  # 3. before_install (if exists)
+
+  # 4. install dependencies
+
+  # 5. after_install
+
+  # 6. before_script
+services:
+#  - mysql
+#  - elasticsearch
+
+before_script:
+#  - mysql -uroot -e 'create database if not exists mamasdb;'
+#  - mysql -uroot -e 'show databaes;'
+#  - sudo service elasticsearch start
+#  - sleep 5
+
+# 7. script
+script:
+  - ./gradlew clean build
+
+# 8. after_script (if succeed)
+after_success:
+  - ./gradlew jscocoTestReport coveralls
+
+branches:
+  only:
+    - feature/search
+    - trash/rebaser
+
+notifications:
+  email: false
+  webhooks: https://fathomless-fjord-24024.herokuapp.com/notify

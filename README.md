@@ -21,6 +21,7 @@ simple management service for real-estate
 - #### mamas-insight
   * aggregation and visualization with ELK
 ---------------------------
+## Features
 #### client management
 * basic client information CRUD
 * client search
