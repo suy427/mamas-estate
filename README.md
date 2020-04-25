@@ -3,7 +3,6 @@
     
 simple management service for real-estate
 
-   
 ## Tech Stack
 * Java (1.8)
 * Spring boot (2.2.2 RELEASE)
