@@ -44,9 +44,9 @@ public class ContractController {
         return new ContractDto.DetailResponse(contractInfoService.getContractById(id));
     }
 
-    @PutMapping(value = "/{id}")
-    public ContractDto.DetailResponse updateContractInfo(@PathVariable final long id, @RequestBody final ContractDto.UpdateReq dto) {
-        return new ContractDto.DetailResponse(contractInfoService.updateContractInfo(id, dto));
+    @PutMapping
+    public ContractDto.DetailResponse updateContractInfo(@RequestBody final ContractDto.UpdateReq dto) {
+        return new ContractDto.DetailResponse(contractInfoService.updateContractInfo(dto));
     }
 
     @DeleteMapping(value = "/{id}")

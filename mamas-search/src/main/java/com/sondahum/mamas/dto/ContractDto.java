@@ -46,12 +46,9 @@ public class ContractDto {
     @Getter
     public static class UpdateReq {
         private Long id;
-//        @NotEmpty(message = "변경할 매도자 이름을 입력해주세요.")
-//        private String seller;
-//        @NotEmpty(message = "변경할 매수자 이름을 입력해주세요.")
-//        private String buyer;
-//        @NotEmpty(message = "변경할 부동산 이름을 입력해주세요.")
-//        private String estate;
+        private String seller;
+        private String buyer;
+        private String estate;
         private Long price;
         private LocalDateTime contractedDate;
     }

@@ -41,9 +41,9 @@ class UserController {
         return new UserDto.DetailResponse(userInfoService.getUserById(id));
     }
 
-    @PutMapping(value = "/{id}")
-    public UserDto.DetailResponse updateUserInfo(@PathVariable final long id, @RequestBody final UserDto.UpdateReq dto) {
-        return new UserDto.DetailResponse(userInfoService.updateUserInfo(id, dto));
+    @PutMapping
+    public UserDto.DetailResponse updateUserInfo(@RequestBody final UserDto.UpdateReq dto) {
+        return new UserDto.DetailResponse(userInfoService.updateUserInfo(dto));
     }
 
     @DeleteMapping(value = "/{id}")

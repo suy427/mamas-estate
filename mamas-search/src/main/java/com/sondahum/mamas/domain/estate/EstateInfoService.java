@@ -43,7 +43,7 @@ public class EstateInfoService {
         return optionalEstate.get();
     }
 
-    public Estate updateEstateInfo(long id, EstateDto.UpdateReq estateDto) { // User를 update할때는...?
+    public Estate updateEstateInfo(EstateDto.UpdateReq dto) { // User를 update할때는...?
         /*
             수정 페이지를 생각해보면
              ------+--+---+---+---+~~~
@@ -58,10 +58,10 @@ todo                       취소, 확인
             확인을 누르는 순간에 메소드가 호출이 되기때문에, 이미 수정된 채로 이 메소드가 호출이되고,
             수정된 정보로 estate entity를 가져온다.
          */
-        Optional<Estate> optionalEstate = estateRepository.findById(id);
-        Estate estate = optionalEstate.orElseThrow(() -> new NoSuchEntityException(id));
+        Optional<Estate> optionalEstate = estateRepository.findById(dto.getId());
+        Estate estate = optionalEstate.orElseThrow(() -> new NoSuchEntityException(dto.getId()));
 
-        estate.updateEstateInfo(estateDto);
+        estate.updateEstateInfo(dto);
 
 //      userRepository.save(user) // TODO | save 안하는 이유 알아내기~~ --> EntityManager는 Entity의 변경사항을 자동으로 감시하여 반영한다.
 

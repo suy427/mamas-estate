@@ -49,11 +49,10 @@ public class EstateDto {
     @Setter
     public static class UpdateReq {
         private Long id;
-        @NotEmpty(message = "변경할 부동산 이름을 입력해주세요.")
         private String name;
         private Address address;
         private Double area;
-//        private String ownerName;
+        private String ownerName;
         private EstateStatus status;
         private EstateType estateType;
         private ContractType contractType;

@@ -43,9 +43,9 @@ public class EstateController {
         return new EstateDto.DetailResponse(estateInfoService.getEstateById(id));
     }
 
-    @PutMapping(value = "/{id}")
-    public EstateDto.DetailResponse updateEstateInfo(@PathVariable final long id, @RequestBody final EstateDto.UpdateReq dto) {
-        return new EstateDto.DetailResponse(estateInfoService.updateEstateInfo(id, dto));
+    @PutMapping
+    public EstateDto.DetailResponse updateEstateInfo(@RequestBody final EstateDto.UpdateReq dto) {
+        return new EstateDto.DetailResponse(estateInfoService.updateEstateInfo(dto));
     }
 
     @DeleteMapping(value = "/{id}")

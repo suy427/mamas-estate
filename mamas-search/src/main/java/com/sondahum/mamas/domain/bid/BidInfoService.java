@@ -47,11 +47,11 @@ public class BidInfoService {
         return optionalBid.isPresent();
     }
 
-    public Bid updateBidInfo(long id, BidDto.UpdateReq dto) {
+    public Bid updateBidInfo(BidDto.UpdateReq dto) {
         // 여기서 찾아올 때 이미 user, estate는 수정이 되어있다.
         // 왜?? 수정 다 하고 저장할 때 이 메소드가 호출이 되니깐.
-        Optional<Bid> optionalContract = bidRepository.findById(id);
-        Bid bid = optionalContract.orElseThrow(() -> new NoSuchEntityException(id));
+        Optional<Bid> optionalContract = bidRepository.findById(dto.getId());
+        Bid bid = optionalContract.orElseThrow(() -> new NoSuchEntityException(dto.getId()));
 
         /* todo
          update와 contract는 update할 때, 자신의 정보 뿐 아니라 user, estate 등의 다른

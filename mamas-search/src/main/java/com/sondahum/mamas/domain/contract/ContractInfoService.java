@@ -45,9 +45,9 @@ public class ContractInfoService {
         return optionalContract.isPresent();
     }
 
-    public Contract updateContractInfo(long id, ContractDto.UpdateReq dto) {
-        Optional<Contract> optionalContract = contractRepository.findById(id);
-        Contract contract = optionalContract.orElseThrow(() -> new NoSuchEntityException(id));
+    public Contract updateContractInfo(ContractDto.UpdateReq dto) {
+        Optional<Contract> optionalContract = contractRepository.findById(dto.getId());
+        Contract contract = optionalContract.orElseThrow(() -> new NoSuchEntityException(dto.getId()));
 
         contract.updateContractInfo(dto);
 
