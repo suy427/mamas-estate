@@ -17,7 +17,7 @@
 //@Slf4j
 //@ResponseBody
 //@RestControllerAdvice
-//class ErrorController {
+//public class ErrorController {
 //
 //
 //    /**********************************
