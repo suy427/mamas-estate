@@ -5,6 +5,7 @@ import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.BidInfoDao;
 import com.sondahum.mamas.domain.contract.Contract;
+import com.sondahum.mamas.domain.contract.ContractInfoDao;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.user.UserInfoDao;
 import com.sondahum.mamas.dto.BidDto;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class EstateInfoService {
 
     private final EstateInfoDao estateInfoDao;
-    private final ContractDto contractDto;
+    private final ContractInfoDao contractDao;
     private final UserInfoDao userInfoDao;
     private final BidInfoDao bidInfoDao;
 
