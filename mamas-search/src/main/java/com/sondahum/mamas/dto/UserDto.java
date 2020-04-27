@@ -87,13 +87,6 @@ public class UserDto {
             this.owningEstateAmount = user.getEstateList().size();      // estate
             this.onTradingAmount = user.getTradingList().size();        // bid
             this.recentContractDate = user.getRecentContractedDate();   // contract
-
-
-//            this.owningEstateAmount = user.getSellingList().size();// 현재 파는거
-//            this.soldEstateAmount = user.getSoldList().size();
-//            this.buyingEstateAmount = user.getBuyingList().size();
-//            this.boughtEstateAmount = user.getBoughtList().size();
-
         }
     }
 

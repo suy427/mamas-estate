@@ -1,15 +1,13 @@
 package com.sondahum.mamas.controller;
 
 import com.sondahum.mamas.common.model.PageRequest;
-import com.sondahum.mamas.dto.EstateDto;
 import com.sondahum.mamas.domain.estate.EstateInfoService;
+import com.sondahum.mamas.dto.EstateDto;
+import com.sondahum.mamas.domain.estate.EstateInfoDao;
 import com.sondahum.mamas.domain.estate.EstateSearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

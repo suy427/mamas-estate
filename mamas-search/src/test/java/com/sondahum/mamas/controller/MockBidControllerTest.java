@@ -17,9 +17,6 @@ import java.util.Map;
 
 public class MockBidControllerTest extends AbstractMockRequestHelper {
 
-    @Mock
-    private BidRepository bidRepository;
-
     /*********************************
      *          등록 TEST
      *********************************/

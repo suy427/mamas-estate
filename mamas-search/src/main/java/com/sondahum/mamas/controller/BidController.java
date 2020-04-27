@@ -1,6 +1,7 @@
 package com.sondahum.mamas.controller;
 
 import com.sondahum.mamas.domain.bid.Bid;
+import com.sondahum.mamas.domain.bid.BidInfoDao;
 import com.sondahum.mamas.domain.bid.BidInfoService;
 import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.common.model.PageRequest;
@@ -8,7 +9,6 @@ import com.sondahum.mamas.domain.bid.BidSearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
