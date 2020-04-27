@@ -29,10 +29,7 @@ class UserController {
     }
 
     @GetMapping
-    public Page<UserDto.SearchResponse> searchUsers( // 서치 결과는 목록형으로... 그걸 누르면 디테일 정보 확인하게끔
-                                                     @RequestParam(name = "query", required = false) final UserDto.SearchReq query,
-                                                     final PageRequest pageRequest
-    ) {
+    public Page<UserDto.SearchResponse> searchUsers(@RequestParam(name = "query", required = false) final UserDto.SearchReq query, final PageRequest pageRequest) {
         return userSearchService.search(query, pageRequest.of(query.getSortOrders())).map(UserDto.SearchResponse::new);
     }
 

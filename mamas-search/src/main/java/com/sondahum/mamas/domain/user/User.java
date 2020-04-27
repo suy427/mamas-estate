@@ -31,26 +31,26 @@ public class User extends BaseEntity {
 
 
     @Column(name = "user_name")
-    String name;
+    private String name;
 
-    String phone;
+    private String phone;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    Role role;
+    private Role role;
 
     @Builder.Default
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<Bid> bidList = new ArrayList<>();
+    private List<Bid> bidList = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    List<Estate> estateList = new ArrayList<>();
+    private List<Estate> estateList = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(cascade = CascadeType.ALL)
-    List<Contract> contractList = new ArrayList<>();
+    private List<Contract> contractList = new ArrayList<>();
 
 
     public List<Bid> getTradingList() {

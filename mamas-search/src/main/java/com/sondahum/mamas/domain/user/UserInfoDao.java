@@ -44,14 +44,16 @@ public class UserInfoDao {
         Optional<User> optionalUser = userRepository.findById(id);
         optionalUser.orElseThrow(() -> new NoSuchEntityException(id));
 
+        new Exception().printStackTrace();
+
         return optionalUser.get();
     }
 
-    public User updateUserInfo(Long id, UserDto.UpdateReq userDto) {
-        Optional<User> optional = userRepository.findById(id);
-        User user = optional.orElseThrow(() -> new NoSuchEntityException(id));
+    public User updateUserInfo(UserDto.UpdateReq dto) {
+        Optional<User> optional = userRepository.findById(dto.getId());
+        User user = optional.orElseThrow(() -> new NoSuchEntityException(dto.getId()));
 
-        user.updateUserInfo(userDto);// 예제에 보면 따로 repository에 변경된 entity를 save하지 않는다.
+        user.updateUserInfo(dto);// 예제에 보면 따로 repository에 변경된 entity를 save하지 않는다.
 
         return user;
     }
@@ -71,10 +73,10 @@ public class UserInfoDao {
 
         if (userDto.getName().isEmpty()) { // 폰번호만 입력한 경우
             optionalUser = userRepository.findByPhone(userDto.getPhone());
-            return optionalUser.map(user -> user.phone).orElse(null);
+            return optionalUser.map(User::getPhone).orElse(null);
         } else { // 이름만 등록한 경우
             optionalUser = userRepository.findByName(userDto.getName());
-            return optionalUser.map(user -> user.name).orElse(null);
+            return optionalUser.map(User::getName).orElse(null);
         }
     }
 }

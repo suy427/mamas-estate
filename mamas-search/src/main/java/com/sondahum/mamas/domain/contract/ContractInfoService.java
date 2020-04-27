@@ -1,9 +1,13 @@
 package com.sondahum.mamas.domain.contract;
 
 
+import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateInfoDao;
+import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.user.UserInfoDao;
 import com.sondahum.mamas.dto.ContractDto;
+import com.sondahum.mamas.dto.EstateDto;
+import com.sondahum.mamas.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,19 +21,44 @@ public class ContractInfoService {
     private final EstateInfoDao estateInfoDao;
     private final ContractInfoDao contractInfoDao;
 
-    public Contract createContractInfo(ContractDto.CreateReq userDto) {
-        return null;
+    private Contract currentContract;
+
+    public Contract createContractInfo(ContractDto.CreateReq contractDto) {
+        currentContract = contractDto.toEntity();
+        return currentContract;
+    }
+
+    public User updateSeller(UserDto.UpdateReq userDto) {
+        User seller = currentContract.getSeller();
+        seller.updateUserInfo(userDto);
+
+        return seller;
+    }
+
+    public User updateBuyer(UserDto.UpdateReq userDto) {
+        User buyer = currentContract.getBuyer();
+        buyer.updateUserInfo(userDto);
+
+        return buyer;
+    }
+
+    public Estate updateEstate(EstateDto.UpdateReq estateDto) {
+        Estate estate = currentContract.getEstate();
+        estate.updateEstateInfo(estateDto);
+
+        return estate;
     }
 
     public Contract getContractById(long id) {
-        return null;
+        currentContract = contractInfoDao.getContractById(id);
+        return currentContract;
     }
 
-    public Contract updateContractInfo(long id, ContractDto.UpdateReq dto) {
-        return null;
+    public Contract updateContractInfo(ContractDto.UpdateReq dto) {
+        return contractInfoDao.updateContractInfo(dto);
     }
 
     public Contract deleteContractInfo(long id) {
-        return null;
+        return contractInfoDao.deleteContractInfo(id);
     }
 }

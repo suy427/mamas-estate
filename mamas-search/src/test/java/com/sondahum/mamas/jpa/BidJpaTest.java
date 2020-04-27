@@ -22,7 +22,7 @@ import java.util.List;
 
 @DataJpaTest
 @RunWith(SpringRunner.class)
-public class BidRepositoryTest {
+public class BidJpaTest {
 
     @Autowired
     UserRepository userRepository;

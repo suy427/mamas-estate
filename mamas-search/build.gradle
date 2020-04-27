@@ -20,7 +20,8 @@ dependencies {
 
     // mockito
     // todo mockito-all 을 쓰다가 mockito-core로 바꾸란걸보고 바꿨다 나중에 다시 원인 알아보기..
-    testCompile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
+    // spring boot starter에 이미 mockito가 있었다... 그래서 충돌나서 주석함. dependency 볼 수 있으니 앞으론 보고 확인!!!
+//    testCompile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
     // jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
 
