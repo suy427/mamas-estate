@@ -1,4 +1,4 @@
-//package com.sondahum.mamas.repository;
+//package com.sondahum.mamas.jpa;
 //
 //
 //import com.sondahum.mamas.domain.estate.Estate;
@@ -7,8 +7,7 @@
 //import com.sondahum.mamas.domain.user.UserRepository;
 //import org.hamcrest.CoreMatchers;
 //import org.hamcrest.MatcherAssert;
-//import org.junit.Assert;
-//import org.junit.jupiter.api.Test;
+//import org.junit.Test;
 //import org.junit.runner.RunWith;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -21,15 +20,14 @@
 //
 //@DataJpaTest
 //@RunWith(SpringRunner.class)
-////@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-//public class EstateRepositoryTest {
+//public class EstateJpaTest {
 //
 //    @Autowired
 //    UserRepository userRepository;
 //    @Autowired
 //    EstateRepository estateRepository;
 //
-////    @Test
+//    @Test
 //    void createEstateTest() {
 //        List<User> initialEstateOwners = new ArrayList<>();
 //        List<Estate> initialEstates = new ArrayList<>();

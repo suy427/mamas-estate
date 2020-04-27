@@ -4,7 +4,10 @@ import com.sondahum.mamas.common.model.Range;
 //import com.sondahum.mamas.domain.user.model.Phone;
 import com.sondahum.mamas.domain.user.model.Role;
 import com.sondahum.mamas.domain.user.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Sort;
 
 import javax.validation.constraints.NotEmpty;
@@ -15,6 +18,9 @@ import java.util.List;
 public class UserDto {
 
     @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class CreateReq {
         private String name;
         private String phone;
@@ -31,6 +37,7 @@ public class UserDto {
     }
 
     @Getter
+    @Builder
     public static class UpdateReq {
         private Long id;
         private String name;
@@ -67,6 +74,7 @@ public class UserDto {
         todo 얘를 불러올 때 이미 estate, bid, contract 다 조회하는데
         여기서 해당 버튼 누르면 또다시 그때마다 estate, bid, contract 다시 불러와야해..?
      */
+    @Getter
     public static class DetailResponse { // 실제 상세정보
         private Long id;
         private String name;

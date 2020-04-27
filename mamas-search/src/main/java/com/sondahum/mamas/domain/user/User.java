@@ -12,6 +12,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -59,7 +60,11 @@ public class User extends BaseEntity {
     }
 
     public LocalDateTime getRecentContractedDate() { // TODO 괜찮은걸로 보이긴한데 좀 찝찝하기도함..ㅎ
-        return Collections.max(contractList).getCreatedDate();
+        if (contractList.isEmpty())
+            return null;
+
+        else
+            return Collections.max(contractList).getCreatedDate();
     }
 
     public void updateUserInfo(UserDto.UpdateReq userDto) {

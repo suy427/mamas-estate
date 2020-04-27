@@ -42,9 +42,9 @@ public class BidController {
         return new BidDto.DetailResponse(bidInfoService.getBidById(id));
     }
 
-    @PutMapping(value = "/{id}")
-    public BidDto.DetailResponse updateBidInfo(@PathVariable final long id, @RequestBody final BidDto.UpdateReq dto) {
-        return new BidDto.DetailResponse(bidInfoService.updateBidInfo(id, dto));
+    @PutMapping
+    public BidDto.DetailResponse updateBidInfo(@RequestBody final BidDto.UpdateReq dto) {
+        return new BidDto.DetailResponse(bidInfoService.updateBidInfo(dto));
     }
 
     @DeleteMapping(value = "/{id}")

@@ -1,4 +1,4 @@
-//package com.sondahum.mamas.repository;
+//package com.sondahum.mamas.jpa;
 //
 //
 //import com.sondahum.mamas.domain.bid.BidRepository;
@@ -12,18 +12,16 @@
 //import org.junit.runner.RunWith;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-//import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 //import org.springframework.test.context.junit4.SpringRunner;
 //
 //import static com.sondahum.mamas.testutil.TestValueGenerator.*;
-//import static org.mockito.BDDMockito.given;
 //
 //import java.util.ArrayList;
 //import java.util.List;
 //
 //@DataJpaTest
 //@RunWith(SpringRunner.class)
-//public class UserRepositoryTest {
+//public class UserJpaTest {
 //
 //    @Autowired
 //    UserRepository userRepository;

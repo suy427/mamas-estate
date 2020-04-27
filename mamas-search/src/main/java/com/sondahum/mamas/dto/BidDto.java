@@ -47,10 +47,8 @@ public class BidDto {
     @NoArgsConstructor
     public static class UpdateReq {
         private Long id;
-//        @NotEmpty(message = "변경할 고객의 이름을 입력해주세요.")
-//        private String user;
-//        @NotEmpty(message = "변경할 매물 정보를 입력해주세요.")
-//        private String estate;
+        private String user;
+        private String estate;
         private Range.Price price;
         @NotNull(message = "변경할 매매 종류를 입력해주세요..")
         private Action action;

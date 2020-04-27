@@ -14,16 +14,17 @@ dependencies {
     // spring boot test
     compile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
+//    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
+//        exclude module: 'junit'
+//    }
 
     // mockito
-    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+    // todo mockito-all 을 쓰다가 mockito-core로 바꾸란걸보고 바꿨다 나중에 다시 원인 알아보기..
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
     // jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
 
-    compile 'org.postgresql:postgresql:9.2-1004-jdbc41'
 
-    // spring boot test... 위에거랑 뭐가 다르지..?ㅎㅎ
-    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
     // spring configuration processor
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
     // spring rest doc

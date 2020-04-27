@@ -1,4 +1,4 @@
-package com.sondahum.mamas.domain.contract;
+package com.sondahum.mamas.service;
 
 public class ContractSearchServiceTest {
 
