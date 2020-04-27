@@ -29,7 +29,7 @@ public class EstateController {
 
     @GetMapping
     public Page<EstateDto.SimpleResponse> searchEstates(@RequestParam(name = "query", required = false) final EstateDto.SearchReq query, final PageRequest pageRequest) {
-        return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(SimpleResponse::new);
+        return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(EstateDto.SimpleResponse::new);
     }
 
     @GetMapping(value = "/{id}")

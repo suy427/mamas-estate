@@ -3,7 +3,6 @@ package com.sondahum.mamas.controller;
 import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.domain.user.UserInfoService;
 import com.sondahum.mamas.dto.UserDto;
-import com.sondahum.mamas.domain.user.UserInfoDao;
 import com.sondahum.mamas.domain.user.UserSearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +28,8 @@ class UserController {
     }
 
     @GetMapping
-    public Page<UserDto.SearchResponse> searchUsers(@RequestParam(name = "query", required = false) final UserDto.SearchReq query, final PageRequest pageRequest) {
-        return userSearchService.search(query, pageRequest.of(query.getSortOrders())).map(UserDto.SearchResponse::new);
+    public Page<UserDto.SimpleResponse> searchUsers(@RequestParam(name = "query", required = false) final UserDto.SearchReq query, final PageRequest pageRequest) {
+        return userSearchService.search(query, pageRequest.of(query.getSortOrders())).map(UserDto.SimpleResponse::new);
     }
 
     @GetMapping(value = "/{id}")
