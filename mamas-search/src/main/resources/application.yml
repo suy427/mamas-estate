@@ -5,13 +5,7 @@ server:
 
 spring:
   profiles:
-    active: [local, test]
-
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/mamasdb
-#    username: sondahum
-#    password: sondahum
+    active: [test]
 
   jpa:
     open-in-view: false
