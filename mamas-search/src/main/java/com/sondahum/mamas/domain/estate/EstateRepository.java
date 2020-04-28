@@ -4,10 +4,11 @@ import com.sondahum.mamas.domain.estate.model.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface EstateRepository extends JpaRepository<Estate, Long> {
-    Optional<Estate> findByNameAndAddress_AndValidity(String name, Address address);
-    Optional<Estate> findByName(String name);
+    Optional<Estate> findByNameAndAddress_AndValidity(String name, Address address, boolean validity);
+    Optional<Estate> findByName_AndValidity(String name, boolean validity);
 }

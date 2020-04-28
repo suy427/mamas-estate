@@ -1,12 +1,13 @@
 package com.sondahum.mamas.domain.estate;
 
-import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
+import com.sondahum.mamas.domain.estate.exception.EstateAlreadyExistException;
 import com.sondahum.mamas.dto.EstateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 @Slf4j
@@ -19,20 +20,17 @@ public class EstateInfoDao {
 
 
     public Estate createEstateInfo(EstateDto.CreateReq estateDto) {
-        if (!isSameEstateExist(estateDto))
-            throw new EntityAlreadyExistException(estateDto.getName());
+        Optional<Estate> duplicatedEstate = duplicateCheck(estateDto.toEntity());
 
-        Estate estate = estateRepository.save(estateDto.toEntity());
+        if (duplicatedEstate.isPresent())
+            throw new EstateAlreadyExistException(duplicatedEstate.get());
 
-        return estate;
+        return estateRepository.save(estateDto.toEntity());
     }
 
     @Transactional(readOnly = true)
-    boolean isSameEstateExist(EstateDto.CreateReq estateDto) {
-        Optional<Estate> optionalEstate =
-                estateRepository.findByNameAndAddress_AndValidity(estateDto.getName(), estateDto.getAddress());
-
-        return optionalEstate.isPresent();
+    Optional<Estate> duplicateCheck(Estate estate) {
+        return estateRepository.findByNameAndAddress_AndValidity(estate.getName(), estate.getAddress(), true);
     }
 
 

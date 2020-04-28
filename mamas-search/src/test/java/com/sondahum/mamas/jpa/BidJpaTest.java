@@ -35,8 +35,8 @@ public class BidJpaTest {
      *      사람 생성 --> 이 사람이 주인인 땅 생성 --> 이 땅의 판매 호가 생성 --> 호가 정보만 저장.
      *
      *  [EXPECTATION]
-     *      1. 사람도 같이 저장될까 ?
-     *      2. 땅도 같이 저장될까 ?
+     *      1. 사람도 같이 저장될까 ? -> O
+     *      2. 땅도 같이 저장될까 ? -> O
      *      3. 저장이 된다면 그 사람의 estateList에 저장한 땅이 나올까 ?
      *      4. 저장이 된다면 그 사람의 bidList에 저장한 bid가 나올까 ?
      *      5. 저장이 된다면 그 땅의 bidList에 저장한 bid가 나올까 ?
@@ -51,8 +51,8 @@ public class BidJpaTest {
 
         Bid savedBid = bidRepository.save(bid1);
 
-        Optional<User> optionalUser = userRepository.findByName(user1.getName());
-        Optional<Estate> optionalEstate = estateRepository.findByName(estate1.getName());
+        Optional<User> optionalUser = userRepository.findByName_AndValidity(user1.getName(), true);
+        Optional<Estate> optionalEstate = estateRepository.findByName_AndValidity(estate1.getName(), true);
 
         User savedUser = null;
         Estate savedEstate = null;

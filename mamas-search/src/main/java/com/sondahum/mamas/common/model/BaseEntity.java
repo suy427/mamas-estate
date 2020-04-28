@@ -24,5 +24,5 @@ public abstract class BaseEntity implements Serializable {
     protected LocalDateTime modifiedDate;
 
     @Column(name = "is_deleted")
-    protected boolean validity;
+    protected boolean validity = true;
 }

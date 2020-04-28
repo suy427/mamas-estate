@@ -8,6 +8,7 @@ import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.domain.contract.ContractInfoDao;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateInfoDao;
+import com.sondahum.mamas.domain.user.exception.UserAlreadyExistException;
 import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.dto.ContractDto;
 import com.sondahum.mamas.dto.EstateDto;
@@ -32,7 +33,14 @@ public class UserInfoService {
     private User currentUser;
 
     public User createUserInfo(UserDto.CreateReq userDto) {
-        currentUser = userInfoDao.createUserInfo(userDto); // 여기서 repo에 넣어줌
+        try {
+            currentUser = userInfoDao.createUserInfo(userDto); // 이미 존재하면 있는유저 반환
+        } catch (UserAlreadyExistException e) {
+            currentUser = e.getUser();
+            e.setMessage(userDto.getName() + "님의 정보가 이미 존재합니다.");
+            throw e;
+        }
+
         return currentUser;
     }
 
@@ -44,9 +52,10 @@ public class UserInfoService {
     }
 
     public Estate updateEstate(EstateDto.UpdateReq estateDto) {
-        Estate estate = currentUser.getEstateList().stream()
-                .filter(element -> element.getId().equals(estateDto.getId()))
-                .findFirst().orElseThrow(() -> new NoSuchEntityException(estateDto.getId()));
+        Estate estate = estateInfoDao.getEstateById(estateDto.getId());
+//        Estate estate = currentUser.getEstateList().stream()
+//                .filter(element -> element.getId().equals(estateDto.getId()))
+//                .findFirst().orElseThrow(() -> new NoSuchEntityException(estateDto.getId()));
 
         estate.updateEstateInfo(estateDto);
 

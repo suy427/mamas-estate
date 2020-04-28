@@ -32,10 +32,10 @@ public class UserInfoDao {
         if (userDto.getName().isEmpty() && userDto.getPhone().isEmpty())
             throw new NotEnoughInfoException(userDto.getName(), userDto.getPhone());
 
-        String existInfo = userExist(userDto);
+        Optional<User> duplicatedUser = duplicateCheck(userDto.toEntity());
 
-        if (!existInfo.isEmpty())
-            throw new UserAlreadyExistException(existInfo);// TODO 이름이 같으면 A,B표시 등등 생각해보기
+        if (duplicatedUser.isPresent())
+            throw new UserAlreadyExistException(duplicatedUser.get());// TODO 이름이 같으면 A,B표시 등등 생각해보기
 
         return userRepository.save(userDto.toEntity());
     }
@@ -68,15 +68,14 @@ public class UserInfoDao {
     }
 
     @Transactional(readOnly = true)
-    public String userExist(UserDto.CreateReq userDto) {
+    public Optional<User> duplicateCheck(User user) {
         Optional<User> optionalUser;
 
-        if (userDto.getName().isEmpty()) { // 폰번호만 입력한 경우
-            optionalUser = userRepository.findByPhone_AndValidity(userDto.getPhone());
-            return optionalUser.map(User::getPhone).orElse(null);
+        if (user.getName().isEmpty()) { // 폰번호만 입력한 경우
+            optionalUser = userRepository.findByPhone_AndValidity(user.getPhone(), true);
         } else { // 이름만 등록한 경우
-            optionalUser = userRepository.findByName_AndValidity(userDto.getName());
-            return optionalUser.map(User::getName).orElse(null);
+            optionalUser = userRepository.findByName_AndValidity(user.getName(), true);
         }
+        return  optionalUser;
     }
 }

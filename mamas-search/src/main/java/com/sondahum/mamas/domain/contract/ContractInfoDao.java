@@ -38,7 +38,7 @@ public class ContractInfoDao {
     boolean isSameContract(ContractDto.CreateReq contractDto) {
         Optional<Contract> optionalContract =
                 contractRepository.findBySeller_NameAndBuyer_NameAndEstate_Name_AndValidity(
-                        contractDto.getSeller(), contractDto.getBuyer(), contractDto.getEstate());
+                        contractDto.getSeller(), contractDto.getBuyer(), contractDto.getEstate(), true);
 
         return optionalContract.isPresent();
     }

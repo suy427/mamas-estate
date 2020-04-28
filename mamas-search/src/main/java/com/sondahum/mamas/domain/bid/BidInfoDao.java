@@ -2,17 +2,13 @@ package com.sondahum.mamas.domain.bid;
 
 import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
-import com.sondahum.mamas.domain.bid.model.Action;
-import com.sondahum.mamas.domain.estate.EstateRepository;
-import com.sondahum.mamas.domain.user.UserRepository;
+import com.sondahum.mamas.domain.bid.exception.BidAlreadyExistException;
 import com.sondahum.mamas.dto.BidDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
 
@@ -23,13 +19,14 @@ public class BidInfoDao {
 
     private final BidRepository bidRepository;
 
+    // todo 호가는 똑같은걸 여러번 할 수도 있는거 아닐까..?
     public Bid createBid(BidDto.CreateReq bidDto) {
-        if (isSameBidExist(bidDto))
-            throw new EntityAlreadyExistException(bidDto.getUser());
+//        Optional<Bid> duplicatedBid = duplicateCheck(bidDto.toEntity());
+//
+//        if (duplicatedBid.isPresent())
+//            throw new BidAlreadyExistException(duplicatedBid.get());
 
-        Bid bid = bidRepository.save(bidDto.toEntity());
-
-        return bid;
+        return bidRepository.save(bidDto.toEntity());
     }
 
     public Bid getBidById(long id) {
@@ -39,13 +36,13 @@ public class BidInfoDao {
         return optionalBid.get();
     }
 
-    @Transactional(readOnly = true)
-    public boolean isSameBidExist(BidDto.CreateReq bidDto) {
-        Optional<Bid> optionalBid = bidRepository.findByUser_NameAndEstate_NameAndAction_AndValidity(
-                bidDto.getUser(),bidDto.getEstate(), bidDto.getAction());
-
-        return optionalBid.isPresent();
-    }
+//    @Transactional(readOnly = true)
+//    public Optional<Bid> duplicateCheck(Bid bid) {
+//        Optional<Bid> optionalBid = bidRepository.findByUser_NameAndEstate_NameAndAction_AndValidity(
+//                bid.getUser().getName(),bid.getEstate().getName(), bid.getAction(), true);
+//
+//        return optionalBid;
+//    }
 
     public Bid updateBidInfo(BidDto.UpdateReq dto) {
         // 여기서 찾아올 때 이미 user, estate는 수정이 되어있다.

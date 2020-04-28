@@ -7,6 +7,7 @@ import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.model.EstateType;
 import com.sondahum.mamas.domain.estate.model.EstateStatus;
 import com.sondahum.mamas.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Sort;
@@ -17,12 +18,13 @@ import java.util.List;
 public class EstateDto {
 
     @Getter
+    @Builder
     public static class CreateReq {
         @NotEmpty(message = "등록할 부동산 이름을 입력해주세요.")
         private String name;
         private Address address;
         private String area;
-        private String ownerName;
+        private String ownerName = "";
         private EstateStatus status;
         private EstateType estateType;
         private ContractType contractType;
@@ -30,7 +32,7 @@ public class EstateDto {
         private Range.Price marketPriceRange;
 
         public Estate toEntity() {
-            User owner = User.builder().name(ownerName).build();
+            User owner = User.builder().name("ownerName").build();
 
             return Estate.builder()
                     .name(name)

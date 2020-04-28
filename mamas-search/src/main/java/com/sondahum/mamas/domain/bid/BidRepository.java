@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface BidRepository extends JpaRepository<Bid, Long> {
 
-    Optional<Bid> findByUser_NameAndEstate_NameAndAction_AndValidity(String user, String estate, Action action);
+    Optional<Bid> findByUser_NameAndEstate_NameAndAction_AndValidity(String user, String estate, Action action, boolean validity);
 }

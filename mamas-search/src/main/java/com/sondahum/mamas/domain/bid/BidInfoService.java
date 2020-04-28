@@ -1,10 +1,14 @@
 package com.sondahum.mamas.domain.bid;
 
 
+import com.sondahum.mamas.domain.bid.exception.InvalidActionException;
+import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateInfoDao;
+import com.sondahum.mamas.domain.estate.exception.EstateAlreadyExistException;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.user.UserInfoDao;
+import com.sondahum.mamas.domain.user.exception.UserAlreadyExistException;
 import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.dto.EstateDto;
 import com.sondahum.mamas.dto.UserDto;
@@ -24,7 +28,38 @@ public class BidInfoService {
     private Bid currentBid;
 
     public Bid createBid(BidDto.CreateReq bidDto) {
-        currentBid = bidDto.toEntity();
+        User user;
+        Estate estate;
+        Bid bid;
+
+        try {
+            user = userInfoDao.createUserInfo(
+                    UserDto.CreateReq.builder()
+                            .name(bidDto.getUser())
+                            .build()
+            );
+        } catch (UserAlreadyExistException ue) {
+            user = ue.getUser();
+        }
+
+        try {
+            estate = estateInfoDao.createEstateInfo(
+                    EstateDto.CreateReq.builder()
+                            .name(bidDto.getEstate())
+                            .build()
+            );
+        } catch (EstateAlreadyExistException ee) {
+            estate = ee.getEstate();
+        }
+
+        if (estate.getOwner().getName().equals(bidDto.getUser()) && bidDto.getAction().equals(Action.BUY)) {
+            throw new InvalidActionException("자신의 땅은 살 수 없습니다.");
+        }
+
+        bid = bidInfoDao.createBid(bidDto);
+        user.getBidList().add(bid);
+        estate.getBidList().add(bid);
+
         return currentBid;
     }
 

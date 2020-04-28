@@ -24,7 +24,7 @@ public class ContractInfoService {
     private Contract currentContract;
 
     public Contract createContractInfo(ContractDto.CreateReq contractDto) {
-        currentContract = contractDto.toEntity();
+        currentContract = contractInfoDao.createContractInfo(contractDto);
         return currentContract;
     }
 
