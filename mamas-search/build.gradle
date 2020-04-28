@@ -14,9 +14,9 @@ dependencies {
     // spring boot test
     compile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
-//    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
-//        exclude module: 'junit'
-//    }
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
+        exclude module: 'junit'
+    }
 
     // mockito
     // todo mockito-all 을 쓰다가 mockito-core로 바꾸란걸보고 바꿨다 나중에 다시 원인 알아보기..
@@ -46,7 +46,7 @@ dependencies {
     // h2 database
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
     // mysql-connector
-//    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
 
     // random string generator (for test)
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
@@ -96,4 +96,8 @@ compileQuerydsl{
 
 configurations {
     querydsl.extendsFrom compileClasspath
+}
+
+test {
+    useJUnitPlatform()
 }
