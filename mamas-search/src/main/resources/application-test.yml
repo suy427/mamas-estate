@@ -1,7 +1,0 @@
-spring:
-  datasource:
-    data: classpath:init.sql
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mamasdb
-    username: sondahum
-    password: sondahum
