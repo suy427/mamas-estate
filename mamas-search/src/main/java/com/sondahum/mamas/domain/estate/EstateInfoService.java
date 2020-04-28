@@ -1,79 +1,99 @@
 package com.sondahum.mamas.domain.estate;
 
-import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
+
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
+import com.sondahum.mamas.domain.bid.Bid;
+import com.sondahum.mamas.domain.bid.BidInfoDao;
+import com.sondahum.mamas.domain.contract.Contract;
+import com.sondahum.mamas.domain.contract.ContractInfoDao;
+import com.sondahum.mamas.domain.user.User;
+import com.sondahum.mamas.domain.user.UserInfoDao;
+import com.sondahum.mamas.dto.BidDto;
+import com.sondahum.mamas.dto.ContractDto;
 import com.sondahum.mamas.dto.EstateDto;
+import com.sondahum.mamas.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
 
-@Slf4j
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class EstateInfoService {
 
-    private final EstateRepository estateRepository;
+    private final EstateInfoDao estateInfoDao;
+    private final ContractInfoDao contractDao;
+    private final UserInfoDao userInfoDao;
+    private final BidInfoDao bidInfoDao;
 
-
+    private Estate currentEstate;
 
     public Estate createEstateInfo(EstateDto.CreateReq estateDto) {
-        if (!isSameEstateExist(estateDto))
-            throw new EntityAlreadyExistException(estateDto.getName());
-
-        Estate estate = estateRepository.save(estateDto.toEntity());
-
-        return estate;
+        currentEstate = estateInfoDao.createEstateInfo(estateDto);
+        return currentEstate;
     }
 
-    @Transactional(readOnly = true)
-    boolean isSameEstateExist(EstateDto.CreateReq estateDto) {
-        Optional<Estate> optionalEstate =
-                estateRepository.findByNameAndAddress(estateDto.getName(), estateDto.getAddress());
+    public Bid addNewBid(BidDto.CreateReq bidDto) {
+        Bid bid = bidDto.toEntity();
+        currentEstate.getBidList().add(bid);
 
-        return optionalEstate.isPresent();
+        return bid;
+    }
+
+    // todo 현재 collection을 탐색해서 바꾸는중... cascade가 제대로 동작하는지 확인 필요
+    public Bid updateBid(BidDto.UpdateReq bidDto) {
+        Bid bid = currentEstate.getBidList().stream()
+                .filter(element -> element.getId().equals(bidDto.getId()))
+                .findFirst().orElseThrow(() -> new NoSuchEntityException(bidDto.getId()));
+
+        bid.updateBidInfo(bidDto);
+
+        return bid;
+    }
+
+    public void deleteBid(Long id) {
+        currentEstate.getBidList().removeIf(bid -> bid.getId().equals(id));
+    }
+
+    public User updateOwner(UserDto.UpdateReq userDto) {
+        User user = currentEstate.getOwner();
+        user.updateUserInfo(userDto);
+
+        return user;
+    }
+
+    public Contract addNewContractHistory(ContractDto.CreateReq contractDto) {
+        Contract contract = contractDto.toEntity();
+        currentEstate.getContractHistoryList().add(contract);
+
+        return contract;
+    }
+
+    public Contract updateContractHistory(ContractDto.UpdateReq contractDto) {
+        Contract contract = currentEstate.getContractHistoryList().stream()
+                .filter(element -> element.getId().equals(contractDto.getId()))
+                .findFirst().orElseThrow(() -> new NoSuchEntityException(contractDto.getId()));
+
+        contract.updateContractInfo(contractDto);
+
+        return contract;
+    }
+
+    public void deleteContractHistory(Long id) {
+        currentEstate.getContractHistoryList().removeIf(contract -> contract.getId().equals(id));
     }
 
 
     public Estate getEstateById(long id) {
-        Optional<Estate> optionalEstate = estateRepository.findById(id);
-        optionalEstate.orElseThrow(() -> new NoSuchEntityException(id));
-
-        return optionalEstate.get();
+        currentEstate = estateInfoDao.getEstateById(id);
+        return currentEstate;
     }
 
-    public Estate updateEstateInfo(EstateDto.UpdateReq dto) { // User를 update할때는...?
-        /*
-            수정 페이지를 생각해보면
-             ------+--+---+---+---+~~~
-            소유자 │  땅 정보들 ~~~~~~~
-            -------+--+---+---+---+~~~
-todo                       취소, 확인
-
-            여기서 나머지 정보들은 editText 로 두고 소유자는 링크로 하면 소유자 정보는 OwnerService에서 처리할 수 있다.
-            그런데 그 후에 확인을 누르면 위의 Estate Entity는 가지고 있는 User Entity의 변경사항이 반영된채로 update가 잘 될까...?
-            ----Answer--->>
-            이 고민은 바보같이 updateEstateInfo메소드가 수정페이지에 들어온 순간부터 호출이 되는걸로 착각을 해서 한것 같다.
-            확인을 누르는 순간에 메소드가 호출이 되기때문에, 이미 수정된 채로 이 메소드가 호출이되고,
-            수정된 정보로 estate entity를 가져온다.
-         */
-        Optional<Estate> optionalEstate = estateRepository.findById(dto.getId());
-        Estate estate = optionalEstate.orElseThrow(() -> new NoSuchEntityException(dto.getId()));
-
-        estate.updateEstateInfo(dto);
-
-//      userRepository.save(user) // TODO | save 안하는 이유 알아내기~~ --> EntityManager는 Entity의 변경사항을 자동으로 감시하여 반영한다.
-
-        return estate;
+    public Estate updateEstateInfo(EstateDto.UpdateReq dto) {
+        return estateInfoDao.updateEstateInfo(dto);
     }
 
-    public Estate deleteEstateInfo(Long id) {
-        Optional<Estate> optional = estateRepository.findById(id);
-        Estate estate = optional.orElseThrow(() -> new NoSuchEntityException(id));
-
-        estateRepository.deleteById(id);
-
-        return estate;
+    public Estate deleteEstateInfo(long id) {
+        return estateInfoDao.deleteEstateInfo(id);
     }
 }

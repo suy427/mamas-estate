@@ -2,79 +2,131 @@ package com.sondahum.mamas.domain.user;
 
 
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
-import com.sondahum.mamas.domain.user.exception.NotEnoughInfoException;
-import com.sondahum.mamas.domain.user.exception.UserAlreadyExistException;
+import com.sondahum.mamas.domain.bid.Bid;
+import com.sondahum.mamas.domain.bid.BidInfoDao;
+import com.sondahum.mamas.domain.contract.Contract;
+import com.sondahum.mamas.domain.contract.ContractInfoDao;
+import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.estate.EstateInfoDao;
+import com.sondahum.mamas.dto.BidDto;
+import com.sondahum.mamas.dto.ContractDto;
+import com.sondahum.mamas.dto.EstateDto;
 import com.sondahum.mamas.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserInfoService {
 
-    private final UserRepository userRepository;
+    private final UserInfoDao userInfoDao;
+    private final BidInfoDao bidInfoDao;
+    private final EstateInfoDao estateInfoDao;
+    private final ContractInfoDao contractInfoDao;
 
-    /**
-     * 유저 생성의 두가지 유형
-     * 1) estate를 함께 등록하는 경우
-     * --> 'estate 추가' 버튼이 createNewUserInfo()를 호출
-     * --> 버튼 누름에 따라 estate 추가 form이 나옴.
-     * <p>
-     * 2) estate를 등록하지 않고 User정보만 등록
-     * --> '그냥 그대로 name, phone, role만 등록시킴'
-     */
+    private User currentUser;
+
     public User createUserInfo(UserDto.CreateReq userDto) {
-        if (userDto.getName().isEmpty() && userDto.getPhone().isEmpty())
-            throw new NotEnoughInfoException(userDto.getName(), userDto.getPhone());
-
-        String existInfo = userExist(userDto);
-
-        if (!existInfo.isEmpty())
-            throw new UserAlreadyExistException(existInfo);// TODO 이름이 같으면 A,B표시 등등 생각해보기
-
-        return userRepository.save(userDto.toEntity());
+        currentUser = userInfoDao.createUserInfo(userDto);
+        return currentUser;
     }
 
-    public User getUserById(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        optionalUser.orElseThrow(() -> new NoSuchEntityException(id));
+    public Estate addNewEstate(EstateDto.CreateReq estateDto) {
+        Estate estate = estateDto.toEntity();
+        currentUser.getEstateList().add(estate);
 
-        return optionalUser.get();
+        return estate;
+    }
+
+    public Estate updateEstate(EstateDto.UpdateReq estateDto) {
+        Estate estate = currentUser.getEstateList().stream()
+                .filter(element -> element.getId().equals(estateDto.getId()))
+                .findFirst().orElseThrow(() -> new NoSuchEntityException(estateDto.getId()));
+
+        estate.updateEstateInfo(estateDto);
+
+        return estate;
+    }
+
+    public void deleteEstate(Long id) {
+        currentUser.getEstateList().removeIf(estate -> estate.getId().equals(id));
+    }
+
+    public Bid addNewBid(BidDto.CreateReq bidDto) {
+        Bid bid = bidDto.toEntity();
+        currentUser.getBidList().add(bid);
+
+        return bid;
+    }
+
+    public Bid updateBid(BidDto.UpdateReq bidDto) {
+        Bid bid = currentUser.getBidList().stream()
+                .filter(element -> element.getId().equals(bidDto.getId()))
+                .findFirst().orElseThrow(() -> new NoSuchEntityException(bidDto.getId()));
+
+        bid.updateBidInfo(bidDto);
+
+        return bid;
+    }
+
+    public void deleteBid(Long id) {
+        currentUser.getBidList().removeIf(bid -> bid.getId().equals(id));
+    }
+
+    public Contract addNewContractHistory(ContractDto.CreateReq contractDto) {
+        Contract contract = contractDto.toEntity();
+        currentUser.getContractList().add(contract);
+
+        return contract;
+    }
+
+    public Contract updateContract(ContractDto.UpdateReq contractDto) {
+        Contract contract = currentUser.getContractList().stream()
+                .filter(element -> element.getId().equals(contractDto.getId()))
+                .findFirst().orElseThrow(() -> new NoSuchEntityException(contractDto.getId()));
+
+        contract.updateContractInfo(contractDto);
+
+        return contract;
+    }
+
+    public void deleteContract(Long id) {
+        currentUser.getContractList().removeIf(contract -> contract.getId().equals(id));
+    }
+
+    public List<EstateDto.SimpleResponse> getOwningEstateList() {
+        return currentUser.getEstateList().stream()
+                .map(EstateDto.SimpleResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<BidDto.DetailResponse> getBiddingList() {
+        return currentUser.getBidList().stream()
+                .map(BidDto.DetailResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<ContractDto.DetailResponse> getContractHistoryList() {
+        return currentUser.getContractList().stream()
+                .map(ContractDto.DetailResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public User getUserById(long id) {
+        currentUser = userInfoDao.getUserById(id);
+        return currentUser;
     }
 
     public User updateUserInfo(UserDto.UpdateReq dto) {
-        Optional<User> optional = userRepository.findById(dto.getId());
-        User user = optional.orElseThrow(() -> new NoSuchEntityException(dto.getId()));
-
-        user.updateUserInfo(dto);// 예제에 보면 따로 repository에 변경된 entity를 save하지 않는다.
-
-        return user;
+        return userInfoDao.updateUserInfo(dto);
     }
 
-    public User deleteUserInfo(Long id) {
-        Optional<User> optional = userRepository.findById(id);
-        User user = optional.orElseThrow(() -> new NoSuchEntityException(id));
-
-        userRepository.deleteById(id);
-
-        return user;
-    }
-
-    @Transactional(readOnly = true)
-    public String userExist(UserDto.CreateReq userDto) {
-        Optional<User> optionalUser;
-
-        if (userDto.getName().isEmpty()) { // 폰번호만 입력한 경우
-            optionalUser = userRepository.findByPhone(userDto.getPhone());
-            return optionalUser.map(user -> user.phone).orElse(null);
-        } else { // 이름만 등록한 경우
-            optionalUser = userRepository.findByName(userDto.getName());
-            return optionalUser.map(user -> user.name).orElse(null);
-        }
+    public User deleteUserInfo(long id) {
+        return userInfoDao.deleteUserInfo(id);
     }
 }

@@ -55,13 +55,13 @@ public class UserDto {
         private List<Sort.Order> sortOrders;
     }
 
-    public static class SearchResponse { // list에 나올 기본정보
+    public static class SimpleResponse { // list에 나올 기본정보
         private Long id;
         private String name;
         private String phone;
         private Role role;
 
-        public SearchResponse(User user) {
+        public SimpleResponse(User user) {
             this.id = user.getId();
             this.name = user.getName();
             this.phone = user.getPhone();
@@ -95,13 +95,6 @@ public class UserDto {
             this.owningEstateAmount = user.getEstateList().size();      // estate
             this.onTradingAmount = user.getTradingList().size();        // bid
             this.recentContractDate = user.getRecentContractedDate();   // contract
-
-
-//            this.owningEstateAmount = user.getSellingList().size();// 현재 파는거
-//            this.soldEstateAmount = user.getSoldList().size();
-//            this.buyingEstateAmount = user.getBuyingList().size();
-//            this.boughtEstateAmount = user.getBoughtList().size();
-
         }
     }
 

@@ -30,6 +30,8 @@ public class QEstate extends EntityPathBase<Estate> {
 
     public final ListPath<com.sondahum.mamas.domain.bid.Bid, com.sondahum.mamas.domain.bid.QBid> bidList = this.<com.sondahum.mamas.domain.bid.Bid, com.sondahum.mamas.domain.bid.QBid>createList("bidList", com.sondahum.mamas.domain.bid.Bid.class, com.sondahum.mamas.domain.bid.QBid.class, PathInits.DIRECT2);
 
+    public final ListPath<com.sondahum.mamas.domain.contract.Contract, com.sondahum.mamas.domain.contract.QContract> contractHistoryList = this.<com.sondahum.mamas.domain.contract.Contract, com.sondahum.mamas.domain.contract.QContract>createList("contractHistoryList", com.sondahum.mamas.domain.contract.Contract.class, com.sondahum.mamas.domain.contract.QContract.class, PathInits.DIRECT2);
+
     public final EnumPath<com.sondahum.mamas.domain.estate.model.ContractType> contractType = createEnum("contractType", com.sondahum.mamas.domain.estate.model.ContractType.class);
 
     //inherited

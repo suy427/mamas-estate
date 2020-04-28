@@ -1,93 +1,100 @@
-//package com.sondahum.mamas.jpa;
-//
-//import com.sondahum.mamas.domain.bid.model.Action;
-//import com.sondahum.mamas.domain.bid.Bid;
-//import com.sondahum.mamas.domain.bid.BidRepository;
-//import com.sondahum.mamas.domain.estate.Estate;
-//import com.sondahum.mamas.domain.estate.EstateRepository;
-//import com.sondahum.mamas.domain.user.User;
-//import com.sondahum.mamas.domain.user.UserRepository;
-//import org.junit.Ignore;
-//import org.junit.jupiter.api.Test;
-//import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-//import org.springframework.test.context.junit4.SpringRunner;
-//
-//import static com.sondahum.mamas.testutil.TestValueGenerator.*;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//
-//@DataJpaTest
-//@RunWith(SpringRunner.class)
-//public class BidJpaTest {
-//
-//    @Autowired
-//    UserRepository userRepository;
-//    @Autowired
-//    BidRepository bidRepository;
-//    @Autowired
-//    EstateRepository estateRepository;
-//
-//    /**
-//     * scenario
-//     * create user info --> create bid info --> check that bid info affects user info
-//     *
-//     * 1. create bid info of exist user --> check the user's bid list (default was null)
-//     *
-//     *   [CURRENT SCENARIO]
-//     *   5명의 유저가 있고, 그 중 3명의 bid정보를 생성함.
-//     *   1) bid정보 생성 --> estate정보 생성됨. --> estate owner정보(user정보 생성됨.)
-//     *   2) bid의 action이 'sell' 일 경우 owner가 bid의 주인인 user여야함. // 그나마 간단
-//     *   3) bid의 action이 'buy'이고
-//     */
-//
-//    @Ignore(value = "not now")
+package com.sondahum.mamas.jpa;
+
+import com.sondahum.mamas.domain.bid.Bid;
+import com.sondahum.mamas.domain.bid.BidRepository;
+import com.sondahum.mamas.domain.bid.model.Action;
+import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.estate.EstateRepository;
+import com.sondahum.mamas.domain.user.User;
+import com.sondahum.mamas.domain.user.UserRepository;
+import com.sondahum.mamas.testutil.TestValueGenerator;
+import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.Optional;
+
+
+@DataJpaTest
+@Slf4j
+public class BidJpaTest {
+
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    BidRepository bidRepository;
+    @Autowired
+    EstateRepository estateRepository;
+
+
+    /**
+     *  [CONDITION]
+     *      사람 생성 --> 이 사람이 주인인 땅 생성 --> 이 땅의 판매 호가 생성 --> 호가 정보만 저장.
+     *
+     *  [EXPECTATION]
+     *      1. 사람도 같이 저장될까 ?
+     *      2. 땅도 같이 저장될까 ?
+     *      3. 저장이 된다면 그 사람의 estateList에 저장한 땅이 나올까 ?
+     *      4. 저장이 된다면 그 사람의 bidList에 저장한 bid가 나올까 ?
+     *      5. 저장이 된다면 그 땅의 bidList에 저장한 bid가 나올까 ?
+     */
+    @Test
+    void 호가정보_생성() {
+        User user1 = TestValueGenerator.userInfoGenerator();
+        Estate estate1 = TestValueGenerator.estateInfoGenerator(user1);
+        Bid bid1 = TestValueGenerator.bidInfoGenerator(user1, estate1);
+        bid1.setAction(Action.SELL);
+
+
+        Bid savedBid = bidRepository.save(bid1);
+
+        Optional<User> optionalUser = userRepository.findByName(user1.getName());
+        Optional<Estate> optionalEstate = estateRepository.findByName(estate1.getName());
+
+        User savedUser = null;
+        Estate savedEstate = null;
+
+        if (optionalUser.isPresent())
+            savedUser = optionalUser.get();
+
+        if (optionalEstate.isPresent())
+            savedEstate = optionalEstate.get();
+
+        MatcherAssert.assertThat(savedBid, CoreMatchers.is(bid1));
+        MatcherAssert.assertThat(savedEstate, CoreMatchers.is(estate1));
+        MatcherAssert.assertThat(savedUser, CoreMatchers.is(user1));
+
+        MatcherAssert.assertThat(savedBid.getUser(), CoreMatchers.is(savedUser));
+        MatcherAssert.assertThat(savedBid.getEstate(), CoreMatchers.is(savedEstate));
+
+//        MatcherAssert.assertThat(savedUser.getBidList().size(), CoreMatchers.is(0));
+        MatcherAssert.assertThat(savedUser.getEstateList().size(), CoreMatchers.is(0));
+
+        MatcherAssert.assertThat(savedEstate.getOwner(), CoreMatchers.is(savedUser));
+//        MatcherAssert.assertThat(savedEstate.getBidList().size(), CoreMatchers.is(0));
+    }
+
 //    @Test
-//    void bidInfoCascadeTest() {
-//        List<User> initialCreatedOwnerGroup = new ArrayList<>();
-//        for (int i = 0; i < 5; i++) {
-//            initialCreatedOwnerGroup.add(userInfoGenerator());
-//        }
-//        List<User> savedOwnerGroup = userRepository.saveAll(initialCreatedOwnerGroup);
+//    void 유저_호가_컬렉션_추가() {
+//        User user1 = TestValueGenerator.userInfoGenerator();
+//        Estate estate1 = TestValueGenerator.estateInfoGenerator(user1);
+//
+//        User savedUser1 = userRepository.save(user1);
+//        Estate savedEstate1 = estateRepository.save(estate1);
+//
+//        Bid bid1 = TestValueGenerator.bidInfoGenerator(savedUser1, savedEstate1);
+//
+//        Bid savedBid1 = bidRepository.save(bid1);
+//
+//        MatcherAssert.assertThat(savedUser1, CoreMatchers.is(user1));
 //
 //
-//        List<User> initialCreatedNonOwnerGroup = new ArrayList<>();
-//        for (int i = 0; i < 5; i++) {
-//            initialCreatedNonOwnerGroup.add(userInfoGenerator());
-//        }
-//        List<User> savedNonOwnerGroup = userRepository.saveAll(initialCreatedNonOwnerGroup);
-//
-////      #################################################################################
-////      ##
-////      ## ownerGroup의 5명은 아래에서 만들어지는 땅을 갖는다.
-////      ##
-////      #################################################################################
-//        List<Estate> initialCreatedEstates = new ArrayList<>();
-//        for (int i = 0; i < 5; i++) {
-//            initialCreatedEstates.add(estateInfoGenerator(initialCreatedNonOwnerGroup.get(i)));
-//        }
-//        List<Estate> savedEstates = estateRepository.saveAll(initialCreatedEstates);
+//        user1.getBidList().add(bid1);
 //
 //
-////      #################################################################################
-////      ##
-////      ## nonOwnerGroup이 bidding을 한다.
-////      ##
-////      #################################################################################
-//        List<Bid> initialCreatedBids = new ArrayList<>();
-//        for (int i = 0; i < 5; i++) {
-//            initialCreatedBids.add(bidInfoGenerator(savedNonOwnerGroup.get(i), Action.BUY, savedEstates.get(i)));
-//        }
-//        List<Bid> savedBids = bidRepository.saveAll(initialCreatedBids);
-//
-//        List<User> finalUsers = userRepository.findAll();
-//        List<Estate> finalEstates = estateRepository.findAll();
-//        List<Bid> finalBids = bidRepository.findAll();
-//
-//        System.out.println("break point");
 //    }
-//
-//}
+
+}

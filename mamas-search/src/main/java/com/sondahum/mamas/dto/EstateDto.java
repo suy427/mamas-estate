@@ -74,7 +74,7 @@ public class EstateDto {
         private List<Sort.Order> sortOrders;
     }
 
-    public static class SearchResponse {
+    public static class SimpleResponse {
         private Long id;
         private String name;
         private String address3; // most detailed address
@@ -82,7 +82,7 @@ public class EstateDto {
         private EstateType estateType;
         private ContractType contractType;
 
-        public SearchResponse(Estate estate) {
+        public SimpleResponse(Estate estate) {
             this.id = estate.getId();
             this.name = estate.getName();
             this.address3 = estate.getAddress().getAddress3();

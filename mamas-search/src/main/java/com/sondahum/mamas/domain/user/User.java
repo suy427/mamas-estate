@@ -31,32 +31,35 @@ public class User extends BaseEntity {
 
 
     @Column(name = "user_name")
-    String name;
+    private String name;
 
-    String phone;
+    private String phone;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    Role role;
+    private Role role;
 
+    // todo 이게 없으면 list가 null로 초기화된다... new ArrayList<>()가 안되구나...
+    // todo bid를 못만들어서 그런가...?
     @Builder.Default
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<Bid> bidList = new ArrayList<>();
+    private List<Bid> bidList = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    List<Estate> estateList = new ArrayList<>();
+    private List<Estate> estateList = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(cascade = CascadeType.ALL)
-    List<Contract> contractList = new ArrayList<>();
+    private List<Contract> contractList = new ArrayList<>();
 
 
     public List<Bid> getTradingList() {
-        return getBidList().stream()
+        List<Bid> tmp = getBidList().stream()
                 .filter(bid -> bid.getStatus() == BidStatus.ONGOING)
                 .collect(Collectors.toList());
+
+        return tmp;
     }
 
     public LocalDateTime getRecentContractedDate() { // TODO 괜찮은걸로 보이긴한데 좀 찝찝하기도함..ㅎ

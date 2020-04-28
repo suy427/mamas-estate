@@ -3,9 +3,9 @@ package com.sondahum.mamas.domain.estate.model;
 import java.util.LinkedHashMap;
 
 public enum ContractType {
-    RENT(1, "MAMA")
-    , BARGAIN(2, "AGENT")
-    , MONTHLY(3, "OTHER");
+    RENT(1, "RENT")
+    , BARGAIN(2, "SALE")
+    , MONTHLY(3, "MONTH");
 
 
     private final int value;
