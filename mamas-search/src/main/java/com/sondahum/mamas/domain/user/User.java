@@ -39,8 +39,6 @@ public class User extends BaseEntity {
     @Column(name = "role")
     private Role role;
 
-    @Builder.Default
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Bid> bidList = new ArrayList<>();
 

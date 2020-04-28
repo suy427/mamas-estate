@@ -18,7 +18,6 @@ import java.util.Random;
 public class TestValueGenerator {
 
     private static Random random = new Random();
-    protected MockMvc mockMvc;
 
     /******************************
      *
@@ -46,14 +45,14 @@ public class TestValueGenerator {
                 .address3(randomStringGenerator(5)).build();
     }
 
-    public static Long randomIdGenerator() {
-        return random.nextLong();
-    }
+//    public static Long randomIdGenerator() {
+//        return random.nextLong();
+//    }
 
 
-    public static Integer randomNumbersGenerator(int length) {
-        return random.nextInt(length);
-    }
+//    public static Integer randomNumbersGenerator(int length) {
+//        return random.nextInt(length);
+//    }
 
 
     public static Range.Area randomAreaGenerator() {
@@ -118,7 +117,8 @@ public class TestValueGenerator {
         return User.builder()
                 .name(randomNameGenerator().name)
                 .phone(randomPhoneNumberGenerator())
-                .role(randomRoleGenerator()).build();
+                .role(randomRoleGenerator())
+                .build();
     }
 
     /********************************
@@ -135,7 +135,8 @@ public class TestValueGenerator {
                 .estateType(randomEstateTypeGenerator())
                 .marketPriceRange(randomPriceRangeGenerator())
                 .ownerRequirePriceRange(randomPriceRangeGenerator())
-                .owner(owner).build();
+                .owner(owner)
+                .build();
     }
 
 
@@ -145,12 +146,14 @@ public class TestValueGenerator {
      *
      ********************************/
 
-    public static Bid bidInfoGenerator(User user, Action action, Estate estate) {
+    public static Bid bidInfoGenerator(User user, Estate estate) {
         return Bid.builder()
                 .user(user)
                 .estate(estate)
-                .action(action)
-                .priceRange(randomPriceRangeGenerator()).build();
+                .action(randomActionGenerator())
+                .priceRange(randomPriceRangeGenerator())
+                .build();
     }
+
 
 }
