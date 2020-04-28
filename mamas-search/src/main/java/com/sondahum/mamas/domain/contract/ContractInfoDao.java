@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
 @Slf4j
@@ -39,7 +37,7 @@ public class ContractInfoDao {
     @Transactional(readOnly = true)
     boolean isSameContract(ContractDto.CreateReq contractDto) {
         Optional<Contract> optionalContract =
-                contractRepository.findBySeller_NameAndBuyer_NameAndEstate_Name(
+                contractRepository.findBySeller_NameAndBuyer_NameAndEstate_Name_AndValidity(
                         contractDto.getSeller(), contractDto.getBuyer(), contractDto.getEstate());
 
         return optionalContract.isPresent();
@@ -58,7 +56,7 @@ public class ContractInfoDao {
         Optional<Contract> optional = contractRepository.findById(id);
         Contract contract = optional.orElseThrow(() -> new NoSuchEntityException(id)); // todo exception 정리
 
-        contractRepository.deleteById(id);
+        contract.setValidity(false);
 
         return contract;
     }

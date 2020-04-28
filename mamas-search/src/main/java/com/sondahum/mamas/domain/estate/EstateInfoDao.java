@@ -30,7 +30,7 @@ public class EstateInfoDao {
     @Transactional(readOnly = true)
     boolean isSameEstateExist(EstateDto.CreateReq estateDto) {
         Optional<Estate> optionalEstate =
-                estateRepository.findByNameAndAddress(estateDto.getName(), estateDto.getAddress());
+                estateRepository.findByNameAndAddress_AndValidity(estateDto.getName(), estateDto.getAddress());
 
         return optionalEstate.isPresent();
     }
@@ -72,7 +72,7 @@ todo                       취소, 확인
         Optional<Estate> optional = estateRepository.findById(id);
         Estate estate = optional.orElseThrow(() -> new NoSuchEntityException(id));
 
-        estateRepository.deleteById(id);
+        estate.setValidity(false);
 
         return estate;
     }

@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface EstateRepository extends JpaRepository<Estate, Long> {
-    Optional<Estate> findByNameAndAddress(String name, Address address);
+    Optional<Estate> findByNameAndAddress_AndValidity(String name, Address address);
     Optional<Estate> findByName(String name);
 }

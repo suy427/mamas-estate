@@ -34,9 +34,6 @@ public class QBid extends EntityPathBase<Bid> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     //inherited
-    public final BooleanPath isDeleted = _super.isDeleted;
-
-    //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
     public final com.sondahum.mamas.common.model.QRange_Price priceRange;
@@ -44,6 +41,9 @@ public class QBid extends EntityPathBase<Bid> {
     public final EnumPath<com.sondahum.mamas.domain.bid.model.BidStatus> status = createEnum("status", com.sondahum.mamas.domain.bid.model.BidStatus.class);
 
     public final com.sondahum.mamas.domain.user.QUser user;
+
+    //inherited
+    public final BooleanPath validity = _super.validity;
 
     public QBid(String variable) {
         this(Bid.class, forVariable(variable), INITS);

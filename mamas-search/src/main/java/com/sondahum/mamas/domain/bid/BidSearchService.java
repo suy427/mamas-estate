@@ -16,6 +16,7 @@ import java.util.List;
 
 
 import static com.sondahum.mamas.domain.bid.QBid.bid;
+import static com.sondahum.mamas.domain.estate.QEstate.estate;
 
 
 @Service
@@ -34,7 +35,8 @@ public class BidSearchService extends QuerydslRepositorySupport {
         }
 
         List<Bid> bids = from(bid).where(
-                user(query.getUser())       // todo 얘 왜이러지... 다른덴 안이런데.. null 들어오면 안되는건가.. method내에서 check하긴하는데;;
+                validity()
+                , user(query.getUser())       // todo 얘 왜이러지... 다른덴 안이런데.. null 들어오면 안되는건가.. method내에서 check하긴하는데;;
                 , estate(query.getEstate())
                 , action(query.getAction())
                 , date(query.getDate())
@@ -42,6 +44,10 @@ public class BidSearchService extends QuerydslRepositorySupport {
         ).fetch();
 
         return new PageImpl<>(bids, pageable, bids.size());
+    }
+
+    private BooleanExpression validity() {
+        return bid.validity.eq(true);
     }
 
     private BooleanExpression user(String user) {

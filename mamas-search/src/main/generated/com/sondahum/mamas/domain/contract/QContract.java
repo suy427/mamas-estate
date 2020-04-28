@@ -39,14 +39,14 @@ public class QContract extends EntityPathBase<Contract> {
     public final NumberPath<Long> id = _super.id;
 
     //inherited
-    public final BooleanPath isDeleted = _super.isDeleted;
-
-    //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
     public final NumberPath<Long> price = createNumber("price", Long.class);
 
     public final com.sondahum.mamas.domain.user.QUser seller;
+
+    //inherited
+    public final BooleanPath validity = _super.validity;
 
     public QContract(String variable) {
         this(Contract.class, forVariable(variable), INITS);

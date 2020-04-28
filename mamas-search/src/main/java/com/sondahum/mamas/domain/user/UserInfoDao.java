@@ -62,7 +62,7 @@ public class UserInfoDao {
         Optional<User> optional = userRepository.findById(id);
         User user = optional.orElseThrow(() -> new NoSuchEntityException(id));
 
-        userRepository.deleteById(id);
+        user.setValidity(false);
 
         return user;
     }
@@ -72,10 +72,10 @@ public class UserInfoDao {
         Optional<User> optionalUser;
 
         if (userDto.getName().isEmpty()) { // 폰번호만 입력한 경우
-            optionalUser = userRepository.findByPhone(userDto.getPhone());
+            optionalUser = userRepository.findByPhone_AndValidity(userDto.getPhone());
             return optionalUser.map(User::getPhone).orElse(null);
         } else { // 이름만 등록한 경우
-            optionalUser = userRepository.findByName(userDto.getName());
+            optionalUser = userRepository.findByName_AndValidity(userDto.getName());
             return optionalUser.map(User::getName).orElse(null);
         }
     }

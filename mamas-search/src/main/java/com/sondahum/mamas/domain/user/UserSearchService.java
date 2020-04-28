@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import static com.sondahum.mamas.domain.bid.QBid.bid;
 import static com.sondahum.mamas.domain.contract.QContract.contract;
+import static com.sondahum.mamas.domain.estate.QEstate.estate;
 import static com.sondahum.mamas.domain.user.QUser.user;
 
 
@@ -53,9 +54,10 @@ public class UserSearchService extends QuerydslRepositorySupport {
                                 .between(query.getContractDate().getMinimum(), query.getContractDate().getMaximum())
                 )
                 .where(
-                  name(query.getName())
-                , phone(query.getPhone())
-                , role(query.getRole().name())
+                    validity()
+                    , name(query.getName())
+                    , phone(query.getPhone())
+                    , role(query.getRole().name())
                 )
                 .fetchJoin().fetch();
 
@@ -63,6 +65,10 @@ public class UserSearchService extends QuerydslRepositorySupport {
 //        contractDate(users, query.getContractDate()); // todo 이 두 method 반드시 refactoring 할 것!!!!
 
         return new PageImpl<>(users, pageable, users.size());
+    }
+
+    private BooleanExpression validity() {
+        return user.validity.eq(true);
     }
 
     private BooleanExpression name(String name) {

@@ -42,9 +42,6 @@ public class QEstate extends EntityPathBase<Estate> {
     //inherited
     public final NumberPath<Long> id = _super.id;
 
-    //inherited
-    public final BooleanPath isDeleted = _super.isDeleted;
-
     public final com.sondahum.mamas.common.model.QRange_Price marketPriceRange;
 
     //inherited
@@ -59,6 +56,9 @@ public class QEstate extends EntityPathBase<Estate> {
     public final DateTimePath<java.time.LocalDateTime> registeredDate = createDateTime("registeredDate", java.time.LocalDateTime.class);
 
     public final EnumPath<com.sondahum.mamas.domain.estate.model.EstateStatus> status = createEnum("status", com.sondahum.mamas.domain.estate.model.EstateStatus.class);
+
+    //inherited
+    public final BooleanPath validity = _super.validity;
 
     public QEstate(String variable) {
         this(Estate.class, forVariable(variable), INITS);

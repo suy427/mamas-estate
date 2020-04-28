@@ -23,6 +23,6 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "modified_date")
     protected LocalDateTime modifiedDate;
 
-
-    protected boolean isDeleted;
+    @Column(name = "is_deleted")
+    protected boolean validity;
 }

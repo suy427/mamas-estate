@@ -41,7 +41,7 @@ public class BidInfoDao {
 
     @Transactional(readOnly = true)
     public boolean isSameBidExist(BidDto.CreateReq bidDto) {
-        Optional<Bid> optionalBid = bidRepository.findByUser_NameAndEstate_NameAndAction(
+        Optional<Bid> optionalBid = bidRepository.findByUser_NameAndEstate_NameAndAction_AndValidity(
                 bidDto.getUser(),bidDto.getEstate(), bidDto.getAction());
 
         return optionalBid.isPresent();
@@ -69,7 +69,7 @@ public class BidInfoDao {
         Optional<Bid> optional = bidRepository.findById(id);
         Bid bid = optional.orElseThrow(() -> new NoSuchEntityException(id)); // todo exception 정리
 
-        bidRepository.deleteById(id);
+        bid.setValidity(false);
 
         return bid;
     }

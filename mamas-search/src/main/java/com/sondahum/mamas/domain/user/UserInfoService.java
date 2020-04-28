@@ -32,7 +32,7 @@ public class UserInfoService {
     private User currentUser;
 
     public User createUserInfo(UserDto.CreateReq userDto) {
-        currentUser = userInfoDao.createUserInfo(userDto);
+        currentUser = userInfoDao.createUserInfo(userDto); // 여기서 repo에 넣어줌
         return currentUser;
     }
 

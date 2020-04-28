@@ -35,9 +35,6 @@ public class QUser extends EntityPathBase<User> {
     public final NumberPath<Long> id = _super.id;
 
     //inherited
-    public final BooleanPath isDeleted = _super.isDeleted;
-
-    //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
     public final StringPath name = createString("name");
@@ -45,6 +42,9 @@ public class QUser extends EntityPathBase<User> {
     public final StringPath phone = createString("phone");
 
     public final EnumPath<com.sondahum.mamas.domain.user.model.Role> role = createEnum("role", com.sondahum.mamas.domain.user.model.Role.class);
+
+    //inherited
+    public final BooleanPath validity = _super.validity;
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));
