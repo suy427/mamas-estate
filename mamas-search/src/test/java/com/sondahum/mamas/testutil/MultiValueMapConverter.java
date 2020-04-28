@@ -47,7 +47,7 @@ public class MultiValueMapConverter {
 
         for (Field field : fields) {
             String _name = (name.equals("")) ? field.getName() : name + "." + field.getName();
-            Object value = new PropertyDescriptor(field.getName(), object.getClass()).getReadMethod().invoke(object);
+            Object value = new PropertyDescriptor((String)field.getName(), object.getClass()).getReadMethod().invoke(object);
 
             if (value == null) {
 //                return mvm;
@@ -75,7 +75,7 @@ public class MultiValueMapConverter {
                     }
                     mvm.add(_name, resource);
                 } else {
-                    value = new PropertyDescriptor(field.getName(), object.getClass()).getReadMethod().invoke(object);
+                    value = new PropertyDescriptor((String)field.getName(), object.getClass()).getReadMethod().invoke(object);
                     mvm.add(_name, value);
                 }
 //            }
