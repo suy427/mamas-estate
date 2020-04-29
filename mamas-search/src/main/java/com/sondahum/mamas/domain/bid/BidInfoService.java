@@ -16,6 +16,7 @@ import com.sondahum.mamas.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -28,30 +29,12 @@ public class BidInfoService {
 
     private Bid currentBid;
 
+    @Transactional(rollbackFor = Exception.class)
     public Bid createBid(BidDto.CreateReq bidDto) {
-        User user;
-        Estate estate;
-        Bid bid;
+       User user = userInfoDao.createUserInfo(UserDto.CreateReq.builder().name(bidDto.getUserName()).build());
+       Estate estate = estateInfoDao.createEstateInfo(EstateDto.CreateReq.builder().name(bidDto.getEstateName()).build());
 
-        try {
-            user = userInfoDao.createUserInfo(
-                    UserDto.CreateReq.builder()
-                            .name(bidDto.getUserName())
-                            .build()
-            );
-        } catch (UserAlreadyExistException ue) {
-            user = ue.getUser();
-        }
 
-        try {
-            estate = estateInfoDao.createEstateInfo(
-                    EstateDto.CreateReq.builder()
-                            .name(bidDto.getEstateName())
-                            .build()
-            );
-        } catch (EstateAlreadyExistException ee) {
-            estate = ee.getEstate();
-        }
 
         if (estate.getOwner().getName().equals(bidDto.getUserName()) && bidDto.getAction().equals(Action.BUY)) {
             throw new InvalidActionException("자신의 땅은 살 수 없습니다.");

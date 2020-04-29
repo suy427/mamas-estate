@@ -4,7 +4,9 @@ import java.util.LinkedHashMap;
 
 public enum Action {
     BUY(1, "BUY")
-    , SELL(2, "SELL");
+    , SELL(2, "SELL")
+    , LEASE(3, "LEESE")
+    , LEND(4, "LEND");
 
 
     private final int value;

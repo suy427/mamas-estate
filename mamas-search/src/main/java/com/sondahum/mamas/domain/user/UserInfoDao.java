@@ -29,7 +29,7 @@ public class UserInfoDao {
      * --> '그냥 그대로 name, phone, role만 등록시킴'
      */
     public User createUserInfo(UserDto.CreateReq userDto) {
-        if (userDto.getName().isEmpty() && userDto.getPhone().isEmpty())
+        if (userDto.getName() == null && userDto.getPhone() == null)
             throw new NotEnoughInfoException(userDto.getName(), userDto.getPhone());
 
         Optional<User> duplicatedUser = getDuplicatedUser(userDto.getName(), userDto.getPhone());
@@ -59,9 +59,11 @@ public class UserInfoDao {
     }
 
     public User deleteUserInfo(Long id) {
-        Optional<User> optionalUser = userRepository.deleteByIdInQuery(id);
+        User user = userRepository.deleteByIdInQuery(id)
+                .orElseThrow(() -> new NoSuchEntityException(id));
 
-        return optionalUser.orElseThrow(() -> new NoSuchEntityException(id));
+        user.setActive(false);
+        return user;
     }
 
     public Optional<User> getDuplicatedUser(String info) {
@@ -75,9 +77,9 @@ public class UserInfoDao {
     public Optional<User> getDuplicatedUser(String name, String phone) {
         Optional<User> optionalUser;
 
-        if (name.isEmpty()) { // 폰번호만 입력한 경우
+        if (name == null) { // 폰번호만 입력한 경우
             optionalUser = userRepository.findByPhone_AndActive(phone, true);
-        } else if (phone.isEmpty()) { // 이름만 입력한 경우
+        } else if (phone == null) { // 이름만 입력한 경우
             optionalUser = userRepository.findByName_AndActive(name, true);
         } else { // 둘 다 입력한 경우
             optionalUser = userRepository.findByName_AndPhone_AndActive(name, phone, true);

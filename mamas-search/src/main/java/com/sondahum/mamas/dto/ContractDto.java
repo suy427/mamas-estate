@@ -3,6 +3,7 @@ package com.sondahum.mamas.dto;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.estate.model.ContractType;
 import com.sondahum.mamas.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,21 +25,13 @@ public class ContractDto {
         private String buyer;
         @NotEmpty(message = "계약한 부동산 이름을 입력해주세요.")
         private String estate;
+        private ContractType contractType;
         private Long price;
         private LocalDateTime contractedDate;
         private LocalDateTime expireDate;
 
         public Contract toEntity() {
-            User seller = User.builder()
-                    .name(this.seller).build();
-            User buyer = User.builder()
-                    .name(this.buyer).build();
-            Estate estate = Estate.builder().name(this.estate).build();
-
             return Contract.builder()
-                    .seller(seller)
-                    .buyer(buyer)
-                    .estate(estate)
                     .price(price)
                     .contractedDate(contractedDate)
                     .expireDate(expireDate).build();

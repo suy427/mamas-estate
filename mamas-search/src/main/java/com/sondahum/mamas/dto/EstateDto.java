@@ -24,7 +24,7 @@ public class EstateDto {
         private String name;
         @NotEmpty(message = "등록할 부동산 주소를 입력해주세요.")
         private Address address;
-        private String area;
+        private Double area;
         private String ownerName;
         private EstateStatus status;
         private EstateType estateType;
@@ -33,18 +33,16 @@ public class EstateDto {
         private Range.Price marketPriceRange;
 
         public Estate toEntity() {
-            User owner = User.builder().name("ownerName").build();
-
             return Estate.builder()
                     .name(name)
                     .address(address)
-                    .area(Double.parseDouble(area))
+                    .area(area)
                     .marketPriceRange(marketPriceRange)
                     .contractType(contractType)
                     .estateType(estateType)
                     .status(status)
                     .ownerRequirePriceRange(ownerRequirePriceRange)
-                    .owner(owner).build();
+                    .build();
         }
     }
 

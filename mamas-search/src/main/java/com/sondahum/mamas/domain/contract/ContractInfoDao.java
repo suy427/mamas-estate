@@ -51,9 +51,11 @@ public class ContractInfoDao {
     }
 
     public Contract deleteContractInfo(Long id) {
-        Optional<Contract> optionalContract = contractRepository.deleteByIdInQuery(id);
+        Contract contract = contractRepository.findById(id)
+            .orElseThrow(() -> new NoSuchEntityException(id));
 
-        return optionalContract.orElseThrow(() -> new NoSuchEntityException(id));
+        contract.setActive(false);
+        return contract;
     }
 
 }

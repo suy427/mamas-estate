@@ -62,11 +62,11 @@ public class Estate extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private EstateStatus status;
 
-    @OneToMany//(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "bid_id")
     private List<Bid> bidList;
 
-    @ManyToOne//(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "owner")
     private User owner;
 
@@ -74,7 +74,7 @@ public class Estate extends BaseEntity {
     private LocalDateTime registeredDate;
 
     @Builder.Default // todo 이거 뭔지 다시 확인
-    @OneToMany//(cascade = CascadeType.PERSIST) //todo 연관관계 이렇게 안하면 에러남.. 확인
+    @OneToMany(cascade = CascadeType.PERSIST) //todo 연관관계 이렇게 안하면 에러남.. 확인
     private List<Contract> contractHistoryList = new ArrayList<>();
 
     public void addContractHistory(Contract contract) {

@@ -15,9 +15,4 @@ import java.util.Optional;
 public interface EstateRepository extends JpaRepository<Estate, Long> {
     Optional<Estate> findByNameAndAddress_AndActive(String name, Address address, boolean validity);
     Optional<Estate> findByName_AndActive(String name, boolean validity);
-
-    @Transactional
-    @Modifying
-    @Query("UPDATE FROM Estate e SET e.active=true WHERE e.id=?1")
-    Optional<Estate> deleteByIdInQuery(Long id);
 }

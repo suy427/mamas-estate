@@ -52,8 +52,10 @@ public class EstateInfoDao {
     }
 
     public Estate deleteEstateInfo(Long id) {
-        Optional<Estate> optionalEstate = estateRepository.deleteByIdInQuery(id);
+        Estate estate = estateRepository.findById(id)
+                .orElseThrow(() -> new NoSuchEntityException(id));
 
-        return optionalEstate.orElseThrow(() -> new NoSuchEntityException(id));
+        estate.setActive(false);
+        return estate;
     }
 }

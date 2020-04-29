@@ -13,6 +13,7 @@ import com.sondahum.mamas.domain.contract.exception.ContractAlreadyExistExceptio
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateInfoDao;
 import com.sondahum.mamas.domain.estate.exception.EstateAlreadyExistException;
+import com.sondahum.mamas.domain.estate.model.ContractType;
 import com.sondahum.mamas.domain.user.exception.UserAlreadyExistException;
 import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.dto.ContractDto;
@@ -21,7 +22,9 @@ import com.sondahum.mamas.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.tree.ExpandVetoException;
 import java.util.List;
 
 @Service
@@ -36,7 +39,7 @@ public class UserInfoService {
 
     private User currentUser;
 
-    public User createUserInfo(UserDto.CreateReq userDto) {
+    public User createUserInfo(UserDto.CreateReq userDto) { // 기본정보 생성
         try {
             currentUser = userInfoDao.createUserInfo(userDto); // 이미 존재하면 있는유저 반환
         } catch (UserAlreadyExistException e) {
@@ -50,13 +53,20 @@ public class UserInfoService {
 
     // xhr로 수정분만 받아오니까
     // 방금 넣은 애만 return해주자
+    @Transactional(rollbackFor = Exception.class)
     public Estate addNewEstate(EstateDto.CreateReq estateDto) {
+        Estate estate = specifyEstate(estateDto); // 일단 영속화부터 시키고보니까, 이게 실패하면 다시 지워줘야한다 (not soft delete)
 
-        Estate estate = specifyEstate(estateDto);
+        if (!estate.getOwner().equals(currentUser)) {
+            if (estate.getOwner() == null)
+                estate.setOwner(currentUser);
+            else
+                throw new UserAlreadyExistException(estate.getOwner()); // 다른 사람의 땅을 등록하려고 했을 때.
+        } else {
+            throw new EstateAlreadyExistException(estate); // 이미 있는 땅을 등록하려고 했을 때.
+        }
 
-        estate.setOwner(currentUser);
         currentUser.addEstate(estate);
-
         return estate;
     }
 
@@ -65,50 +75,27 @@ public class UserInfoService {
                 .filter(estate -> estate.getId().equals(estateDto.getId()))
                 .findFirst().orElseThrow(() -> new NoSuchEntityException(estateDto.getId()));
 
-        target.updateEstateInfo(estateDto);
+        target.updateEstateInfo(estateDto); // 예상) 영속화된 객체는 업데이트 됐을 때, 다른 객체와의 연관관계에서도 변경사항이 반영되있을 것이다.
         return target;
     }
 
+    // 여기서 땅을 지워버리게 되면, 이 땅의 bid, contract
     public List<Estate> deleteEstate(Long id) { // 삭제는 수행 후 리스트를 갱신해서 보여준다.
         estateInfoDao.deleteEstateInfo(id);
         return currentUser.getEstateList();
     }
 
-    private Estate specifyEstate(EstateDto.CreateReq estateDto) {
-        Estate estate;
 
-        try {
-            estate = estateInfoDao.getDuplicatedEstate(estateDto.getName(), estateDto.getAddress())
-                    .orElse(estateDto.toEntity());
-        } catch (EstateAlreadyExistException e) {
-            estate = e.getEstate();
-            e.setMessage("중복된 정보가 존재합니다. [ " +estate.getName()+" ]" );
-        }
-        return estate;
-    }
-
+    @Transactional(rollbackFor = Exception.class)
     public Bid addNewBid(EstateDto.CreateReq estateDto, BidDto.CreateReq bidDto) { // 땅부터 정하고 넘어가는걸로..!
-        Bid bid;
-        Estate estate;
+        Estate estate = specifyEstate(estateDto);
 
-        estate = specifyEstate(estateDto);
-
-        // 이미 bidding한적이 있는 물건.
-        // 있는 땅일 때는 주인도 누군지 알 수 있다.
-        if (estate.getId() != 0) { // toEntity로 만든 entity는 id값이 아직 없다.
-            if (estate.getOwner().equals(currentUser) && bidDto.getAction().equals(Action.BUY)) {
-                throw new InvalidActionException("자신의 땅은 살 수 없습니다.");
-            }
+        if (estate.getOwner().equals(currentUser)) {
+            if (bidDto.getAction().equals(Action.BUY) || bidDto.getAction().equals(Action.LEASE))
+                throw new InvalidActionException("자신의 땅은 사거나 임대할  없습니다.");
         }
 
-        try {
-            bid = bidInfoDao.getDuplicatedBid(bidDto.getUserName(), bidDto.getEstateName(), bidDto.getAction())
-            .orElse(bidDto.toEntity());
-        } catch (BidAlreadyExistException be) { // 얘는 알려만 주는거다. 등록은 된다.
-            bid = be.getBid();
-            be.setMessage("중복된 정보가 존재합니다. [ "
-                    + bid.getEstate()+", "+bid.getAction()+", "+bid.getPriceRange().toString()+" ]");
-        }
+        Bid bid = specifyBid(bidDto);
 
         bid.setUser(currentUser);
         bid.setEstate(estate);
@@ -124,9 +111,6 @@ public class UserInfoService {
                 .filter(bid -> bid.getId().equals(bidDto.getId()))
                 .findFirst().orElseThrow(() -> new NoSuchEntityException(bidDto.getId()));
 
-        //이 target객체는 영속성 객체니까 estate의 bidlist에도 변경이 반영이 되겠지...?
-        //todo 확인 해봅시다.
-
         target.updateBidInfo(bidDto);
         return target;
     }
@@ -136,50 +120,26 @@ public class UserInfoService {
         return currentUser.getBidList();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public Contract addNewContract(EstateDto.CreateReq estateDto, ContractDto.CreateReq contractDto) {
-        Contract contract;
-        User seller;
-        User buyer;
-        Estate estate;
+        Estate estate = specifyEstate(estateDto);
 
-        estate = specifyEstate(estateDto);
-
-        if (estate.getId() != 0) {
-            if(estate.getOwner().equals(currentUser) && contractDto.getBuyer().equals(currentUser.getName())) {
-                throw new InvalidActionException("자신의 땅은 살 수 없습니다.");
-            }
+        if (estate.getOwner().equals(currentUser) && contractDto.getBuyer().equals(currentUser.getName())) {
+            throw new InvalidActionException("자신의 땅은 사거나 임대할 수 없습니다.");
         }
 
-        try {
-            seller = userInfoDao.getDuplicatedUser(contractDto.getSeller())
-            .orElse(UserDto.CreateReq.builder().name(contractDto.getSeller()).build().toEntity());
-        } catch (UserAlreadyExistException se) {
-            seller = se.getUser();
+        User seller = userInfoDao.createUserInfo(UserDto.CreateReq.builder().name(contractDto.getSeller()).build());
+        User buyer = userInfoDao.createUserInfo(UserDto.CreateReq.builder().name(contractDto.getBuyer()).build());
+        Contract contract = contractInfoDao.createContractInfo(contractDto);
+
+        if (contractDto.getContractType().equals(ContractType.BARGAIN)) {// 소유관계가 바뀌어버림
+            seller.getEstateList().removeIf(e -> e.equals(estate));
+            buyer.addEstate(estate);
+            estate.setOwner(buyer);
+        } else { //todo 임대 계약에 대해서 좀 더 생각해 볼것...!
+            seller.addEstate(estate);
+            estate.setOwner(seller);
         }
-
-        try {
-            buyer = userInfoDao.getDuplicatedUser(contractDto.getBuyer())
-                    .orElse(UserDto.CreateReq.builder().name(contractDto.getBuyer()).build().toEntity());
-        } catch (UserAlreadyExistException be) {
-            buyer = be.getUser();
-        }
-
-        try {
-            contract = contractInfoDao.getDuplicatedContract(seller.getName(), buyer.getName(), estate.getName())
-                    .orElse(ContractDto.CreateReq.builder()
-                            .seller(seller.getName())
-                            .buyer(buyer.getName())
-                            .estate(estate.getName())
-                            .build()
-                            .toEntity()
-                    );
-        } catch (ContractAlreadyExistException ce) {
-            contract = ce.getContract();
-        }
-
-        seller.addEstate(estate);
-        estate.setOwner(seller);
-
         contract.setSeller(seller);
         contract.setBuyer(buyer);
         contract.setEstate(estate);
@@ -215,5 +175,30 @@ public class UserInfoService {
 
     public User deleteUserInfo(long id) {
         return userInfoDao.deleteUserInfo(id);
+    }
+
+    private Estate specifyEstate(EstateDto.CreateReq estateDto) {
+        Estate estate;
+
+        try {
+            estate = estateInfoDao.createEstateInfo(estateDto);
+        } catch (EstateAlreadyExistException e) {
+            estate = e.getEstate();
+            e.setMessage("중복된 정보가 존재합니다. [ " + estate.getName() + " ]");
+        }
+        return estate;
+    }
+
+    private Bid specifyBid(BidDto.CreateReq bidDto) {
+        Bid bid;
+
+        try {
+            bid = bidInfoDao.createBid(bidDto);
+        } catch (BidAlreadyExistException e) {
+            bid = e.getBid();
+            e.setMessage("중복된 정보가 존재합니다. [ "
+                    + bid.getEstate()+", "+bid.getAction()+", "+bid.getPriceRange().toString()+" ]");
+        }
+        return bid;
     }
 }

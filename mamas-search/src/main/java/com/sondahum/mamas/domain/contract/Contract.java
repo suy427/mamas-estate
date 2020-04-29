@@ -2,6 +2,7 @@ package com.sondahum.mamas.domain.contract;
 
 import com.sondahum.mamas.common.model.BaseEntity;
 import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.estate.model.ContractType;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.dto.ContractDto;
 import lombok.*;
@@ -33,6 +34,9 @@ public class Contract extends BaseEntity implements Comparable<Contract> {
     @ManyToOne//(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "estate_id", nullable = false)
     private Estate estate;
+
+    @Column(name = "contract_type")
+    private ContractType contractType;
 
     private LocalDateTime contractedDate;
 

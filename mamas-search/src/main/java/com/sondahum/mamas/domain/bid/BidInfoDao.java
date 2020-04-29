@@ -54,9 +54,11 @@ public class BidInfoDao {
     }
 
     public Bid deleteBidInfo(Long id) {
-        Optional<Bid> optionalBid = bidRepository.deleteByIdInQuery(id);
+        Bid bid = bidRepository.findById(id)
+                .orElseThrow(() -> new NoSuchEntityException(id));
 
-        return optionalBid.orElseThrow(() -> new NoSuchEntityException(id));
+        bid.setActive(false);
+        return bid;
     }
 
 }

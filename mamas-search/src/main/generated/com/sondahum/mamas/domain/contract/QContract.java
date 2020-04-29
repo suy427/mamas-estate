@@ -31,6 +31,8 @@ public class QContract extends EntityPathBase<Contract> {
 
     public final DateTimePath<java.time.LocalDateTime> contractedDate = createDateTime("contractedDate", java.time.LocalDateTime.class);
 
+    public final EnumPath<com.sondahum.mamas.domain.estate.model.ContractType> contractType = createEnum("contractType", com.sondahum.mamas.domain.estate.model.ContractType.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
