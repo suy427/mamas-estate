@@ -1,6 +1,5 @@
 package com.sondahum.mamas.integration;
 
-import com.sondahum.mamas.domain.bid.BidRepository;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.model.Action;
@@ -9,7 +8,6 @@ import com.sondahum.mamas.testutil.AbstractMockRequestHelper;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.springframework.mock.web.MockHttpServletResponse;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,7 +24,7 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
         BidDto.CreateReq dto =
                 BidDto.CreateReq.builder()
                         .user("김철수")
-                        .estate("로열팰리스 1003호")
+                        .estateName("로열팰리스 1003호")
                         .action(Action.SELL).build();
 
         MockHttpServletResponse result = requestPost(
@@ -42,7 +40,7 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
         BidDto.CreateReq dto =
                 BidDto.CreateReq.builder()
                         .user("")
-                        .estate("로열팰리스 1003호")
+                        .estateName("로열팰리스 1003호")
                         .action(Action.SELL).build();
 
         MockHttpServletResponse result = requestPost(
@@ -58,7 +56,7 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
         BidDto.CreateReq dto =
                 BidDto.CreateReq.builder()
                         .user("김철수")
-                        .estate("")
+                        .estateName("")
                         .action(Action.SELL).build();
 
         MockHttpServletResponse result = requestPost(
@@ -74,7 +72,7 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
         BidDto.CreateReq dto =
                 BidDto.CreateReq.builder()
                         .user("김철수")
-                        .estate("로열팰리스 1003호")
+                        .estateName("로열팰리스 1003호")
                         .action(null).build();
 
         MockHttpServletResponse result = requestPost(

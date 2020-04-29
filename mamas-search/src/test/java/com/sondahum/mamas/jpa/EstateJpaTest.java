@@ -40,7 +40,7 @@ public class EstateJpaTest {
         Estate estate1 = TestValueGenerator.estateInfoGenerator(user1); // 이 사람의 땅 생성
 
         Estate resultEstate = estateRepository.save(estate1); // 땅만 저장함. owner에 user1이 들어감.
-        Optional<User> optionalUser = userRepository.findByName_AndValidity(user1.getName(), true); // 이 때, user1이 찾아질까? --> 영속성 전이로 인해서..??
+        Optional<User> optionalUser = userRepository.findByName_AndActive(user1.getName(), true); // 이 때, user1이 찾아질까? --> 영속성 전이로 인해서..??
         User resultUser = null;
 
         if (optionalUser.isPresent())

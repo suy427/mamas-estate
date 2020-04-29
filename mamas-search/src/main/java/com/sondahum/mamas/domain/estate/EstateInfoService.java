@@ -4,10 +4,15 @@ package com.sondahum.mamas.domain.estate;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.BidInfoDao;
+import com.sondahum.mamas.domain.bid.exception.BidAlreadyExistException;
+import com.sondahum.mamas.domain.bid.exception.InvalidActionException;
+import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.domain.contract.ContractInfoDao;
+import com.sondahum.mamas.domain.estate.exception.EstateAlreadyExistException;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.user.UserInfoDao;
+import com.sondahum.mamas.domain.user.exception.UserAlreadyExistException;
 import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.dto.ContractDto;
 import com.sondahum.mamas.dto.EstateDto;
@@ -29,13 +34,55 @@ public class EstateInfoService {
     private Estate currentEstate;
 
     public Estate createEstateInfo(EstateDto.CreateReq estateDto) {
-        currentEstate = estateInfoDao.createEstateInfo(estateDto);
+        try {
+            currentEstate = estateInfoDao.createEstateInfo(estateDto);
+        } catch (EstateAlreadyExistException e) {
+            currentEstate = e.getEstate();
+            e.setMessage(estateDto.getName()+" 은(는) 이미 등록된 매물입니다.");
+            throw e;
+        }
+
         return currentEstate;
     }
 
     public Bid addNewBid(BidDto.CreateReq bidDto) {
-        Bid bid = bidDto.toEntity();
-        currentEstate.getBidList().add(bid);
+        User user;
+        Bid bid;
+
+        try {
+            user = userInfoDao.createUserInfo(
+                    UserDto.CreateReq.builder()
+                    .name(bidDto.getUser())
+                    .build()
+            );
+        } catch (UserAlreadyExistException ue) {
+            user = ue.getUser();
+
+            if (currentEstate.getOwner().getName().equals(bidDto.getUser()) && bidDto.getAction().equals(Action.BUY)) {
+                throw new InvalidActionException("자신의 땅은 살 수 없습니다.");
+            }
+
+            int amount=0, sell=0, buy=0;
+            for (Bid bidHistory : currentEstate.getBidList()) {
+                if (bidHistory.getUser().getId().equals(user.getId())) {
+                    amount++;
+                    if (bidHistory.getAction().equals(Action.BUY))
+                        buy++;
+                    else sell++;
+                }
+            }
+            ue.setMessage("총 "+amount+"건의 호가 기록이 있는 고객입니다.\n 매수 : "+buy+"매도 : "+sell);
+        }
+
+
+
+        try {
+            bid = bidInfoDao.createBid(bidDto);
+        } catch (BidAlreadyExistException be) {
+            bid = be.getBid();
+            be.setMessage("중복된 정보가 존재합니다. [ "
+                    + bid.getEstate()+", "+bid.getAction()+", "+bid.getPriceRange().toString()+" ]");
+        }
 
         return bid;
     }

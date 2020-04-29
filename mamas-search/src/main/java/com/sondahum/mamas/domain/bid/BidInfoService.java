@@ -1,6 +1,7 @@
 package com.sondahum.mamas.domain.bid;
 
 
+import com.sondahum.mamas.domain.bid.exception.BidAlreadyExistException;
 import com.sondahum.mamas.domain.bid.exception.InvalidActionException;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.estate.Estate;
@@ -45,7 +46,7 @@ public class BidInfoService {
         try {
             estate = estateInfoDao.createEstateInfo(
                     EstateDto.CreateReq.builder()
-                            .name(bidDto.getEstate())
+                            .name(bidDto.getEstateName())
                             .build()
             );
         } catch (EstateAlreadyExistException ee) {
@@ -56,7 +57,12 @@ public class BidInfoService {
             throw new InvalidActionException("자신의 땅은 살 수 없습니다.");
         }
 
-        bid = bidInfoDao.createBid(bidDto);
+        try {
+            bid = bidInfoDao.createBid(bidDto);
+        } catch (BidAlreadyExistException be) {
+            bid = be.getBid();
+            be.setMessage("");
+        }
         user.getBidList().add(bid);
         estate.getBidList().add(bid);
 

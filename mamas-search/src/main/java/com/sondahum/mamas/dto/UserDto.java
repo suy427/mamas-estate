@@ -10,10 +10,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Sort;
 
-import javax.validation.constraints.NotEmpty;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserDto {
 
@@ -80,21 +79,19 @@ public class UserDto {
         private String name;
         private String phone;
         private Role role;
-        private Integer owningEstateAmount; // 누르면 estate list pop up --> 파는거, 이미 계약된거 포함
-//      private Integer soldEstateAmount;   // 위에께 있기 때문에 이건 필요 없다.
-//      private Integer boughtEstateAmount; // 따져보면 contract list를 불러오면 이걸 따로 볼 필요없음.
-        private Integer onTradingAmount;
-        private LocalDateTime recentContractDate;
-//      private Integer buyingEstateAmount; // 누르면 bid list pop up --> 호가 걸어놓은거
+        private List<EstateDto.SimpleResponse> owningEstateList; // 누르면 estate list pop up --> 파는거, 이미 계약된거 포함
+        private List<BidDto.DetailResponse> onTradingList;
+        private List<ContractDto.DetailResponse> contractHistoryList;
+
 
         public DetailResponse(User user) {
             this.id = user.getId();
             this.name = user.getName();
             this.phone = user.getPhone();
             this.role = user.getRole();
-            this.owningEstateAmount = user.getEstateList().size();      // estate
-            this.onTradingAmount = user.getTradingList().size();        // bid
-            this.recentContractDate = user.getRecentContractedDate();   // contract
+            this.owningEstateList = user.getEstateList().stream().map(EstateDto.SimpleResponse::new).collect(Collectors.toList());      // estate
+            this.onTradingList = user.getBidList().stream().map(BidDto.DetailResponse::new).collect(Collectors.toList());        // bid
+            this.contractHistoryList = user.getContractList().stream().map(ContractDto.DetailResponse::new).collect(Collectors.toList());   // contract
         }
     }
 

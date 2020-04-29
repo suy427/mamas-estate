@@ -37,7 +37,7 @@ public class ContractInfoDao {
     @Transactional(readOnly = true)
     boolean isSameContract(ContractDto.CreateReq contractDto) {
         Optional<Contract> optionalContract =
-                contractRepository.findBySeller_NameAndBuyer_NameAndEstate_Name_AndValidity(
+                contractRepository.findBySeller_NameAndBuyer_NameAndEstate_Name_AndActive(
                         contractDto.getSeller(), contractDto.getBuyer(), contractDto.getEstate(), true);
 
         return optionalContract.isPresent();
@@ -53,12 +53,9 @@ public class ContractInfoDao {
     }
 
     public Contract deleteContractInfo(Long id) {
-        Optional<Contract> optional = contractRepository.findById(id);
-        Contract contract = optional.orElseThrow(() -> new NoSuchEntityException(id)); // todo exception 정리
+        Optional<Contract> optionalContract = contractRepository.deleteByIdInQuery(id);
 
-        contract.setValidity(false);
-
-        return contract;
+        return optionalContract.orElseThrow(() -> new NoSuchEntityException(id));
     }
 
 }

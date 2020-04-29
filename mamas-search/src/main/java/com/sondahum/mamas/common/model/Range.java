@@ -29,6 +29,11 @@ public class Range {
         public boolean isIn(Long price) {
             return minimum <= price && price <= maximum;
         }
+
+        @Override
+        public String toString() {
+            return minimum+" ~ "+maximum;
+        }
     }
 
 
@@ -49,6 +54,11 @@ public class Range {
         public boolean isIn(LocalDateTime date) {
                return minimum.compareTo(date) <= 0 && maximum.compareTo(date) >= 0;
         }
+
+        @Override
+        public String toString() {
+            return minimum+" ~ "+maximum;
+        }
     }
 
 
@@ -68,6 +78,11 @@ public class Range {
 
         public boolean isIn(Double area) {
             return minimum <= area && area <= maximum;
+        }
+
+        @Override
+        public String toString() {
+            return minimum+" ~ "+maximum;
         }
     }
 }
