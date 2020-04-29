@@ -4,6 +4,7 @@ import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.domain.Sort;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class ContractDto {
 
     @Getter
+    @Builder
     public static class CreateReq {
         @NotEmpty(message = "매도자 이름을 입력해주세요.")
         private String seller;

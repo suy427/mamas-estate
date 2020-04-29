@@ -52,13 +52,13 @@ public class EstateInfoService {
         try {
             user = userInfoDao.createUserInfo(
                     UserDto.CreateReq.builder()
-                    .name(bidDto.getUser())
+                    .name(bidDto.getUserName())
                     .build()
             );
         } catch (UserAlreadyExistException ue) {
             user = ue.getUser();
 
-            if (currentEstate.getOwner().getName().equals(bidDto.getUser()) && bidDto.getAction().equals(Action.BUY)) {
+            if (currentEstate.getOwner().getName().equals(bidDto.getUserName()) && bidDto.getAction().equals(Action.BUY)) {
                 throw new InvalidActionException("자신의 땅은 살 수 없습니다.");
             }
 

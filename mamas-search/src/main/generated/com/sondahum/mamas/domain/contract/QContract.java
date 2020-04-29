@@ -24,6 +24,9 @@ public class QContract extends EntityPathBase<Contract> {
 
     public final com.sondahum.mamas.common.model.QBaseEntity _super = new com.sondahum.mamas.common.model.QBaseEntity(this);
 
+    //inherited
+    public final BooleanPath active = _super.active;
+
     public final com.sondahum.mamas.domain.user.QUser buyer;
 
     public final DateTimePath<java.time.LocalDateTime> contractedDate = createDateTime("contractedDate", java.time.LocalDateTime.class);
@@ -44,9 +47,6 @@ public class QContract extends EntityPathBase<Contract> {
     public final NumberPath<Long> price = createNumber("price", Long.class);
 
     public final com.sondahum.mamas.domain.user.QUser seller;
-
-    //inherited
-    public final BooleanPath validity = _super.validity;
 
     public QContract(String variable) {
         this(Contract.class, forVariable(variable), INITS);

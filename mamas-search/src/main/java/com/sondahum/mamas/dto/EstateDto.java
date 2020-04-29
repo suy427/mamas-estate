@@ -22,9 +22,10 @@ public class EstateDto {
     public static class CreateReq {
         @NotEmpty(message = "등록할 부동산 이름을 입력해주세요.")
         private String name;
+        @NotEmpty(message = "등록할 부동산 주소를 입력해주세요.")
         private Address address;
         private String area;
-        private String ownerName = "";
+        private String ownerName;
         private EstateStatus status;
         private EstateType estateType;
         private ContractType contractType;

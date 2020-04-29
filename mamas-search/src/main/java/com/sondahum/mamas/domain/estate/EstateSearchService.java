@@ -49,7 +49,7 @@ public class EstateSearchService extends QuerydslRepositorySupport {
     }
 
     private BooleanExpression validity() {
-        return estate.validity.eq(true);
+        return estate.active.eq(true);
     }
 
     private BooleanExpression name(String name) {

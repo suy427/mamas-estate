@@ -1,8 +1,8 @@
 package com.sondahum.mamas.domain.bid;
 
-import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.domain.bid.exception.BidAlreadyExistException;
+import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.dto.BidDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,8 @@ public class BidInfoDao {
 
     // todo 호가는 똑같은걸 여러번 할 수도 있는거 아닐까..? --> 알려만 주자.
     public Bid createBid(BidDto.CreateReq bidDto) {
-        Optional<Bid> duplicatedBid = duplicateCheck(bidDto.toEntity());
+        Optional<Bid> duplicatedBid =
+                getDuplicatedBid(bidDto.getUserName(), bidDto.getEstateName(), bidDto.getAction());
 
         if (duplicatedBid.isPresent()) {
             bidRepository.save(duplicatedBid.get());
@@ -39,11 +40,9 @@ public class BidInfoDao {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Bid> duplicateCheck(Bid bid) {
-        Optional<Bid> optionalBid = bidRepository.findByUser_NameAndEstate_NameAndAction_AndActive(
-                bid.getUser().getName(),bid.getEstate().getName(), bid.getAction(), true);
-
-        return optionalBid;
+    public Optional<Bid> getDuplicatedBid(String userName, String estateName, Action action) {
+        return bidRepository.findByUser_NameAndEstate_NameAndAction_AndActive(
+                userName, estateName, action, true);
     }
 
     public Bid updateBidInfo(BidDto.UpdateReq dto) {

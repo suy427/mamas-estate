@@ -22,6 +22,9 @@ public class QUser extends EntityPathBase<User> {
 
     public final com.sondahum.mamas.common.model.QBaseEntity _super = new com.sondahum.mamas.common.model.QBaseEntity(this);
 
+    //inherited
+    public final BooleanPath active = _super.active;
+
     public final ListPath<com.sondahum.mamas.domain.bid.Bid, com.sondahum.mamas.domain.bid.QBid> bidList = this.<com.sondahum.mamas.domain.bid.Bid, com.sondahum.mamas.domain.bid.QBid>createList("bidList", com.sondahum.mamas.domain.bid.Bid.class, com.sondahum.mamas.domain.bid.QBid.class, PathInits.DIRECT2);
 
     public final ListPath<com.sondahum.mamas.domain.contract.Contract, com.sondahum.mamas.domain.contract.QContract> contractList = this.<com.sondahum.mamas.domain.contract.Contract, com.sondahum.mamas.domain.contract.QContract>createList("contractList", com.sondahum.mamas.domain.contract.Contract.class, com.sondahum.mamas.domain.contract.QContract.class, PathInits.DIRECT2);
@@ -42,9 +45,6 @@ public class QUser extends EntityPathBase<User> {
     public final StringPath phone = createString("phone");
 
     public final EnumPath<com.sondahum.mamas.domain.user.model.Role> role = createEnum("role", com.sondahum.mamas.domain.user.model.Role.class);
-
-    //inherited
-    public final BooleanPath validity = _super.validity;
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));

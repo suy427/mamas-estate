@@ -32,7 +32,7 @@ public class UserInfoDao {
         if (userDto.getName().isEmpty() && userDto.getPhone().isEmpty())
             throw new NotEnoughInfoException(userDto.getName(), userDto.getPhone());
 
-        Optional<User> duplicatedUser = duplicateCheck(userDto.toEntity());
+        Optional<User> duplicatedUser = getDuplicatedUser(userDto.getName(), userDto.getPhone());
 
         if (duplicatedUser.isPresent())
             throw new UserAlreadyExistException(duplicatedUser.get());// TODO 이름이 같으면 A,B표시 등등 생각해보기
@@ -64,14 +64,23 @@ public class UserInfoDao {
         return optionalUser.orElseThrow(() -> new NoSuchEntityException(id));
     }
 
+    public Optional<User> getDuplicatedUser(String info) {
+        if (Character.isDigit(info.charAt(0)))
+            return getDuplicatedUser("", info);
+        else
+            return getDuplicatedUser(info, "");
+    }
+
     @Transactional(readOnly = true)
-    public Optional<User> duplicateCheck(User user) {
+    public Optional<User> getDuplicatedUser(String name, String phone) {
         Optional<User> optionalUser;
 
-        if (user.getName().isEmpty()) { // 폰번호만 입력한 경우
-            optionalUser = userRepository.findByPhone_AndActive(user.getPhone(), true);
-        } else { // 이름만 등록한 경우
-            optionalUser = userRepository.findByName_AndActive(user.getName(), true);
+        if (name.isEmpty()) { // 폰번호만 입력한 경우
+            optionalUser = userRepository.findByPhone_AndActive(phone, true);
+        } else if (phone.isEmpty()) { // 이름만 입력한 경우
+            optionalUser = userRepository.findByName_AndActive(name, true);
+        } else { // 둘 다 입력한 경우
+            optionalUser = userRepository.findByName_AndPhone_AndActive(name, phone, true);
         }
         return  optionalUser;
     }

@@ -24,6 +24,9 @@ public class QEstate extends EntityPathBase<Estate> {
 
     public final com.sondahum.mamas.common.model.QBaseEntity _super = new com.sondahum.mamas.common.model.QBaseEntity(this);
 
+    //inherited
+    public final BooleanPath active = _super.active;
+
     public final com.sondahum.mamas.domain.estate.model.QAddress address;
 
     public final NumberPath<Double> area = createNumber("area", Double.class);
@@ -56,9 +59,6 @@ public class QEstate extends EntityPathBase<Estate> {
     public final DateTimePath<java.time.LocalDateTime> registeredDate = createDateTime("registeredDate", java.time.LocalDateTime.class);
 
     public final EnumPath<com.sondahum.mamas.domain.estate.model.EstateStatus> status = createEnum("status", com.sondahum.mamas.domain.estate.model.EstateStatus.class);
-
-    //inherited
-    public final BooleanPath validity = _super.validity;
 
     public QEstate(String variable) {
         this(Estate.class, forVariable(variable), INITS);

@@ -19,12 +19,13 @@ public class ContractInfoDao {
 
 
     public Contract createContractInfo(ContractDto.CreateReq contractDto) {
-        if (!isSameContract(contractDto))
+        Optional<Contract> duplicatedContract =
+                getDuplicatedContract(contractDto.getSeller(), contractDto.getBuyer(), contractDto.getEstate());
+
+        if (duplicatedContract.isPresent())
             throw new EntityAlreadyExistException(contractDto.getEstate());
 
-        Contract contract = contractRepository.save(contractDto.toEntity());
-
-        return contract;
+        return contractRepository.save(contractDto.toEntity());
     }
 
     public Contract getContractById(long id) {
@@ -35,12 +36,9 @@ public class ContractInfoDao {
     }
 
     @Transactional(readOnly = true)
-    boolean isSameContract(ContractDto.CreateReq contractDto) {
-        Optional<Contract> optionalContract =
-                contractRepository.findBySeller_NameAndBuyer_NameAndEstate_Name_AndActive(
-                        contractDto.getSeller(), contractDto.getBuyer(), contractDto.getEstate(), true);
-
-        return optionalContract.isPresent();
+    public Optional<Contract> getDuplicatedContract(String seller, String buyer, String estate) {
+        return contractRepository.findBySeller_NameAndBuyer_NameAndEstate_Name_AndActive(
+                        seller, buyer, estate, true);
     }
 
     public Contract updateContractInfo(ContractDto.UpdateReq dto) {

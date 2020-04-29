@@ -47,7 +47,7 @@ public class BidSearchService extends QuerydslRepositorySupport {
     }
 
     private BooleanExpression validity() {
-        return bid.validity.eq(true);
+        return bid.active.eq(true);
     }
 
     private BooleanExpression user(String user) {

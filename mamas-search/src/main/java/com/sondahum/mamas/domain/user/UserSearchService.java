@@ -68,7 +68,7 @@ public class UserSearchService extends QuerydslRepositorySupport {
     }
 
     private BooleanExpression validity() {
-        return user.validity.eq(true);
+        return user.active.eq(true);
     }
 
     private BooleanExpression name(String name) {

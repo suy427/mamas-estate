@@ -2,6 +2,7 @@ package com.sondahum.mamas.domain.estate;
 
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.domain.estate.exception.EstateAlreadyExistException;
+import com.sondahum.mamas.domain.estate.model.Address;
 import com.sondahum.mamas.dto.EstateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class EstateInfoDao {
 
 
     public Estate createEstateInfo(EstateDto.CreateReq estateDto) {
-        Optional<Estate> duplicatedEstate = duplicateCheck(estateDto.toEntity());
+        Optional<Estate> duplicatedEstate = getDuplicatedEstate(estateDto.getName(), estateDto.getAddress());
 
         if (duplicatedEstate.isPresent())
             throw new EstateAlreadyExistException(duplicatedEstate.get());
@@ -29,8 +30,8 @@ public class EstateInfoDao {
     }
 
     @Transactional(readOnly = true)
-    Optional<Estate> duplicateCheck(Estate estate) {
-        return estateRepository.findByNameAndAddress_AndActive(estate.getName(), estate.getAddress(), true);
+    public Optional<Estate> getDuplicatedEstate(String name, Address address) {
+        return estateRepository.findByNameAndAddress_AndActive(name, address, true);
     }
 
 

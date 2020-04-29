@@ -17,6 +17,6 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE FROM bid b SET b.active=true WHERE b.id=?1")
+    @Query("UPDATE FROM Bid b SET b.active=true WHERE b.id=?1")
     Optional<Bid> deleteByIdInQuery(Long id);
 }

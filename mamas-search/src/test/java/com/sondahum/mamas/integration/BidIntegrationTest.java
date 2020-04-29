@@ -23,7 +23,7 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
     public void 등록성공() throws Exception {
         BidDto.CreateReq dto =
                 BidDto.CreateReq.builder()
-                        .user("김철수")
+                        .userName("김철수")
                         .estateName("로열팰리스 1003호")
                         .action(Action.SELL).build();
 
@@ -39,7 +39,7 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
     public void 사람_이름이_없을때() throws Exception {
         BidDto.CreateReq dto =
                 BidDto.CreateReq.builder()
-                        .user("")
+                        .userName("")
                         .estateName("로열팰리스 1003호")
                         .action(Action.SELL).build();
 
@@ -55,7 +55,7 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
     public void 땅_정보가_없을때() throws Exception {
         BidDto.CreateReq dto =
                 BidDto.CreateReq.builder()
-                        .user("김철수")
+                        .userName("김철수")
                         .estateName("")
                         .action(Action.SELL).build();
 
@@ -71,7 +71,7 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
     public void 액션이_없을때() throws Exception {
         BidDto.CreateReq dto =
                 BidDto.CreateReq.builder()
-                        .user("김철수")
+                        .userName("김철수")
                         .estateName("로열팰리스 1003호")
                         .action(null).build();
 

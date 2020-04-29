@@ -21,16 +21,17 @@ public class BidDto {
     @AllArgsConstructor
     public static class CreateReq {
         @NotEmpty(message = "등록할 고객의 이름을 입력해주세요.")
-        private String user;
+        private String userName;
         @NotEmpty(message = "등록할 매물의 이름을 입력해주세요.")
         private String estateName;
+        @NotEmpty(message = "등록할 매물의 주소를 입력해주세요.")
         private Address estateAddress;
         private Range.Price price;
         @NotNull(message = "매매 종류를 입력해주세요.")
         private Action action;
 
         public Bid toEntity() {
-            User bidUser = User.builder().name(user).build();
+            User bidUser = User.builder().name(userName).build();
             Estate bidEstate = Estate.builder().name(estateName).build();
 
             return Bid.builder()

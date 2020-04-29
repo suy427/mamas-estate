@@ -17,6 +17,6 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE FROM contract c SET c.active=true WHERE c.id=?1")
+    @Query("UPDATE FROM Contract c SET c.active=true WHERE c.id=?1")
     Optional<Contract> deleteByIdInQuery(Long id);
 }

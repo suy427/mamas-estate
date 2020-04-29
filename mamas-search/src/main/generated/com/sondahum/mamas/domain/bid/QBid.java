@@ -27,6 +27,9 @@ public class QBid extends EntityPathBase<Bid> {
     public final EnumPath<com.sondahum.mamas.domain.bid.model.Action> action = createEnum("action", com.sondahum.mamas.domain.bid.model.Action.class);
 
     //inherited
+    public final BooleanPath active = _super.active;
+
+    //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     public final com.sondahum.mamas.domain.estate.QEstate estate;
@@ -41,9 +44,6 @@ public class QBid extends EntityPathBase<Bid> {
     public final EnumPath<com.sondahum.mamas.domain.bid.model.BidStatus> status = createEnum("status", com.sondahum.mamas.domain.bid.model.BidStatus.class);
 
     public final com.sondahum.mamas.domain.user.QUser user;
-
-    //inherited
-    public final BooleanPath validity = _super.validity;
 
     public QBid(String variable) {
         this(Bid.class, forVariable(variable), INITS);

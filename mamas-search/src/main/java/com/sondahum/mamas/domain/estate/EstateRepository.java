@@ -18,6 +18,6 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE FROM estate e SET e.active=true WHERE e.id=?1")
+    @Query("UPDATE FROM Estate e SET e.active=true WHERE e.id=?1")
     Optional<Estate> deleteByIdInQuery(Long id);
 }

@@ -46,7 +46,7 @@ public class ContractSearchService extends QuerydslRepositorySupport {
     }
 
     private BooleanExpression validity() {
-        return contract.validity.eq(true);
+        return contract.active.eq(true);
     }
 
     private BooleanExpression estate(String estate) {
