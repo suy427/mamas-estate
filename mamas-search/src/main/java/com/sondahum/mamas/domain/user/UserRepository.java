@@ -13,9 +13,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByName_AndActive(String name, boolean active);
     Optional<User> findByName_AndPhone_AndActive(String name, String phone, boolean active);
     Optional<User> findByPhone_AndActive(String phone, boolean active);
-
-    @Transactional
-    @Modifying
-    @Query("UPDATE FROM User u SET u.active=true WHERE u.id=?1")
-    Optional<User> deleteByIdInQuery(Long id);
 }

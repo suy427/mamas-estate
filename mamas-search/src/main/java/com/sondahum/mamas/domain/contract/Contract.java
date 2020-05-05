@@ -53,5 +53,8 @@ public class Contract extends BaseEntity implements Comparable<Contract> {
         return this.contractedDate.compareTo(o.getCreatedDate());
     }
 
-
+    @Override
+    public String toString() {
+        return estate+", 매도 : "+seller+", 매수 : "+buyer+" ("+contractedDate.toString()+")";
+    }
 }
