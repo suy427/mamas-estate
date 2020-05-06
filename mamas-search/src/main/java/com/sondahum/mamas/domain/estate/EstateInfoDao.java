@@ -29,6 +29,11 @@ public class EstateInfoDao {
         return estateRepository.save(estateDto.toEntity());
     }
 
+    public Estate findEstateByName(String name) {
+        return estateRepository.findByName_AndActive(name, true)
+                .orElseThrow(() -> new NoSuchEntityException(1L));
+    }
+
     @Transactional(readOnly = true)
     public Optional<Estate> getDuplicatedEstate(String name, Address address) {
         return estateRepository.findByNameAndAddress_AndActive(name, address, true);

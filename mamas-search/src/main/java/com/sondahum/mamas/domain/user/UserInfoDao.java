@@ -2,6 +2,7 @@ package com.sondahum.mamas.domain.user;
 
 
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
+import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.user.exception.NotEnoughInfoException;
 import com.sondahum.mamas.domain.user.exception.UserAlreadyExistException;
 import com.sondahum.mamas.dto.UserDto;
@@ -40,6 +41,11 @@ public class UserInfoDao {
         return userRepository.save(userDto.toEntity());
     }
 
+    public User findUserByName(String name) {
+        return userRepository.findByName_AndActive(name, true)
+                .orElseThrow(() -> new NoSuchEntityException(1L)); // todo exception 정의하기
+    }
+
     public User getUserById(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         optionalUser.orElseThrow(() -> new NoSuchEntityException(id));
@@ -59,22 +65,21 @@ public class UserInfoDao {
     }
 
     public User deleteUserInfo(Long id) {
-        User user = userRepository.deleteByIdInQuery(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchEntityException(id));
 
         user.setActive(false);
         return user;
     }
 
-    public Optional<User> getDuplicatedUser(String info) {
+    private Optional<User> getDuplicatedUser(String info) {
         if (Character.isDigit(info.charAt(0)))
             return getDuplicatedUser("", info);
         else
             return getDuplicatedUser(info, "");
     }
 
-    @Transactional(readOnly = true)
-    public Optional<User> getDuplicatedUser(String name, String phone) {
+    private Optional<User> getDuplicatedUser(String name, String phone) {
         Optional<User> optionalUser;
 
         if (name == null) { // 폰번호만 입력한 경우

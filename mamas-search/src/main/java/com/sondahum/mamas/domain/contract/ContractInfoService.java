@@ -1,10 +1,15 @@
 package com.sondahum.mamas.domain.contract;
 
 
+import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateInfoDao;
+import com.sondahum.mamas.domain.estate.EstateRepository;
+import com.sondahum.mamas.domain.estate.exception.EstateAlreadyExistException;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.user.UserInfoDao;
+import com.sondahum.mamas.domain.user.UserRepository;
+import com.sondahum.mamas.domain.user.exception.UserAlreadyExistException;
 import com.sondahum.mamas.dto.ContractDto;
 import com.sondahum.mamas.dto.EstateDto;
 import com.sondahum.mamas.dto.UserDto;
@@ -21,44 +26,68 @@ public class ContractInfoService {
     private final EstateInfoDao estateInfoDao;
     private final ContractInfoDao contractInfoDao;
 
-    private Contract currentContract;
+    public Contract createContractInfo(ContractDto.CreateReq contractDto) { // 맨 마지막
+        Contract contract = contractInfoDao.createContractInfo(contractDto);
 
-    public Contract createContractInfo(ContractDto.CreateReq contractDto) {
-        currentContract = contractInfoDao.createContractInfo(contractDto);
-        return currentContract;
+        // 없으면 만든다. --> specify에서 이미 만들었다.
+        User seller = userInfoDao.findUserByName(contractDto.getSeller());
+        User buyer = userInfoDao.findUserByName(contractDto.getBuyer());
+
+        if (seller.getName().equals(buyer.getName())) {
+            throw new RuntimeException(); // todo 스스로계약 안됨.
+        }
+
+        Estate estate = estateInfoDao.findEstateByName(contractDto.getEstate());
+
+        if (!estate.getOwner().equals(seller)) {
+            throw new RuntimeException(); // todo 잘못된 계약...
+        }
+
+        contract.setSeller(seller);
+        contract.setBuyer(buyer);
+        contract.setEstate(estate);
+
+        seller.addContractHistory(contract);
+        buyer.addContractHistory(contract);
+        estate.addContractHistory(contract);
+
+        return contract;
     }
 
-    public User updateSeller(UserDto.UpdateReq userDto) {
-        User seller = currentContract.getSeller();
-        seller.updateUserInfo(userDto);
-
-        return seller;
+    // seller, buyer 둘다쓰고, 중복체크는 클라이언트에서..
+    // update할때도 이걸 돌리자 --> 업데이트는 이름만 --> 아니다 각각의 service에서 바꾸도록 하자.
+    public User specifyUser(String name) {
+        return userInfoDao.createUserInfo(UserDto.CreateReq.builder().name(name).build());
     }
 
-    public User updateBuyer(UserDto.UpdateReq userDto) {
-        User buyer = currentContract.getBuyer();
-        buyer.updateUserInfo(userDto);
-
-        return buyer;
-    }
-
-    public Estate updateEstate(EstateDto.UpdateReq estateDto) {
-        Estate estate = currentContract.getEstate();
-        estate.updateEstateInfo(estateDto);
-
-        return estate;
+    public Estate specifyEstate(String name) {
+        return estateInfoDao.createEstateInfo(EstateDto.CreateReq.builder().name(name).build());
     }
 
     public Contract getContractById(long id) {
-        currentContract = contractInfoDao.getContractById(id);
-        return currentContract;
+        return contractInfoDao.getContractById(id);
     }
 
-    public Contract updateContractInfo(ContractDto.UpdateReq dto) {
-        return contractInfoDao.updateContractInfo(dto);
+    public Contract revertContract(long id) {
+        Contract originalContract = contractInfoDao.deleteContractInfo(id);
+
+        originalContract.getBuyer().getEstateList()
+                .removeIf(estate -> estate.equals(originalContract.getEstate()));
+        originalContract.getBuyer().getContractList()
+                .removeIf(contract -> contract.equals(originalContract));
+        originalContract.getSeller().getContractList()
+                .removeIf(contract -> contract.equals(originalContract));
+
+        originalContract.getSeller().addEstate(originalContract.getEstate());
+
+        return originalContract;
     }
 
-    public Contract deleteContractInfo(long id) {
-        return contractInfoDao.deleteContractInfo(id);
+    // 계약 내용은 바뀔 수 있다 + estate의 명칭까지..! --> 계약 내용만 바뀌도록..!
+    public Contract updateContractInfo(ContractDto.UpdateReq contractDto) {
+        Contract contract = contractInfoDao.getContractById(contractDto.getId());
+        contract.updateContractInfo(contractDto);
+
+        return contract;
     }
 }

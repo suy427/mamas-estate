@@ -9,7 +9,6 @@ import com.sondahum.mamas.domain.bid.exception.InvalidActionException;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.domain.contract.ContractInfoDao;
-import com.sondahum.mamas.domain.contract.exception.ContractAlreadyExistException;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateInfoDao;
 import com.sondahum.mamas.domain.estate.exception.EstateAlreadyExistException;
@@ -24,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.tree.ExpandVetoException;
 import java.util.List;
 
 @Service
@@ -37,18 +35,14 @@ public class UserInfoService {
     private final EstateInfoDao estateInfoDao;
     private final ContractInfoDao contractInfoDao;
 
-    private User currentUser;
-
-    public User createUserInfo(UserDto.CreateReq userDto) { // 기본정보 생성
+    public User createUserInfo(UserDto.CreateReq userDto) { // 기본정보 생성 --> 있으면 할필요 없다.
+        User user;
         try {
-            currentUser = userInfoDao.createUserInfo(userDto); // 이미 존재하면 있는유저 반환
+            user = userInfoDao.createUserInfo(userDto);
         } catch (UserAlreadyExistException e) {
-            currentUser = e.getUser();
-            e.setMessage(userDto.getName() + "님의 정보가 이미 존재합니다.");
-            throw e;
+            user = e.getUser();
         }
-
-        return currentUser;
+        return user;
     }
 
     // xhr로 수정분만 받아오니까
@@ -139,29 +133,28 @@ public class UserInfoService {
     @Transactional(rollbackFor = Exception.class)
     public Contract addNewContract(EstateDto.CreateReq estateDto, ContractDto.CreateReq contractDto) {
         User seller, buyer;
-        if (contractDto.getBuyer().equals(currentUser.getName())) {
-
+        if (contractDto.getBuyer().equals(currentUser.getName())) { //
+            buyer = currentUser;
+            seller = specifyUser(UserDto.CreateReq.builder().name(contractDto.getSeller()).build());
+        } else if(contractDto.getSeller().equals(currentUser.getName())) {
+            buyer = specifyUser(UserDto.CreateReq.builder().name(contractDto.getBuyer()).build());
+            seller = currentUser;
         } else {
-
+            throw new RuntimeException(); // todo define an exception for this situation.
         }
 
-        User seller = userInfoDao.createUserInfo(UserDto.CreateReq.builder().name(contractDto.getSeller()).build());
-        User buyer = userInfoDao.createUserInfo(UserDto.CreateReq.builder().name(contractDto.getBuyer()).build());
-        Contract contract = contractInfoDao.createContractInfo(contractDto);
         Estate estate = specifyEstate(estateDto);
-
-        if (estate.getOwner().equals(currentUser) && contractDto.getBuyer().equals(currentUser.getName())) {
+        if (estate.getOwner().equals(currentUser) && buyer.equals(currentUser)) {
             throw new InvalidActionException("자신의 땅은 사거나 임대할 수 없습니다.");
         }
 
+        Contract contract = contractInfoDao.createContractInfo(contractDto);
 
-        if (contractDto.getContractType().equals(ContractType.BARGAIN)) {// 소유관계가 바뀌어버림
+        //todo 임대 계약에 대해서 좀 더 생각해 볼것...! --> 일단은 사고 파는 것만!
+        if (contractDto.getContractType().equals(ContractType.SALE)) {// 소유관계가 바뀌어버림
             seller.getEstateList().removeIf(e -> e.equals(estate));
             buyer.addEstate(estate);
             estate.setOwner(buyer);
-        } else { //todo 임대 계약에 대해서 좀 더 생각해 볼것...! --> 일단은 사고 파는 것만!
-            seller.addEstate(estate);
-            estate.setOwner(seller);
         }
 
         contract.setSeller(seller);
@@ -175,7 +168,7 @@ public class UserInfoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Contract updateContract(ContractDto.UpdateReq contractDto) {
+    public Contract updateContract(ContractDto.UpdateReq contractDto) { // todo 의존관계가 있는 정보는 따로 넣어주는게 낫지 않을까..?
         Contract target = currentUser.getContractList().stream()
                 .filter(contract -> contract.getId().equals(contractDto.getId()))
                 .findFirst().orElseThrow(() -> new NoSuchEntityException(contractDto.getId()));
@@ -188,24 +181,33 @@ public class UserInfoService {
             target.setEstate(newEstate);
         }
 
-        // who is partner
+
+        // 계약사항중 사람에 수정사항이 있을경우
+        // 본인은 수정할 수 없고 상대방을 수정할 수 있다.
         if (!(target.getSeller().getName().equals(contractDto.getSeller())
                 && target.getBuyer().getName().equals(contractDto.getBuyer()))) {
             User contractor;
             String newContractorName;
 
-            if (contractDto.getBuyer().equals(currentUser.getName())) {
+            if (contractDto.getBuyer().equals(currentUser.getName())) { // 내가 매수자면 상대방은 매도자
                 contractor = target.getSeller();
                 target.setSeller(contractor);
+                newContractorName = contractDto.getSeller();
             } else {
                 contractor = target.getBuyer();
                 target.setBuyer(contractor);
+                newContractorName = contractDto.getBuyer();
             }
 
             contractor.getContractList().removeIf(contract -> contract.equals(target));
-            newContractorName = contractor.getName();
             User newContractor = specifyUser(UserDto.CreateReq.builder().name(newContractorName).build());
             newContractor.addContractHistory(target);
+
+            if (target.getSeller().equals(currentUser)) {
+                target.setBuyer(newContractor);
+            } else {
+                target.setSeller(newContractor);
+            }
         }
 
         target.updateContractInfo(contractDto);

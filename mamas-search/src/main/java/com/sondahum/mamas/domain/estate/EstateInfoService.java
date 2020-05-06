@@ -53,8 +53,9 @@ public class EstateInfoService {
     public Bid addNewBid(UserDto.CreateReq userDto, BidDto.CreateReq bidDto) {
         User user = specifyUser(userDto);
 
-        if (currentEstate.getOwner().equals(user) && bidDto.getAction().equals(Action.BUY)) {
-            throw new InvalidActionException("자신의 땅은 살 수 없습니다.");
+        if (currentEstate.getOwner().equals(user)) {
+            if (bidDto.getAction().equals(Action.LEASE) || bidDto.getAction().equals(Action.BUY))
+            throw new InvalidActionException("자신의 땅은 사거나 임대할  없습니다.");
         }
 
         Bid bid = specifyBid(bidDto);
@@ -69,12 +70,13 @@ public class EstateInfoService {
     }
 
     // 땅 고정. (유저, 가격)
+    @Transactional(rollbackFor = Exception.class) //
     public Bid updateBid(BidDto.UpdateReq bidDto) {
         Bid target = currentEstate.getBidList().stream()
                 .filter(bid -> bid.getId().equals(bidDto.getId()))
                 .findFirst().orElseThrow(() -> new NoSuchEntityException(bidDto.getId()));
 
-        if (!target.getUser().getName().equals(bidDto.getUser())) {
+        if (!target.getUser().getName().equals(bidDto.getUser())) { // 사람이 업데이트되는 경우
             target.getUser().getBidList().removeIf(bid -> bid.equals(target));
             User newUser = specifyUser(UserDto.CreateReq.builder().name(bidDto.getUser()).build());
             newUser.addBidHistory(target);
@@ -90,6 +92,7 @@ public class EstateInfoService {
         return currentEstate.getBidList();
     }
 
+    @Transactional(rollbackFor = Exception.class) //
     public User updateOwner(UserDto.UpdateReq userDto) {
         User user = currentEstate.getOwner();
         user.getEstateList().removeIf(estate -> estate.equals(currentEstate));
@@ -116,13 +119,29 @@ public class EstateInfoService {
     }
 
     public Contract updateContractHistory(ContractDto.UpdateReq contractDto) {
-        Contract contract = currentEstate.getContractHistoryList().stream()
+        Contract target = currentEstate.getContractHistoryList().stream()
                 .filter(element -> element.getId().equals(contractDto.getId()))
                 .findFirst().orElseThrow(() -> new NoSuchEntityException(contractDto.getId()));
 
-        contract.updateContractInfo(contractDto);
 
-        return contract;
+        if (!target.getBuyer().getName().equals(contractDto.getBuyer())) {
+            target.getBuyer().getContractList().removeIf(contract -> contract.equals(target));
+
+            User newBuyer = specifyUser(UserDto.CreateReq.builder().name(contractDto.getBuyer()).build());
+            newBuyer.addContractHistory(target);
+            target.setBuyer(newBuyer);
+        }
+
+        if (!target.getSeller().getName().equals(contractDto.getSeller())) {
+            target.getSeller().getContractList().removeIf(contract -> contract.equals(target));
+
+            User newSeller = specifyUser(UserDto.CreateReq.builder().name(contractDto.getSeller()).build());
+            newSeller.addContractHistory(target);
+            target.setSeller(newSeller);
+        }
+
+        target.updateContractInfo(contractDto);
+        return target;
     }
 
     public List<Contract> deleteContractHistory(Long id) {

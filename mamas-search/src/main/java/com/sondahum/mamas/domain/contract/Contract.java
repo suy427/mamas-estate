@@ -48,6 +48,10 @@ public class Contract extends BaseEntity implements Comparable<Contract> {
         this.contractedDate = contractDto.getContractedDate();
     }
 
+    public boolean isValidAt(LocalDateTime date) {
+        return expireDate.isAfter(date);
+    }
+
     @Override
     public int compareTo(Contract o) {
         return this.contractedDate.compareTo(o.getCreatedDate());

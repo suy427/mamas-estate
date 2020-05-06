@@ -25,7 +25,6 @@ public class EstateDto {
         @NotEmpty(message = "등록할 부동산 주소를 입력해주세요.")
         private Address address;
         private Double area;
-        private String ownerName;
         private EstateStatus status;
         private EstateType estateType;
         private ContractType contractType;

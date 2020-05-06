@@ -2,6 +2,7 @@ package com.sondahum.mamas.domain.contract;
 
 import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
+import com.sondahum.mamas.domain.contract.exception.ContractAlreadyExistException;
 import com.sondahum.mamas.dto.ContractDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +19,23 @@ public class ContractInfoDao {
     private final ContractRepository contractRepository;
 
 
+    // contract의 duplicate는 expire만
     public Contract createContractInfo(ContractDto.CreateReq contractDto) {
-        Optional<Contract> duplicatedContract =
-                getDuplicatedContract(contractDto.getSeller(), contractDto.getBuyer(), contractDto.getEstate());
+        Optional<Contract> optionalContract = isDuplicated(contractDto);
+        Contract contract;
 
-        if (duplicatedContract.isPresent())
-            throw new EntityAlreadyExistException(contractDto.getEstate());
+        if (optionalContract.isPresent()) { // 있던거
+            contract = optionalContract.get();
+            if (contract.isValidAt(contractDto.getExpireDate())) { // 기한 내면 중복 불가
+                throw new ContractAlreadyExistException(contract);
+            } else {
+                contract = contractRepository.save(contractDto.toEntity()); // 기한 지나면 중복 가능
+            }
+        } else {
+            contract = contractRepository.save(contractDto.toEntity()); // 없던거면 저장
+        }
 
-        return contractRepository.save(contractDto.toEntity());
+        return contract;
     }
 
     public Contract getContractById(long id) {
@@ -36,9 +46,12 @@ public class ContractInfoDao {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Contract> getDuplicatedContract(String seller, String buyer, String estate) {
+    public Optional<Contract> isDuplicated(ContractDto.CreateReq contractDto) {
         return contractRepository.findBySeller_NameAndBuyer_NameAndEstate_Name_AndActive(
-                        seller, buyer, estate, true);
+                contractDto.getSeller()
+                , contractDto.getBuyer()
+                , contractDto.getEstate()
+                , true);
     }
 
     public Contract updateContractInfo(ContractDto.UpdateReq dto) {
@@ -52,7 +65,7 @@ public class ContractInfoDao {
 
     public Contract deleteContractInfo(Long id) {
         Contract contract = contractRepository.findById(id)
-            .orElseThrow(() -> new NoSuchEntityException(id));
+                .orElseThrow(() -> new NoSuchEntityException(id));
 
         contract.setActive(false);
         return contract;

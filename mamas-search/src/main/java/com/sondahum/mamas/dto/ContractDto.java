@@ -41,10 +41,9 @@ public class ContractDto {
     @Getter
     public static class UpdateReq {
         private Long id;
-        private String seller;
-        private String buyer;
-        private String estate;
         private Long price;
+        private ContractType contractType;
+        private LocalDateTime expireDate;
         private LocalDateTime contractedDate;
     }
 

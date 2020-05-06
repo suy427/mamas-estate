@@ -14,7 +14,7 @@ public class ContractAlreadyExistException extends RuntimeException {
     private String message;
     private final Contract contract;
 
-    ContractAlreadyExistException(Contract contract) {
+    public ContractAlreadyExistException(Contract contract) {
         this.contract = contract;
     }
 

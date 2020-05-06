@@ -76,25 +76,4 @@ public class BidJpaTest {
         MatcherAssert.assertThat(savedEstate.getOwner(), CoreMatchers.is(savedUser));
 //        MatcherAssert.assertThat(savedEstate.getBidList().size(), CoreMatchers.is(0));
     }
-
-//    @Test
-//    void 유저_호가_컬렉션_추가() {
-//        User user1 = TestValueGenerator.userInfoGenerator();
-//        Estate estate1 = TestValueGenerator.estateInfoGenerator(user1);
-//
-//        User savedUser1 = userRepository.save(user1);
-//        Estate savedEstate1 = estateRepository.save(estate1);
-//
-//        Bid bid1 = TestValueGenerator.bidInfoGenerator(savedUser1, savedEstate1);
-//
-//        Bid savedBid1 = bidRepository.save(bid1);
-//
-//        MatcherAssert.assertThat(savedUser1, CoreMatchers.is(user1));
-//
-//
-//        user1.getBidList().add(bid1);
-//
-//
-//    }
-
 }
