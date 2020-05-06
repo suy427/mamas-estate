@@ -23,28 +23,28 @@ public class EstateController {
 
 
     @PostMapping
-    public EstateDto.DetailResponse createEstate(@RequestBody @Valid EstateDto.CreateReq estateDto) {
-        return new EstateDto.DetailResponse(estateInfoService.createEstateInfo(estateDto));
+    public EstateDto.DetailForm createEstate(@RequestBody @Valid EstateDto.CreateReq estateDto) {
+        return new EstateDto.DetailForm(estateInfoService.createEstateInfo(estateDto));
     }
 
     @GetMapping
-    public Page<EstateDto.SimpleResponse> searchEstates(@RequestParam(name = "query", required = false) final EstateDto.SearchReq query, final PageRequest pageRequest) {
-        return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(EstateDto.SimpleResponse::new);
+    public Page<EstateDto.SimpleForm> searchEstates(@RequestParam(name = "query", required = false) final EstateDto.SearchReq query, final PageRequest pageRequest) {
+        return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(SimpleForm::new);
     }
 
     @GetMapping(value = "/{id}")
-    public EstateDto.DetailResponse getEstateDetail(@PathVariable final long id) {
-        return new EstateDto.DetailResponse(estateInfoService.getEstateById(id));
+    public EstateDto.DetailForm getEstateDetail(@PathVariable final long id) {
+        return new EstateDto.DetailForm(estateInfoService.getEstateById(id));
     }
 
     @PutMapping
-    public EstateDto.DetailResponse updateEstateInfo(@RequestBody final EstateDto.UpdateReq dto) {
-        return new EstateDto.DetailResponse(estateInfoService.updateEstateInfo(dto));
+    public EstateDto.DetailForm updateEstateInfo(@RequestBody final EstateDto.UpdateReq dto) {
+        return new EstateDto.DetailForm(estateInfoService.updateEstateInfo(dto));
     }
 
     @DeleteMapping(value = "/{id}")
-    public EstateDto.DetailResponse deleteContract(@PathVariable final long id) {
-        return new EstateDto.DetailResponse(estateInfoService.deleteEstateInfo(id));
+    public EstateDto.DetailForm deleteContract(@PathVariable final long id) {
+        return new EstateDto.DetailForm(estateInfoService.deleteEstateInfo(id));
     }
 
 

@@ -59,7 +59,7 @@ public class ContractDto {
 
 
     @Getter
-    public static class DetailResponse {
+    public static class DetailForm {
         private Long id;
         private String seller;
         private String buyer;
@@ -67,7 +67,7 @@ public class ContractDto {
         private Long price;
         private LocalDateTime contractedDate;
 
-        public DetailResponse(Contract contract) {
+        public DetailForm(Contract contract) {
             this.id = contract.getId();
             this.seller = contract.getSeller().getName();
             this.buyer = contract.getBuyer().getName();

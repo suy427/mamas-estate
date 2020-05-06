@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Sort;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,9 +78,9 @@ public class UserDto {
         private String name;
         private String phone;
         private Role role;
-        private List<EstateDto.SimpleResponse> owningEstateList; // 누르면 estate list pop up --> 파는거, 이미 계약된거 포함
+        private List<EstateDto.SimpleForm> owningEstateList; // 누르면 estate list pop up --> 파는거, 이미 계약된거 포함
         private List<BidDto.DetailResponse> onTradingList;
-        private List<ContractDto.DetailResponse> contractHistoryList;
+        private List<ContractDto.DetailForm> contractHistoryList;
 
 
         public DetailResponse(User user) {
@@ -89,9 +88,9 @@ public class UserDto {
             this.name = user.getName();
             this.phone = user.getPhone();
             this.role = user.getRole();
-            this.owningEstateList = user.getEstateList().stream().map(EstateDto.SimpleResponse::new).collect(Collectors.toList());      // estate
+            this.owningEstateList = user.getEstateList().stream().map(SimpleForm::new).collect(Collectors.toList());      // estate
             this.onTradingList = user.getBidList().stream().map(BidDto.DetailResponse::new).collect(Collectors.toList());        // bid
-            this.contractHistoryList = user.getContractList().stream().map(ContractDto.DetailResponse::new).collect(Collectors.toList());   // contract
+            this.contractHistoryList = user.getContractList().stream().map(DetailForm::new).collect(Collectors.toList());   // contract
         }
     }
 

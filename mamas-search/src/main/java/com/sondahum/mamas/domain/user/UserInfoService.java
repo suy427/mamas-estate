@@ -12,7 +12,6 @@ import com.sondahum.mamas.domain.contract.ContractInfoDao;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateInfoDao;
 import com.sondahum.mamas.domain.estate.exception.EstateAlreadyExistException;
-import com.sondahum.mamas.domain.estate.model.ContractType;
 import com.sondahum.mamas.domain.user.exception.UserAlreadyExistException;
 import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.dto.ContractDto;
@@ -46,48 +45,39 @@ public class UserInfoService {
     }
 
     // xhr로 수정분만 받아오니까
-    // 방금 넣은 애만 return해주자
+    // 기본정보 외에 연관관계가 있는 정보들은 일단 유저 등록 후에 가능.
     @Transactional(rollbackFor = Exception.class)
-    public Estate addNewEstate(EstateDto.CreateReq estateDto) {
-        Estate estate = specifyEstate(estateDto); // 일단 영속화부터 시키고보니까, 이게 실패하면 다시 지워줘야한다 (not soft delete)
+    public List<Estate> addNewEstate(long id, EstateDto.CreateReq estateDto) {
+        User currentUser = userInfoDao.getUserById(id);
+        Estate newEstate = estateInfoDao.createEstateInfo(estateDto);
 
-        if (!estate.getOwner().equals(currentUser)) { // 새로운 땅.
-            if (estate.getOwner() == null)
-                estate.setOwner(currentUser);
-            else {
-                User other = estate.getOwner();
-                throw new UserAlreadyExistException(other.getName() + " 소유의 땅입니다.", other); // 다른 사람의 땅을 등록하려고 했을 때.
-            }
-        } else {
-            throw new EstateAlreadyExistException(estate); // 이미 있는 땅을 등록하려고 했을 때.
-        }
 
-        currentUser.addEstate(estate);
-        return estate;
+
     }
 
     // estate가 갖고있을 수 있는 정보 --> owner, bid, contract
     // todo 그럼 얘도 다 가지고 있어야하나...? --> 복잡한 수정이 있어야할 경우엔, 아예 estate 관리로 넘어가자.
     // 그러니까 여기서는 기본정보 + owner정도까지만..!
     public Estate updateEstate(EstateDto.UpdateReq estateDto) {
-        Estate target = currentUser.getEstateList().stream()
-                .filter(estate -> estate.getId().equals(estateDto.getId()))
-                .findFirst().orElseThrow(() -> new NoSuchEntityException(estateDto.getId()));
+        Estate originalEstate = estateInfoDao.getEstateById(estateDto.getId());
 
-        target.updateEstateInfo(estateDto); // 예상) 영속화된 객체는 업데이트 됐을 때, 다른 객체와의 연관관계에서도 변경사항이 반영되있을 것이다.
-        return target;
+        return originalEstate.updateEstateInfo(estateDto);
     }
 
     // 여기서 땅을 지워버리게 되면, 이 땅의 bid, contract
-    public List<Estate> deleteEstate(Long id) { // 삭제는 수행 후 리스트를 갱신해서 보여준다.
-        estateInfoDao.deleteEstateInfo(id);
+    public List<Estate> deleteEstate(EstateDto.SimpleForm estateDto) { // 삭제는 수행 후 리스트를 갱신해서 보여준다.
+        estateInfoDao.deleteEstateInfo(estateDto.getId());
+
+        User currentUser = userInfoDao.findUserByName(estateDto.getName());
+        currentUser.getEstateList().removeIf(estate -> estate.getId().equals(estateDto.getId()));
+
         return currentUser.getEstateList();
     }
 
 
     @Transactional(rollbackFor = Exception.class)
     public Bid addNewBid(EstateDto.CreateReq estateDto, BidDto.CreateReq bidDto) { // 땅부터 정하고 넘어가는걸로..!
-        Estate estate = specifyEstate(estateDto);
+        Estate estate = addNewEstate(estateDto);
 
         if (estate.getOwner().equals(currentUser)) {
             if (bidDto.getAction().equals(Action.BUY) || bidDto.getAction().equals(Action.LEASE))
@@ -116,7 +106,7 @@ public class UserInfoService {
         if (!target.getEstate().getName().equals(bidDto.getEstate())) { // estate를 바꾸는 경우
             target.getEstate().getBidList().removeIf(bid -> bid.equals(target));
 
-            Estate newEstate = specifyEstate(EstateDto.CreateReq.builder().name(bidDto.getEstate()).build());
+            Estate newEstate = addNewEstate(EstateDto.CreateReq.builder().name(bidDto.getEstate()).build());
             target.setEstate(newEstate);
             newEstate.addBidHistory(target);
         }
@@ -131,38 +121,10 @@ public class UserInfoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Contract addNewContract(EstateDto.CreateReq estateDto, ContractDto.CreateReq contractDto) {
-        User seller, buyer;
-        if (contractDto.getBuyer().equals(currentUser.getName())) { //
-            buyer = currentUser;
-            seller = specifyUser(UserDto.CreateReq.builder().name(contractDto.getSeller()).build());
-        } else if(contractDto.getSeller().equals(currentUser.getName())) {
-            buyer = specifyUser(UserDto.CreateReq.builder().name(contractDto.getBuyer()).build());
-            seller = currentUser;
-        } else {
-            throw new RuntimeException(); // todo define an exception for this situation.
-        }
+    public List<ContractDto.DetailForm> addNewContract(long id, ContractDto.CreateReq contractDto) {
+        User currentUser = userInfoDao.getUserById(id);
 
-        Estate estate = specifyEstate(estateDto);
-        if (estate.getOwner().equals(currentUser) && buyer.equals(currentUser)) {
-            throw new InvalidActionException("자신의 땅은 사거나 임대할 수 없습니다.");
-        }
-
-        Contract contract = contractInfoDao.createContractInfo(contractDto);
-
-        //todo 임대 계약에 대해서 좀 더 생각해 볼것...! --> 일단은 사고 파는 것만!
-        if (contractDto.getContractType().equals(ContractType.SALE)) {// 소유관계가 바뀌어버림
-            seller.getEstateList().removeIf(e -> e.equals(estate));
-            buyer.addEstate(estate);
-            estate.setOwner(buyer);
-        }
-
-        contract.setSeller(seller);
-        contract.setBuyer(buyer);
-        contract.setEstate(estate);
-
-        buyer.addContractHistory(contract);
-        seller.addContractHistory(contract);
+        currentUser.addContractHistory();
 
         return contract;
     }
@@ -176,7 +138,7 @@ public class UserInfoService {
         if (!target.getEstate().getName().equals(contractDto.getEstate())) { // estate가 바뀌는 경우
             target.getEstate().getContractHistoryList().removeIf(estate -> estate.equals(target));
 
-            Estate newEstate = specifyEstate(EstateDto.CreateReq.builder().name(contractDto.getEstate()).build());
+            Estate newEstate = addNewEstate(EstateDto.CreateReq.builder().name(contractDto.getEstate()).build());
             newEstate.addContractHistory(target);
             target.setEstate(newEstate);
         }
@@ -220,8 +182,7 @@ public class UserInfoService {
     }
 
     public User getUserById(long id) {
-        currentUser = userInfoDao.getUserById(id);
-        return currentUser;
+        return userInfoDao.getUserById(id);
     }
 
     public User updateUserInfo(UserDto.UpdateReq dto) {
@@ -232,15 +193,25 @@ public class UserInfoService {
         return userInfoDao.deleteUserInfo(id);
     }
 
-    private Estate specifyEstate(EstateDto.CreateReq estateDto) {
+    @Transactional(rollbackFor = Exception.class)
+    public Estate addNewEstate(String userName, EstateDto.CreateReq estateDto) {
+        User currentUser = userInfoDao.findUserByName(userName);
         Estate estate;
 
-        try {
+        try { // 새로 등록하는 매물
             estate = estateInfoDao.createEstateInfo(estateDto);
-        } catch (EstateAlreadyExistException e) {
+            estate.setOwner(currentUser);
+        } catch (EstateAlreadyExistException e) { // 이미 있는데
             estate = e.getEstate();
-            e.setMessage("중복된 정보가 존재합니다. [ " + estate.getName() + " ]");
+            if (estate.getOwner() == null) { // 주인이 없으면 가능
+                estate.setOwner(currentUser);
+            } else {
+                e.setMessage("이미 소유주가 있습니다. [ "+estate.getOwner().getName()+" ]");
+                throw e;
+            }
         }
+        currentUser.addEstate(estate);
+
         return estate;
     }
 
@@ -267,5 +238,9 @@ public class UserInfoService {
             e.setMessage("중복된 정보가 존재합니다. [ " + user.getName() + ", " + user.getPhone() + " ]");
         }
         return user;
+    }
+
+    public Contract specifyContract(ContractDto.CreateReq contractDto) {
+        return contractInfoDao.createContractInfo(contractDto);
     }
 }

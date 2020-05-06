@@ -3,7 +3,6 @@ package com.sondahum.mamas.controller;
 import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.domain.bid.BidInfoService;
 import com.sondahum.mamas.domain.contract.ContractInfoService;
-import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateInfoService;
 import com.sondahum.mamas.domain.user.UserInfoService;
 import com.sondahum.mamas.dto.EstateDto;
@@ -15,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -35,9 +36,54 @@ class UserController {
     }
 
     @PostMapping
-    public Page<EstateDto.SimpleResponse> addEstate(@RequestBody @Valid EstateDto.CreateReq estateDto) {
-        Estate newEstate = estateInfoService.createEstateInfo(estateDto);
-        userInfoService.addNewEstate(newEstate);
+    public EstateDto.SimpleForm addNewEstate(String userName, EstateDto.CreateReq estateDto) {
+        return new EstateDto.SimpleForm(userInfoService.addNewEstate(userName, estateDto));
+    }
+
+    @PutMapping
+    public EstateDto.SimpleForm updateEstate(EstateDto.UpdateReq estateDto) {
+        return new EstateDto.SimpleForm(userInfoService.updateEstate(estateDto));
+    }
+
+    @DeleteMapping
+    public List<EstateDto.SimpleForm> deleteEstate(EstateDto.SimpleForm estateDto) {
+        return userInfoService.deleteEstate(estateDto).stream()
+                .map(EstateDto.SimpleForm::new)
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping
+    public EstateDto.SimpleForm addNewContract(String userName, EstateDto.CreateReq estateDto) {
+        return new EstateDto.SimpleForm(userInfoService.addNewEstate(userName, estateDto));
+    }
+
+    @PutMapping
+    public EstateDto.SimpleForm updateContract(EstateDto.UpdateReq estateDto) {
+        return new EstateDto.SimpleForm(userInfoService.updateEstate(estateDto));
+    }
+
+    @DeleteMapping
+    public List<EstateDto.SimpleForm> deleteContract(EstateDto.SimpleForm estateDto) {
+        return userInfoService.deleteEstate(estateDto).stream()
+                .map(EstateDto.SimpleForm::new)
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping
+    public EstateDto.SimpleForm addNewBid(String userName, EstateDto.CreateReq estateDto) {
+        return new EstateDto.SimpleForm(userInfoService.addNewEstate(userName, estateDto));
+    }
+
+    @PutMapping
+    public EstateDto.SimpleForm updateBid(EstateDto.UpdateReq estateDto) {
+        return new EstateDto.SimpleForm(userInfoService.updateEstate(estateDto));
+    }
+
+    @DeleteMapping
+    public List<EstateDto.SimpleForm> deleteBid(EstateDto.SimpleForm estateDto) {
+        return userInfoService.deleteEstate(estateDto).stream()
+                .map(EstateDto.SimpleForm::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping

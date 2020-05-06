@@ -52,7 +52,6 @@ public class EstateDto {
         private String name;
         private Address address;
         private Double area;
-        private String ownerName;
         private EstateStatus status;
         private EstateType estateType;
         private ContractType contractType;
@@ -74,17 +73,20 @@ public class EstateDto {
         private List<Sort.Order> sortOrders;
     }
 
-    public static class SimpleResponse {
+    @Getter
+    public static class SimpleForm {
         private Long id;
         private String name;
+        private String ownerName;
         private String address3; // most detailed address
         private EstateStatus status;
         private EstateType estateType;
         private ContractType contractType;
 
-        public SimpleResponse(Estate estate) {
+        public SimpleForm(Estate estate) {
             this.id = estate.getId();
             this.name = estate.getName();
+            this.ownerName = estate.getOwner().getName();
             this.address3 = estate.getAddress().getAddress3();
             this.status = estate.getStatus();
             this.contractType = estate.getContractType();
@@ -95,7 +97,7 @@ public class EstateDto {
 
 
     @Getter
-    public static class DetailResponse {
+    public static class DetailForm {
         private Long id;
         private String name;
         private Address address;
@@ -107,7 +109,7 @@ public class EstateDto {
         private Range.Price ownerRequirePriceRange;
         private Range.Price marketPriceRange;
 
-        public DetailResponse(Estate estate) {
+        public DetailForm(Estate estate) {
             this.id = estate.getId();
             this.name = estate.getName();
             this.address = estate.getAddress();

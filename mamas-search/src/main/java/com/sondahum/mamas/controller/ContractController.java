@@ -29,32 +29,32 @@ public class ContractController {
     }
 
     @PostMapping
-    public EstateDto.SimpleResponse specifyEstate(String name) {
-        return new EstateDto.SimpleResponse(contractInfoService.specifyEstate(name));
+    public EstateDto.SimpleForm specifyEstate(String name) {
+        return new EstateDto.SimpleForm(contractInfoService.specifyEstate(name));
     }
 
     @PostMapping
-    public ContractDto.DetailResponse createContract(@RequestBody @Valid ContractDto.CreateReq userDto) {
-        return new ContractDto.DetailResponse(contractInfoService.createContractInfo(userDto));
+    public ContractDto.DetailForm createContract(@RequestBody @Valid ContractDto.CreateReq userDto) {
+        return new ContractDto.DetailForm(contractInfoService.createContractInfo(userDto));
     }
 
     @GetMapping
-    public Page<ContractDto.DetailResponse> searchContracts(@RequestParam(name = "query", required = false) final ContractDto.SearchReq query, final PageRequest pageRequest) {
-        return contractSearchService.search(query, pageRequest.of(query.getSortOrders())).map(ContractDto.DetailResponse::new);
+    public Page<ContractDto.DetailForm> searchContracts(@RequestParam(name = "query", required = false) final ContractDto.SearchReq query, final PageRequest pageRequest) {
+        return contractSearchService.search(query, pageRequest.of(query.getSortOrders())).map(DetailForm::new);
     }
 
     @PutMapping
-    public ContractDto.DetailResponse updateContractInfo(@RequestBody final ContractDto.UpdateReq dto) {
-        return new ContractDto.DetailResponse(contractInfoService.updateContractInfo(dto));
+    public ContractDto.DetailForm updateContractInfo(@RequestBody final ContractDto.UpdateReq dto) {
+        return new ContractDto.DetailForm(contractInfoService.updateContractInfo(dto));
     }
 
     @GetMapping(value = "/{id}")
-    public ContractDto.DetailResponse getEstateDetail(@PathVariable final long id) {
-        return new ContractDto.DetailResponse(contractInfoService.getContractById(id));
+    public ContractDto.DetailForm getEstateDetail(@PathVariable final long id) {
+        return new ContractDto.DetailForm(contractInfoService.getContractById(id));
     }
 
     @DeleteMapping(value = "/{id}")
-    public ContractDto.DetailResponse revertContract(@PathVariable final long id) {
-        return new ContractDto.DetailResponse(contractInfoService.revertContract(id));
+    public ContractDto.DetailForm revertContract(@PathVariable final long id) {
+        return new ContractDto.DetailForm(contractInfoService.revertContract(id));
     }
 }
