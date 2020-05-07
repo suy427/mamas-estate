@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @Slf4j
 @RequiredArgsConstructor
 class UserController {
@@ -35,7 +35,7 @@ class UserController {
     private final EstateSearchService estateSearchService;
 
 
-    @PostMapping(value = "/register")
+    @PostMapping(value = "/user")
     public UserDto.DetailForm createUser(@RequestBody @Valid UserDto.CreateReq userDto) {
         return new UserDto.DetailForm(userInfoService.createUserInfo(userDto));
     }
@@ -43,8 +43,9 @@ class UserController {
     // bidding할 때, bidding할 땅 찾을때.. --> contract할 때도 똑같이 쓴다.
     // 없으면 클라이언트에서 등록 폼 주고 addNewEstate를 한다. --> 없는건 못한다.
     // 결과로 나온 땅을 골라서 누르면 bid 입력폼으로 간다. --> contract입력폼도 가능. --> 이건 둘 다 클라에서..
-    @GetMapping(value = "")
-    public List<EstateDto.SimpleForm> specifyEstate(String query) {
+    // 얘는 그냥 estatecontroller에 가고 팝업을 estateController를 통해서 띄워야하나..?
+    @GetMapping(value = "/estate")
+    public List<EstateDto.SimpleForm> specifyEstate(@RequestParam(name = "query") String query) {
         return estateSearchService.specify(query).stream()
                 .map(EstateDto.SimpleForm::new)
                 .collect(Collectors.toList());
@@ -52,15 +53,15 @@ class UserController {
 
     @PostMapping(value = "/estate")
     public EstateDto.SimpleForm addNewEstate(EstateDto.CreateReq estateDto) {
-        return new EstateDto.SimpleForm(estateInfoService.createEstateInfo(estateDto));
+        return new EstateDto.SimpleForm(estateInfoService.createEstateInfo(id, estateDto));
     }
 
-    @PutMapping
-    public EstateDto.SimpleForm updateEstate(EstateDto.UpdateReq estateDto) {
+    @PutMapping(value = "{user_id}/estate/{estate_id}")
+    public EstateDto.SimpleForm updateEstate(EstateDto.UpdateReq estateDto, @PathVariable String user_id, @PathVariable String estate_id) {
         return new EstateDto.SimpleForm(estateInfoService.updateEstateInfo(estateDto));
     }
 
-    @PutMapping
+    @PutMapping(value = "")
     public EstateDto.SimpleForm deleteEstate(EstateDto.SimpleForm estateDto) {
         return new EstateDto.SimpleForm(estateInfoService.deleteEstateInfo(estateDto.getId()));
     }

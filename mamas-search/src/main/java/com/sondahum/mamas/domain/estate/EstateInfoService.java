@@ -36,7 +36,6 @@ public class EstateInfoService {
 
     public Estate createEstateInfo(EstateDto.CreateReq estateDto) {
         Estate estate;
-        User owner;
 
         try {
             estate = estateInfoDao.createEstateInfo(estateDto);
@@ -46,7 +45,7 @@ public class EstateInfoService {
             throw e;
         }
 
-        owner = userInfoDao.findUserByName(estateDto.getOwnerName());
+        User owner = userInfoDao.getUserById(id);
         estate.setOwner(owner);
         owner.addEstate(estate);
 
