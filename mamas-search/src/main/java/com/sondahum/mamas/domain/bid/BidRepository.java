@@ -14,9 +14,4 @@ import java.util.Optional;
 public interface BidRepository extends JpaRepository<Bid, Long> {
 
     Optional<Bid> findByUser_NameAndEstate_NameAndAction_AndActive(String user, String estate, Action action, boolean active);
-
-    @Transactional
-    @Modifying
-    @Query("UPDATE FROM Bid b SET b.active=true WHERE b.id=?1")
-    Optional<Bid> deleteByIdInQuery(Long id);
 }

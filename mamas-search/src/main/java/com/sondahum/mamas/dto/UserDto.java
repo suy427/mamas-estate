@@ -89,7 +89,7 @@ public class UserDto {
             this.phone = user.getPhone();
             this.role = user.getRole();
             this.owningEstateList = user.getEstateList().stream().map(EstateDto.SimpleForm::new).collect(Collectors.toList());      // estate
-            this.onTradingList = user.getBidList().stream().map(DetailForm::new).collect(Collectors.toList());        // bid
+            this.onTradingList = user.getBidList().stream().map(BidDto.DetailForm::new).collect(Collectors.toList());        // bid
             this.contractHistoryList = user.getContractList().stream().map(ContractDto.DetailForm::new).collect(Collectors.toList());   // contract
         }
     }
