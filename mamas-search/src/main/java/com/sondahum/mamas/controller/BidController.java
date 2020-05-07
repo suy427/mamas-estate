@@ -1,7 +1,6 @@
 package com.sondahum.mamas.controller;
 
 import com.sondahum.mamas.domain.bid.Bid;
-import com.sondahum.mamas.domain.bid.BidInfoDao;
 import com.sondahum.mamas.domain.bid.BidInfoService;
 import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.common.model.PageRequest;
@@ -24,28 +23,28 @@ public class BidController {
 
 
     @PostMapping
-    public BidDto.DetailResponse createBid(@RequestBody @Valid BidDto.CreateReq bidDto) {
+    public BidDto.DefailForm createBid(@RequestBody @Valid BidDto.CreateReq bidDto) {
         Bid created = bidInfoService.createBid(bidDto);
-        return new BidDto.DetailResponse(created);
+        return new BidDto.DefailForm(created);
     }
 
     @GetMapping
-    public Page<BidDto.DetailResponse> searchBids(@RequestParam(name = "query", required = false) final BidDto.SearchReq query, final PageRequest pageRequest) {
-        return bidSearchService.search(query, pageRequest.of(query.getSortOrders())).map(BidDto.DetailResponse::new);
+    public Page<BidDto.DefailForm> searchBids(@RequestParam(name = "query", required = false) final BidDto.SearchReq query, final PageRequest pageRequest) {
+        return bidSearchService.search(query, pageRequest.of(query.getSortOrders())).map(DefailForm::new);
     }
 
     @GetMapping(value = "/{id}")
-    public BidDto.DetailResponse getBidDetail(@PathVariable final long id) {
-        return new BidDto.DetailResponse(bidInfoService.getBidById(id));
+    public BidDto.DefailForm getBidDetail(@PathVariable final long id) {
+        return new BidDto.DefailForm(bidInfoService.getBidById(id));
     }
 
     @PutMapping
-    public BidDto.DetailResponse updateBidInfo(@RequestBody final BidDto.UpdateReq dto) {
-        return new BidDto.DetailResponse(bidInfoService.updateBidInfo(dto));
+    public BidDto.DefailForm updateBidInfo(@RequestBody final BidDto.UpdateReq dto) {
+        return new BidDto.DefailForm(bidInfoService.updateBidInfo(dto));
     }
 
     @DeleteMapping(value = "/{id}")
-    public BidDto.DetailResponse deleteBid(@PathVariable final long id) {
-        return new BidDto.DetailResponse(bidInfoService.deleteBidInfo(id));
+    public BidDto.DefailForm deleteBid(@PathVariable final long id) {
+        return new BidDto.DefailForm(bidInfoService.deleteBidInfo(id));
     }
 }

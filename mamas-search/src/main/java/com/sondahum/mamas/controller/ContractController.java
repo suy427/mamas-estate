@@ -24,8 +24,8 @@ public class ContractController {
     private final ContractSearchService contractSearchService;
 
     @PostMapping
-    public UserDto.SimpleResponse specifyUser(String name) {
-        return new UserDto.SimpleResponse(contractInfoService.specifyUser(name));
+    public UserDto.SimpleForm specifyUser(String name) {
+        return new UserDto.SimpleForm(contractInfoService.specifyUser(name));
     }
 
     @PostMapping
@@ -40,7 +40,7 @@ public class ContractController {
 
     @GetMapping
     public Page<ContractDto.DetailForm> searchContracts(@RequestParam(name = "query", required = false) final ContractDto.SearchReq query, final PageRequest pageRequest) {
-        return contractSearchService.search(query, pageRequest.of(query.getSortOrders())).map(DetailForm::new);
+        return contractSearchService.search(query, pageRequest.of(query.getSortOrders())).map(ContractDto.DetailForm::new);
     }
 
     @PutMapping

@@ -6,6 +6,7 @@ import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateInfoDao;
 import com.sondahum.mamas.domain.estate.EstateRepository;
 import com.sondahum.mamas.domain.estate.exception.EstateAlreadyExistException;
+import com.sondahum.mamas.domain.estate.model.EstateStatus;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.user.UserInfoDao;
 import com.sondahum.mamas.domain.user.UserRepository;
@@ -69,18 +70,21 @@ public class ContractInfoService {
     }
 
     public Contract revertContract(long id) {
-        Contract originalContract = contractInfoDao.deleteContractInfo(id);
+        Contract contractInfo = contractInfoDao.deleteContractInfo(id);
 
-        originalContract.getBuyer().getEstateList()
-                .removeIf(estate -> estate.equals(originalContract.getEstate()));
-        originalContract.getBuyer().getContractList()
-                .removeIf(contract -> contract.equals(originalContract));
-        originalContract.getSeller().getContractList()
-                .removeIf(contract -> contract.equals(originalContract));
+        contractInfo.getBuyer().getEstateList() // 산거 무효
+                .removeIf(estate -> estate.equals(contractInfo.getEstate()));
+        contractInfo.getSeller().addEstate(contractInfo.getEstate()); // 판거 무효
+        contractInfo.getBuyer().getContractList() // 계약 무효
+                .removeIf(contract -> contract.equals(contractInfo));
+        contractInfo.getSeller().getContractList() // 계약 무효
+                .removeIf(contract -> contract.equals(contractInfo));
+        contractInfo.getEstate().getContractHistoryList() // 계약 무효
+                .removeIf(contract -> contract.getId().equals(contractInfo.getId()));
 
-        originalContract.getSeller().addEstate(originalContract.getEstate());
+        contractInfo.getEstate().setStatus(EstateStatus.ONSALE); // 땅 상태 판매중.
 
-        return originalContract;
+        return contractInfo;
     }
 
     // 계약 내용은 바뀔 수 있다 + estate의 명칭까지..! --> 계약 내용만 바뀌도록..!

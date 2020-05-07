@@ -51,9 +51,12 @@ public class Bid extends BaseEntity implements Comparable<Bid> {
 
     private BidStatus status;
 
-    public void updateBidInfo(BidDto.UpdateReq bidDto) {
+    public Bid updateBidInfo(BidDto.UpdateReq bidDto) {
         this.action = bidDto.getAction();
         this.priceRange = bidDto.getPrice();
+        this.status = bidDto.getStatus();
+
+        return this;
     }
 
 

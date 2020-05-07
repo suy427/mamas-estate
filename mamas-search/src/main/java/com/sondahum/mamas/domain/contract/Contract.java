@@ -35,6 +35,7 @@ public class Contract extends BaseEntity implements Comparable<Contract> {
     @JoinColumn(name = "estate_id", nullable = false)
     private Estate estate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "contract_type")
     private ContractType contractType;
 
@@ -43,9 +44,11 @@ public class Contract extends BaseEntity implements Comparable<Contract> {
     private LocalDateTime expireDate;
 
 
-    public void updateContractInfo(ContractDto.UpdateReq contractDto) {
+    public Contract updateContractInfo(ContractDto.UpdateReq contractDto) {
         this.price = contractDto.getPrice();
         this.contractedDate = contractDto.getContractedDate();
+
+        return this;
     }
 
     public boolean isValidAt(LocalDateTime date) {

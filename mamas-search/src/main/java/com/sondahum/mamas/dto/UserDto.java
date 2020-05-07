@@ -53,13 +53,13 @@ public class UserDto {
         private List<Sort.Order> sortOrders;
     }
 
-    public static class SimpleResponse { // list에 나올 기본정보
+    public static class SimpleForm { // list에 나올 기본정보
         private Long id;
         private String name;
         private String phone;
         private Role role;
 
-        public SimpleResponse(User user) {
+        public SimpleForm(User user) {
             this.id = user.getId();
             this.name = user.getName();
             this.phone = user.getPhone();
@@ -79,7 +79,7 @@ public class UserDto {
         private String phone;
         private Role role;
         private List<EstateDto.SimpleForm> owningEstateList; // 누르면 estate list pop up --> 파는거, 이미 계약된거 포함
-        private List<BidDto.DetailResponse> onTradingList;
+        private List<BidDto.DefailForm> onTradingList;
         private List<ContractDto.DetailForm> contractHistoryList;
 
 
@@ -88,9 +88,9 @@ public class UserDto {
             this.name = user.getName();
             this.phone = user.getPhone();
             this.role = user.getRole();
-            this.owningEstateList = user.getEstateList().stream().map(SimpleForm::new).collect(Collectors.toList());      // estate
-            this.onTradingList = user.getBidList().stream().map(BidDto.DetailResponse::new).collect(Collectors.toList());        // bid
-            this.contractHistoryList = user.getContractList().stream().map(DetailForm::new).collect(Collectors.toList());   // contract
+            this.owningEstateList = user.getEstateList().stream().map(EstateDto.SimpleForm::new).collect(Collectors.toList());      // estate
+            this.onTradingList = user.getBidList().stream().map(BidDto.DefailForm::new).collect(Collectors.toList());        // bid
+            this.contractHistoryList = user.getContractList().stream().map(ContractDto.DetailForm::new).collect(Collectors.toList());   // contract
         }
     }
 

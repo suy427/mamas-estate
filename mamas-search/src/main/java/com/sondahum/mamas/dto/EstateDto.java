@@ -22,6 +22,8 @@ public class EstateDto {
     public static class CreateReq {
         @NotEmpty(message = "등록할 부동산 이름을 입력해주세요.")
         private String name;
+        @NotEmpty(message = "소유자 이름을 입력해주세요.")
+        private String ownerName;
         @NotEmpty(message = "등록할 부동산 주소를 입력해주세요.")
         private Address address;
         private Double area;
@@ -60,6 +62,7 @@ public class EstateDto {
     }
 
     @Getter
+    @Builder
     public static class SearchReq {
         private String name;
         private String address;

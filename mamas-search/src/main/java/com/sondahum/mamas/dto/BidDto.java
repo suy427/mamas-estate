@@ -3,6 +3,7 @@ package com.sondahum.mamas.dto;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.common.model.Range;
+import com.sondahum.mamas.domain.bid.model.BidStatus;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.model.Address;
 import com.sondahum.mamas.domain.user.User;
@@ -45,9 +46,8 @@ public class BidDto {
     @NoArgsConstructor
     public static class UpdateReq {
         private Long id;
-        private String user;
-        private String estate;
         private Range.Price price;
+        private BidStatus status;
         @NotNull(message = "변경할 매매 종류를 입력해주세요..")
         private Action action;
     }
@@ -64,7 +64,7 @@ public class BidDto {
     }
 
     @Getter //todo ResponseBody로 반환할 객체에 Getter/Setter가 없으면 binding이 안되는거같다... 이유를 알아보자
-    public static class DetailResponse {
+    public static class DefailForm {
         private Long id;
         private String user;
         private String estate;
@@ -72,7 +72,7 @@ public class BidDto {
         private String action;
 
 
-        public DetailResponse(Bid bid) {
+        public DefailForm(Bid bid) {
             this.id = bid.getId();
             this.user = bid.getUser().getName();
             this.estate = bid.getEstate().getName();
