@@ -3,6 +3,10 @@ package com.sondahum.mamas.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sondahum.mamas.MamasEstateApplicationStarter;
+import com.sondahum.mamas.domain.bid.BidInfoService;
+import com.sondahum.mamas.domain.contract.ContractInfoService;
+import com.sondahum.mamas.domain.estate.EstateInfoService;
+import com.sondahum.mamas.domain.estate.EstateSearchService;
 import com.sondahum.mamas.domain.user.UserInfoService;
 import com.sondahum.mamas.domain.user.UserSearchService;
 import com.sondahum.mamas.domain.user.model.Role;
@@ -43,10 +47,13 @@ public class MockUserControllerTest {
 
     @InjectMocks
     private UserController userController;
-    @Mock
-    private UserInfoService infoService;
-    @Mock
-    private UserSearchService searchService;
+
+    @Mock private UserInfoService userInfoService;
+    @Mock private EstateInfoService estateInfoService;
+    @Mock private ContractInfoService contractInfoService;
+    @Mock private BidInfoService bidInfoService;
+    @Mock private UserSearchService userSearchService;
+    @Mock private EstateSearchService estateSearchService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -54,20 +61,18 @@ public class MockUserControllerTest {
 
     @Before
     public void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(userController)
-//                .setControllerAdvice(new ErrorController())
-                .build();
+        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
     }
 
     @Test
-    public void 유저생성() throws Exception {
+    public void 최초_유저정보_등록() throws Exception {
         //given
         final UserDto.CreateReq dto = UserDto.CreateReq.builder()
                 .name("김철수")
                 .phone("101-0011-1101")
                 .role("OTHER")
                 .build();
-        given(infoService.createUserInfo(any())).willReturn(dto.toEntity());
+        given(userInfoService.createUserInfo(any())).willReturn(dto.toEntity());
 
         //when
         final MockHttpServletResponse resultActions = requestCreateUser(dto).andReturn().getResponse();

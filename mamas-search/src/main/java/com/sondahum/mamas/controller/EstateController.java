@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -36,11 +38,10 @@ public class EstateController {
     // 주인 검색 해서 고름. 없으면 setOwner로
     // 얘는 bid 등록할 때도 쓴다. --> null일 경우 또 setOwner로 감.
     @PostMapping
-    public Page<UserDto.SimpleForm> specifyOwner(
-            @RequestParam(name = "query", required = false) final UserDto.SearchReq query
-            , final PageRequest pageRequest)
-    {
-        return userSearchService.search(query, pageRequest.of(query.getSortOrders())).map(UserDto.SimpleForm::new);
+    public List<UserDto.SimpleForm> specifyOwner(String query) {
+        return userSearchService.specify(query).stream()
+                .map(UserDto.SimpleForm::new)
+                .collect(Collectors.toList());
     }
 
     @PostMapping // 정보가 없는 새로운 유저일 경우 입력 form채워서 만듦.

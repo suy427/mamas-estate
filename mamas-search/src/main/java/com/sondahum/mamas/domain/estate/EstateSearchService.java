@@ -27,6 +27,16 @@ public class EstateSearchService extends QuerydslRepositorySupport {
         this.estateRepository = estateRepository;
     }
 
+    public List<Estate> specify(String query) {
+        if (query == null)  return null;
+
+        return from(estate).where(
+                validity()
+                , name(query)
+                , address(query)
+                , owner(query)
+        ).fetch();
+    }
 
     public Page<Estate> search(final EstateDto.SearchReq query, final Pageable pageable) {
         if (query == null) {

@@ -27,9 +27,6 @@ import java.util.List;
 public class UserInfoService {
 
     private final UserInfoDao userInfoDao;
-    private final BidInfoDao bidInfoDao;
-    private final EstateInfoDao estateInfoDao;
-    private final ContractInfoDao contractInfoDao;
 
     public User createUserInfo(UserDto.CreateReq userDto) { // 기본정보 생성 --> 있으면 할필요 없다.
         User user;
@@ -41,110 +38,6 @@ public class UserInfoService {
         return user;
     }
 
-    private User specifyUser(UserDto.CreateReq userDto) {
-        User user;
-
-        try {
-            user = userInfoDao.createUserInfo(userDto);
-        } catch (UserAlreadyExistException e) {
-            user = e.getUser();
-            e.setMessage(userDto.getName() + "님의 정보가 이미 존재합니다.");
-        }
-        return user;
-    }
-
-    // xhr로 수정분만 받아오니까
-    // 기본정보 외에 연관관계가 있는 정보들은 일단 유저 등록 후에 가능.
-    @Transactional(rollbackFor = Exception.class)
-    public Estate addNewEstate(EstateDto.CreateReq estateDto) {
-        User currentUser = userInfoDao.findUserByName(estateDto.getOwnerName());
-        Estate estate;
-
-        try { // 새로 등록하는 매물
-            estate = estateInfoDao.createEstateInfo(estateDto);
-            estate.setOwner(currentUser);
-        } catch (EstateAlreadyExistException e) { // 이미 있는데
-            estate = e.getEstate();
-            if (estate.getOwner() == null) { // 주인이 없으면 가능
-                estate.setOwner(currentUser);
-            } else {
-                e.setMessage("이미 소유주가 있습니다. [ " + estate.getOwner().getName() + " ]");
-                throw e;
-            }
-        }
-
-        currentUser.addEstate(estate);
-        return estate;
-    }
-
-    // estate가 갖고있을 수 있는 정보 --> owner, bid, contract
-    // todo 그럼 얘도 다 가지고 있어야하나...? --> 복잡한 수정이 있어야할 경우엔, 아예 estate 관리로 넘어가자.
-    // 그러니까 여기서는 기본정보 + owner정도까지만..!
-    public Estate updateEstate(EstateDto.UpdateReq estateDto) {
-        Estate originalEstate = estateInfoDao.getEstateById(estateDto.getId());
-        return originalEstate.updateEstateInfo(estateDto);
-    }
-
-    // 여기서 땅을 지워버리게 되면, 이 땅의 bid, contract
-    public List<Estate> deleteEstate(EstateDto.SimpleForm estateDto) { // 삭제는 수행 후 리스트를 갱신해서 보여준다.
-        Estate target = estateInfoDao.deleteEstateInfo(estateDto.getId());
-
-        User currentUser = target.getOwner();
-        currentUser.getEstateList().removeIf(estate -> estate.getId().equals(estateDto.getId()));
-
-        return currentUser.getEstateList();
-    }
-
-
-    @Transactional(rollbackFor = Exception.class)
-    public Bid addNewBid(BidDto.CreateReq bidDto) { // 땅부터 정하고 넘어가는걸로..!
-        Bid bid;
-        User currentUser;
-        Estate estate = estateInfoDao.findEstateByName(bidDto.getEstateName());
-
-        if (estate.getOwner().getName().equals(bidDto.getUserName())) { // 내 땅.
-            if (bidDto.getAction().equals(Action.BUY))
-                throw new InvalidActionException("본인의 땅은 매수할 수 없습니다.");
-        } else {
-            if (bidDto.getAction().equals(Action.SELL))
-                throw new InvalidActionException("타인 명의의 땅은 매도할 수 없습니다.");
-        }
-
-        if (estate.getStatus().equals(EstateStatus.SOLD)) {
-            throw new InvalidActionException("이미 거래된 매물입니다.");
-        }
-
-        bid = bidInfoDao.createBid(bidDto);
-        currentUser = userInfoDao.findUserByName(bidDto.getUserName());
-
-        currentUser.addBidHistory(bid);
-        estate.addBidHistory(bid);
-
-        bid.setEstate(estate);
-        bid.setUser(currentUser);
-
-        return bid;
-    }
-
-    // bid가 갖고있는 정보 --> user, estate 하지만 user는 바뀔일이 없다.
-    // --> 연관관계를 수정하는건 안되는걸로... 그냥 호가 내용만 수정 가능.
-    @Transactional(rollbackFor = Exception.class)
-    public Bid updateBid(BidDto.UpdateReq bidDto) {
-        Bid originalBid = bidInfoDao.getBidById(bidDto.getId());
-        return originalBid.updateBidInfo(bidDto);
-    }
-
-    public List<Bid> deleteBid(BidDto.DetailForm bidDto) {
-        Bid target = bidInfoDao.deleteBidInfo(bidDto.getId());
-        User currentUser = target.getUser();
-        Estate currentEstate = target.getEstate();
-
-        currentUser.getBidList().removeIf(bid -> bid.getId().equals(target.getId()));
-        currentEstate.getBidList().removeIf(bid -> bid.getId().equals(target.getId()));
-
-        return currentUser.getBidList();
-    }
-
     public User getUserById(long id) {
         return userInfoDao.getUserById(id);
     }
@@ -153,6 +46,8 @@ public class UserInfoService {
         return userInfoDao.updateUserInfo(dto);
     }
 
+    // 지울때 연관관계까지 지우게되면 있던 정보들이 엉망이된다.
+    // 그냥 active를 false로 하고 다른 곳에서 기록은 남되, 접근이 안되도록하자.
     public User deleteUserInfo(long id) {
         return userInfoDao.deleteUserInfo(id);
     }

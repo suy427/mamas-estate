@@ -27,14 +27,15 @@ import java.util.stream.Collectors;
 class UserController {
 
     private final UserInfoService userInfoService;
-    private final UserSearchService userSearchService;
     private final EstateInfoService estateInfoService;
-    private final EstateSearchService estateSearchService;
     private final ContractInfoService contractInfoService;
     private final BidInfoService bidInfoService;
 
+    private final UserSearchService userSearchService;
+    private final EstateSearchService estateSearchService;
 
-    @PostMapping
+
+    @PostMapping(value = "/register")
     public UserDto.DetailForm createUser(@RequestBody @Valid UserDto.CreateReq userDto) {
         return new UserDto.DetailForm(userInfoService.createUserInfo(userDto));
     }
@@ -42,29 +43,26 @@ class UserController {
     // bidding할 때, bidding할 땅 찾을때.. --> contract할 때도 똑같이 쓴다.
     // 없으면 클라이언트에서 등록 폼 주고 addNewEstate를 한다. --> 없는건 못한다.
     // 결과로 나온 땅을 골라서 누르면 bid 입력폼으로 간다. --> contract입력폼도 가능. --> 이건 둘 다 클라에서..
-    @PostMapping
-    public Page<EstateDto.SimpleForm> specifyEstate(
-            @RequestParam(name = "query", required = false) final EstateDto.SearchReq query
-            , final PageRequest pageRequest)
-    {
-        return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(EstateDto.SimpleForm::new);
+    @GetMapping(value = "")
+    public List<EstateDto.SimpleForm> specifyEstate(String query) {
+        return estateSearchService.specify(query).stream()
+                .map(EstateDto.SimpleForm::new)
+                .collect(Collectors.toList());
     }
 
-    @PostMapping
+    @PostMapping(value = "/estate")
     public EstateDto.SimpleForm addNewEstate(EstateDto.CreateReq estateDto) {
         return new EstateDto.SimpleForm(estateInfoService.createEstateInfo(estateDto));
     }
 
     @PutMapping
     public EstateDto.SimpleForm updateEstate(EstateDto.UpdateReq estateDto) {
-        return new EstateDto.SimpleForm(userInfoService.updateEstate(estateDto));
+        return new EstateDto.SimpleForm(estateInfoService.updateEstateInfo(estateDto));
     }
 
-    @DeleteMapping
-    public List<EstateDto.SimpleForm> deleteEstate(EstateDto.SimpleForm estateDto) {
-        return userInfoService.deleteEstate(estateDto).stream()
-                .map(EstateDto.SimpleForm::new)
-                .collect(Collectors.toList());
+    @PutMapping
+    public EstateDto.SimpleForm deleteEstate(EstateDto.SimpleForm estateDto) {
+        return new EstateDto.SimpleForm(estateInfoService.deleteEstateInfo(estateDto.getId()));
     }
 
     @PostMapping
@@ -77,7 +75,7 @@ class UserController {
         return new ContractDto.DetailForm(contractInfoService.updateContractInfo(contractDto));
     }
 
-    @DeleteMapping
+    @PutMapping
     public ContractDto.DetailForm deleteContract(@PathVariable final long id) {
         return new ContractDto.DetailForm(contractInfoService.revertContract(id));
     }
@@ -94,13 +92,13 @@ class UserController {
         return new BidDto.DetailForm(bidInfoService.updateBid(bidDto));
     }
 
-    @DeleteMapping
+    @PutMapping
     public BidDto.DetailForm deleteBid(@PathVariable final long id) {
         return new BidDto.DetailForm(bidInfoService.deleteBidInfo(id));
     }
 
     @GetMapping
-    public Page<UserDto.SimpleForm> searchUsers(@RequestParam(name = "query", required = false) final UserDto.SearchReq query, final PageRequest pageRequest) {
+    public Page<UserDto.SimpleForm> searchUsers(UserDto.SearchReq query, PageRequest pageRequest) {
         return userSearchService.search(query, pageRequest.of(query.getSortOrders())).map(UserDto.SimpleForm::new);
     }
 

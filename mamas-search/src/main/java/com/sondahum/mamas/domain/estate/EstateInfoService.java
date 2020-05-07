@@ -31,25 +31,8 @@ import java.util.List;
 public class EstateInfoService {
 
     private final EstateInfoDao estateInfoDao;
-    private final ContractInfoDao contractDao;
     private final UserInfoDao userInfoDao;
-    private final BidInfoDao bidInfoDao;
 
-    private User specifyUser(UserDto.CreateReq userDto) {
-        User user;
-
-        try {
-            user = userInfoDao.createUserInfo(userDto);
-        } catch (UserAlreadyExistException e) {
-            user = e.getUser();
-            e.setMessage(userDto.getName() + "님의 정보가 이미 존재합니다.");
-        }
-        return user;
-    }
-
-    public Estate specifyEstate(String name) {
-        return estateInfoDao.createEstateInfo(EstateDto.CreateReq.builder().name(name).build());
-    }
 
     public Estate createEstateInfo(EstateDto.CreateReq estateDto) {
         Estate estate;

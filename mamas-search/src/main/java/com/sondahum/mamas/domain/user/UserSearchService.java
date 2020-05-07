@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sondahum.mamas.common.model.Range;
+import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,16 @@ public class UserSearchService extends QuerydslRepositorySupport {
     public UserSearchService(UserRepository userRepository) {
         super(User.class);
         this.userRepository = userRepository;
+    }
+
+    public List<User> specify(String query) {
+        if (query == null)  return null;
+
+        return from(user).where(
+                validity()
+                , name(query)
+                , phone(query)
+        ).fetch();
     }
 
     public Page<User> search(final UserDto.SearchReq query, final Pageable pageable) {

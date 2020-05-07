@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/contract")
@@ -32,11 +34,10 @@ public class ContractController {
     private final EstateInfoService estateInfoService;
 
     @PostMapping
-    public Page<UserDto.SimpleForm> specifyUser(
-            @RequestParam(name = "query", required = false) final UserDto.SearchReq query
-            , final PageRequest pageRequest)
-    {
-        return userSearchService.search(query, pageRequest.of(query.getSortOrders())).map(UserDto.SimpleForm::new);
+    public List<UserDto.SimpleForm> specifyUser(String query) {
+        return userSearchService.specify(query).stream()
+                .map(UserDto.SimpleForm::new)
+                .collect(Collectors.toList());
     }
 
     @PostMapping
@@ -45,11 +46,10 @@ public class ContractController {
     }
 
     @PostMapping
-    public Page<EstateDto.SimpleForm> specifyEstate(
-            @RequestParam(name = "query", required = false) final EstateDto.SearchReq query
-            , final PageRequest pageRequest)
-    {
-        return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(EstateDto.SimpleForm::new);
+    public List<EstateDto.SimpleForm> specifyEstate(String query) {
+        return estateSearchService.specify(query).stream()
+                .map(EstateDto.SimpleForm::new)
+                .collect(Collectors.toList());
     }
 
     @PostMapping
@@ -63,10 +63,7 @@ public class ContractController {
     }
 
     @GetMapping
-    public Page<ContractDto.DetailForm> searchContracts(
-            @RequestParam(name = "query", required = false) final ContractDto.SearchReq query
-            , final PageRequest pageRequest)
-    {
+    public Page<ContractDto.DetailForm> searchContracts(ContractDto.SearchReq query, PageRequest pageRequest) {
         return contractSearchService.search(query, pageRequest.of(query.getSortOrders())).map(ContractDto.DetailForm::new);
     }
 
