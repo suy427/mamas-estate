@@ -64,7 +64,7 @@ public class BidDto {
     }
 
     @Getter //todo ResponseBody로 반환할 객체에 Getter/Setter가 없으면 binding이 안되는거같다... 이유를 알아보자
-    public static class DefailForm {
+    public static class DetailForm {
         private Long id;
         private String user;
         private String estate;
@@ -72,7 +72,7 @@ public class BidDto {
         private String action;
 
 
-        public DefailForm(Bid bid) {
+        public DetailForm(Bid bid) {
             this.id = bid.getId();
             this.user = bid.getUser().getName();
             this.estate = bid.getEstate().getName();

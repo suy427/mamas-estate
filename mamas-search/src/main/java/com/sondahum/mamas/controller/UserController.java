@@ -28,20 +28,31 @@ class UserController {
 
     private final UserInfoService userInfoService;
     private final UserSearchService userSearchService;
-    private final EstateSearchService estateSearchService;
     private final EstateInfoService estateInfoService;
+    private final EstateSearchService estateSearchService;
     private final ContractInfoService contractInfoService;
     private final BidInfoService bidInfoService;
 
 
     @PostMapping
-    public UserDto.DetailResponse createUser(@RequestBody @Valid UserDto.CreateReq userDto) {
-        return new UserDto.DetailResponse(userInfoService.createUserInfo(userDto));
+    public UserDto.DetailForm createUser(@RequestBody @Valid UserDto.CreateReq userDto) {
+        return new UserDto.DetailForm(userInfoService.createUserInfo(userDto));
+    }
+
+    // bidding할 때, bidding할 땅 찾을때.. --> contract할 때도 똑같이 쓴다.
+    // 없으면 클라이언트에서 등록 폼 주고 addNewEstate를 한다. --> 없는건 못한다.
+    // 결과로 나온 땅을 골라서 누르면 bid 입력폼으로 간다. --> contract입력폼도 가능. --> 이건 둘 다 클라에서..
+    @PostMapping
+    public Page<EstateDto.SimpleForm> specifyEstate(
+            @RequestParam(name = "query", required = false) final EstateDto.SearchReq query
+            , final PageRequest pageRequest)
+    {
+        return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(EstateDto.SimpleForm::new);
     }
 
     @PostMapping
     public EstateDto.SimpleForm addNewEstate(EstateDto.CreateReq estateDto) {
-        return new EstateDto.SimpleForm(userInfoService.addNewEstate(estateDto));
+        return new EstateDto.SimpleForm(estateInfoService.createEstateInfo(estateDto));
     }
 
     @PutMapping
@@ -58,12 +69,12 @@ class UserController {
 
     @PostMapping
     public ContractDto.DetailForm addNewContract(ContractDto.CreateReq contractDto) {
-        return new ContractDto.DetailForm(userInfoService.addNewContract(contractDto));
+        return new ContractDto.DetailForm(contractInfoService.createContractInfo(contractDto));
     }
 
     @PutMapping
     public ContractDto.DetailForm updateContract(ContractDto.UpdateReq contractDto) {
-        return new ContractDto.DetailForm(userInfoService.updateContract(contractDto));
+        return new ContractDto.DetailForm(contractInfoService.updateContractInfo(contractDto));
     }
 
     @DeleteMapping
@@ -71,34 +82,21 @@ class UserController {
         return new ContractDto.DetailForm(contractInfoService.revertContract(id));
     }
 
-    // bidding할 때, bidding할 땅 찾을때.. --> contract할 때도 똑같이 쓴다.
-    // 없으면 클라이언트에서 등록 폼 주고 addNewEstate를 한다. --> 없는건 못한다.
-    // 결과로 나온 땅을 골라서 누르면 bid 입력폼으로 간다. --> contract입력폼도 가능. --> 이건 둘 다 클라에서..
-    @PostMapping
-    public Page<EstateDto.SimpleForm> specifyEstate(
-            @RequestParam(name = "query", required = false) final EstateDto.SearchReq query
-            , final PageRequest pageRequest)
-    {
-                return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(EstateDto.SimpleForm::new);
-    }
-
     // specifyEstate에서 고른 땅이 박혀있는 채로 bid 입력 form 나옴
     //
     @PostMapping
-    public BidDto.DefailForm addNewBid(BidDto.CreateReq bidDto) {
-        return new BidDto.DefailForm(userInfoService.addNewBid(bidDto));
+    public BidDto.DetailForm addNewBid(BidDto.CreateReq bidDto) {
+        return new BidDto.DetailForm(bidInfoService.addNewBid(bidDto));
     }
 
     @PutMapping
-    public BidDto.DefailForm updateBid(BidDto.UpdateReq bidDto) {
-        return new BidDto.DefailForm(userInfoService.updateBid(bidDto));
+    public BidDto.DetailForm updateBid(BidDto.UpdateReq bidDto) {
+        return new BidDto.DetailForm(bidInfoService.updateBid(bidDto));
     }
 
     @DeleteMapping
-    public List<BidDto.DefailForm> deleteBid(BidDto.DefailForm bidDto) {
-        return userInfoService.deleteBid(bidDto).stream()
-                .map(BidDto.DefailForm::new)
-                .collect(Collectors.toList());
+    public BidDto.DetailForm deleteBid(@PathVariable final long id) {
+        return new BidDto.DetailForm(bidInfoService.deleteBidInfo(id));
     }
 
     @GetMapping
@@ -107,18 +105,18 @@ class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    public UserDto.DetailResponse getUserDetail(@PathVariable final long id) {
-        return new UserDto.DetailResponse(userInfoService.getUserById(id));
+    public UserDto.DetailForm getUserDetail(@PathVariable final long id) {
+        return new UserDto.DetailForm(userInfoService.getUserById(id));
     }
 
     @PutMapping
-    public UserDto.DetailResponse updateUserInfo(@RequestBody final UserDto.UpdateReq dto) {
-        return new UserDto.DetailResponse(userInfoService.updateUserInfo(dto));
+    public UserDto.DetailForm updateUserInfo(@RequestBody final UserDto.UpdateReq dto) {
+        return new UserDto.DetailForm(userInfoService.updateUserInfo(dto));
     }
 
     @DeleteMapping(value = "/{id}")
-    public UserDto.DetailResponse deleteUser(@PathVariable final long id) {
-        return new UserDto.DetailResponse(userInfoService.deleteUserInfo(id));
+    public UserDto.DetailForm deleteUser(@PathVariable final long id) {
+        return new UserDto.DetailForm(userInfoService.deleteUserInfo(id));
     }
 
 }

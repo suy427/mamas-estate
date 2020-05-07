@@ -3,6 +3,10 @@ package com.sondahum.mamas.controller;
 import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.domain.contract.ContractInfoService;
 import com.sondahum.mamas.domain.contract.ContractSearchService;
+import com.sondahum.mamas.domain.estate.EstateInfoService;
+import com.sondahum.mamas.domain.estate.EstateSearchService;
+import com.sondahum.mamas.domain.user.UserInfoService;
+import com.sondahum.mamas.domain.user.UserSearchService;
 import com.sondahum.mamas.dto.ContractDto;
 
 import com.sondahum.mamas.dto.EstateDto;
@@ -22,15 +26,35 @@ public class ContractController {
 
     private final ContractInfoService contractInfoService;
     private final ContractSearchService contractSearchService;
+    private final UserInfoService userInfoService;
+    private final EstateSearchService estateSearchService;
+    private final UserSearchService userSearchService;
+    private final EstateInfoService estateInfoService;
 
     @PostMapping
-    public UserDto.SimpleForm specifyUser(String name) {
-        return new UserDto.SimpleForm(contractInfoService.specifyUser(name));
+    public Page<UserDto.SimpleForm> specifyUser(
+            @RequestParam(name = "query", required = false) final UserDto.SearchReq query
+            , final PageRequest pageRequest)
+    {
+        return userSearchService.search(query, pageRequest.of(query.getSortOrders())).map(UserDto.SimpleForm::new);
     }
 
     @PostMapping
-    public EstateDto.SimpleForm specifyEstate(String name) {
-        return new EstateDto.SimpleForm(contractInfoService.specifyEstate(name));
+    public UserDto.SimpleForm setContractUser(UserDto.CreateReq userDto) {
+        return new UserDto.SimpleForm(userInfoService.createUserInfo(userDto));
+    }
+
+    @PostMapping
+    public Page<EstateDto.SimpleForm> specifyEstate(
+            @RequestParam(name = "query", required = false) final EstateDto.SearchReq query
+            , final PageRequest pageRequest)
+    {
+        return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(EstateDto.SimpleForm::new);
+    }
+
+    @PostMapping
+    public EstateDto.SimpleForm setContractEstate(EstateDto.CreateReq estateDto) {
+        return new EstateDto.SimpleForm(estateInfoService.createEstateInfo(estateDto));
     }
 
     @PostMapping
@@ -39,7 +63,10 @@ public class ContractController {
     }
 
     @GetMapping
-    public Page<ContractDto.DetailForm> searchContracts(@RequestParam(name = "query", required = false) final ContractDto.SearchReq query, final PageRequest pageRequest) {
+    public Page<ContractDto.DetailForm> searchContracts(
+            @RequestParam(name = "query", required = false) final ContractDto.SearchReq query
+            , final PageRequest pageRequest)
+    {
         return contractSearchService.search(query, pageRequest.of(query.getSortOrders())).map(ContractDto.DetailForm::new);
     }
 
@@ -49,7 +76,7 @@ public class ContractController {
     }
 
     @GetMapping(value = "/{id}")
-    public ContractDto.DetailForm getEstateDetail(@PathVariable final long id) {
+    public ContractDto.DetailForm getContractDetail(@PathVariable final long id) {
         return new ContractDto.DetailForm(contractInfoService.getContractById(id));
     }
 

@@ -73,23 +73,23 @@ public class UserDto {
         여기서 해당 버튼 누르면 또다시 그때마다 estate, bid, contract 다시 불러와야해..?
      */
     @Getter
-    public static class DetailResponse { // 실제 상세정보
+    public static class DetailForm { // 실제 상세정보
         private Long id;
         private String name;
         private String phone;
         private Role role;
         private List<EstateDto.SimpleForm> owningEstateList; // 누르면 estate list pop up --> 파는거, 이미 계약된거 포함
-        private List<BidDto.DefailForm> onTradingList;
+        private List<BidDto.DetailForm> onTradingList;
         private List<ContractDto.DetailForm> contractHistoryList;
 
 
-        public DetailResponse(User user) {
+        public DetailForm(User user) {
             this.id = user.getId();
             this.name = user.getName();
             this.phone = user.getPhone();
             this.role = user.getRole();
             this.owningEstateList = user.getEstateList().stream().map(EstateDto.SimpleForm::new).collect(Collectors.toList());      // estate
-            this.onTradingList = user.getBidList().stream().map(BidDto.DefailForm::new).collect(Collectors.toList());        // bid
+            this.onTradingList = user.getBidList().stream().map(DetailForm::new).collect(Collectors.toList());        // bid
             this.contractHistoryList = user.getContractList().stream().map(ContractDto.DetailForm::new).collect(Collectors.toList());   // contract
         }
     }
