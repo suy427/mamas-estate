@@ -56,11 +56,15 @@ public class EstateInfoDao {
         return estate;
     }
 
-    public Estate deleteEstateInfo(Long id) {
+    public Estate deleteEstateSoft(Long id) {
         Estate estate = estateRepository.findById(id)
                 .orElseThrow(() -> new NoSuchEntityException(id));
 
         estate.setActive(false);
         return estate;
+    }
+
+    public void deleteEstateHard(long id) {
+        estateRepository.deleteById(id);
     }
 }

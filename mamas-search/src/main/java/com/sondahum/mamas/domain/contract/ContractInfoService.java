@@ -1,20 +1,13 @@
 package com.sondahum.mamas.domain.contract;
 
 
-import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.domain.bid.exception.InvalidActionException;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateInfoDao;
-import com.sondahum.mamas.domain.estate.EstateRepository;
-import com.sondahum.mamas.domain.estate.exception.EstateAlreadyExistException;
 import com.sondahum.mamas.domain.estate.model.EstateStatus;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.user.UserInfoDao;
-import com.sondahum.mamas.domain.user.UserRepository;
-import com.sondahum.mamas.domain.user.exception.UserAlreadyExistException;
 import com.sondahum.mamas.dto.ContractDto;
-import com.sondahum.mamas.dto.EstateDto;
-import com.sondahum.mamas.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -60,7 +53,7 @@ public class ContractInfoService {
     }
 
     public Contract revertContract(long id) {
-        Contract target = contractInfoDao.deleteContractInfo(id);
+        Contract target = contractInfoDao.softDeleteContract(id);
 
         target.getBuyer().getEstateList() // 산거 무효
                 .removeIf(estate -> estate.equals(target.getEstate()));
@@ -75,6 +68,10 @@ public class ContractInfoService {
         target.getEstate().setStatus(EstateStatus.ONSALE); // 땅 상태 판매중.
 
         return target;
+    }
+
+    public void deleteContract(long id) {
+        contractInfoDao.hardDeleteContract(id);
     }
 
     // 계약 내용은 바뀔 수 있다 + estate의 명칭까지..! --> 계약 내용만 바뀌도록..!

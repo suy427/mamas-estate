@@ -28,34 +28,7 @@ public class ContractController {
 
     private final ContractInfoService contractInfoService;
     private final ContractSearchService contractSearchService;
-    private final UserInfoService userInfoService;
-    private final EstateSearchService estateSearchService;
-    private final UserSearchService userSearchService;
-    private final EstateInfoService estateInfoService;
 
-    @PostMapping
-    public List<UserDto.SimpleForm> specifyUser(String query) {
-        return userSearchService.specify(query).stream()
-                .map(UserDto.SimpleForm::new)
-                .collect(Collectors.toList());
-    }
-
-    @PostMapping
-    public UserDto.SimpleForm setContractUser(UserDto.CreateReq userDto) {
-        return new UserDto.SimpleForm(userInfoService.createUserInfo(userDto));
-    }
-
-    @PostMapping
-    public List<EstateDto.SimpleForm> specifyEstate(String query) {
-        return estateSearchService.specify(query).stream()
-                .map(EstateDto.SimpleForm::new)
-                .collect(Collectors.toList());
-    }
-
-    @PostMapping
-    public EstateDto.SimpleForm setContractEstate(EstateDto.CreateReq estateDto) {
-        return new EstateDto.SimpleForm(estateInfoService.createEstateInfo(estateDto));
-    }
 
     @PostMapping
     public ContractDto.DetailForm createContract(@RequestBody @Valid ContractDto.CreateReq userDto) {
@@ -77,8 +50,13 @@ public class ContractController {
         return new ContractDto.DetailForm(contractInfoService.getContractById(id));
     }
 
-    @DeleteMapping(value = "/{id}")
+    @PutMapping(value = "/{id}")
     public ContractDto.DetailForm revertContract(@PathVariable final long id) {
         return new ContractDto.DetailForm(contractInfoService.revertContract(id));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteContract(@PathVariable final long id) {
+        contractInfoService.deleteContract(id);
     }
 }

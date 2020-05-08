@@ -53,12 +53,16 @@ public class BidInfoDao {
         return bid;
     }
 
-    public Bid deleteBidInfo(Long id) {
+    public Bid softDeleteBid(Long id) {
         Bid bid = bidRepository.findById(id)
                 .orElseThrow(() -> new NoSuchEntityException(id));
 
         bid.setActive(false);
         return bid;
+    }
+
+    public void hardDeleteBid(Long id) {
+        bidRepository.deleteById(id);
     }
 
 }

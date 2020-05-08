@@ -63,12 +63,16 @@ public class ContractInfoDao {
         return contract;
     }
 
-    public Contract deleteContractInfo(Long id) {
+    public Contract softDeleteContract(Long id) {
         Contract contract = contractRepository.findById(id)
                 .orElseThrow(() -> new NoSuchEntityException(id));
 
         contract.setActive(false);
         return contract;
+    }
+
+    public void hardDeleteContract(long id) {
+        contractRepository.deleteById(id);
     }
 
 }

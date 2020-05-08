@@ -27,28 +27,11 @@ public class BidController {
 
     private final BidInfoService bidInfoService;
     private final BidSearchService bidSearchService;
-    private final UserSearchService userSearchService;
-    private final EstateSearchService estateSearchService;
 
-
-    @PostMapping
-    public List<UserDto.SimpleForm> specifyUser(String query) {
-        return userSearchService.specify(query).stream()
-                .map(UserDto.SimpleForm::new)
-                .collect(Collectors.toList());
-    }
-
-    @PostMapping
-    public List<EstateDto.SimpleForm> specifyEstate(String query) {
-        return estateSearchService.specify(query).stream()
-                .map(EstateDto.SimpleForm::new)
-                .collect(Collectors.toList());
-    }
 
     @PostMapping
     public BidDto.DetailForm createBid(@RequestBody @Valid BidDto.CreateReq bidDto) {
-        Bid created = bidInfoService.createBid(bidDto);
-        return new BidDto.DetailForm(created);
+        return new BidDto.DetailForm(bidInfoService.createBid(bidDto));
     }
 
     @GetMapping
@@ -63,7 +46,7 @@ public class BidController {
 
     @PutMapping
     public BidDto.DetailForm updateBidInfo(@RequestBody final BidDto.UpdateReq dto) {
-        return new BidDto.DetailForm(bidInfoService.updateBidInfo(dto));
+        return new BidDto.DetailForm(bidInfoService.updateBid(dto));
     }
 
     @DeleteMapping(value = "/{id}")
@@ -72,7 +55,7 @@ public class BidController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public BidDto.DetailForm deleteBid(@PathVariable final long id) {
-        return new BidDto.DetailForm(bidInfoService.deleteBidInfo(id));
+    public void deleteBid(@PathVariable final long id) {
+        bidInfoService.deleteBidInfo(id);
     }
 }

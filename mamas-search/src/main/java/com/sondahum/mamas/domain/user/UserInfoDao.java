@@ -64,12 +64,16 @@ public class UserInfoDao {
         return user;
     }
 
-    public User deleteUserInfo(Long id) {
+    public User deleteUserSoft(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchEntityException(id));
 
         user.setActive(false);
         return user;
+    }
+
+    public void deleteUserHard(long id) {
+        userRepository.deleteById(id);
     }
 
     private Optional<User> getDuplicatedUser(String info) {

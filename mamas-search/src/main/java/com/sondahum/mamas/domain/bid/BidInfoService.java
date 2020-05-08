@@ -3,13 +3,11 @@ package com.sondahum.mamas.domain.bid;
 
 import com.sondahum.mamas.domain.bid.exception.InvalidActionException;
 import com.sondahum.mamas.domain.bid.model.Action;
-import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.EstateInfoDao;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.user.UserInfoDao;
 import com.sondahum.mamas.dto.BidDto;
-import com.sondahum.mamas.dto.EstateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -54,26 +52,9 @@ public class BidInfoService {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public Bid addNewBid(BidDto.CreateReq bidDto) { // 땅은 현재땅(등록돼야 bid추가가능. owner는 팝업으로 먼저했다.)
-        Estate estate = estateInfoDao.findEstateByName(bidDto.getEstateName());
-        User user = userInfoDao.findUserByName(bidDto.getUserName());
-
-        bidValidation(estate, user, bidDto.getAction());
-
-        Bid bid = bidInfoDao.createBid(bidDto);
-        bid.setUser(user);
-        bid.setEstate(estate);
-
-        user.addBidHistory(bid);
-
-        estate.addBidHistory(bid);
-
-        return bid;
-    }
-
     // 땅 고정. (유저, 가격)
-    @Transactional(rollbackFor = Exception.class) //
+    // bid는 내용이 바뀌면 체크해줘야할게 있다.
+    @Transactional(rollbackFor = Exception.class)
     public Bid updateBid(BidDto.UpdateReq bidDto) {
         Bid originalBid = bidInfoDao.getBidById(bidDto.getId());
         Estate estate = originalBid.getEstate();
@@ -87,7 +68,7 @@ public class BidInfoService {
     }
 
     public Bid revertBid(Long id) {
-        Bid target = bidInfoDao.deleteBidInfo(id);
+        Bid target = bidInfoDao.softDeleteBid(id);
 
         target.getEstate().getBidList().removeIf(bid -> bid.equals(target));
         target.getUser().getBidList().removeIf(bid -> bid.equals(target));
@@ -99,11 +80,8 @@ public class BidInfoService {
         return bidInfoDao.getBidById(id);
     }
 
-    public Bid updateBidInfo(BidDto.UpdateReq dto) {
-        return bidInfoDao.updateBidInfo(dto);
+    public void deleteBidInfo(long id) {
+        bidInfoDao.hardDeleteBid(id);
     }
 
-    public Bid deleteBidInfo(long id) {
-        return bidInfoDao.deleteBidInfo(id);
-    }
 }
