@@ -1,6 +1,5 @@
 package com.sondahum.mamas.domain.user;
 
-
 import com.sondahum.mamas.domain.user.exception.UserAlreadyExistException;
 import com.sondahum.mamas.dto.UserDto;
 import lombok.RequiredArgsConstructor;

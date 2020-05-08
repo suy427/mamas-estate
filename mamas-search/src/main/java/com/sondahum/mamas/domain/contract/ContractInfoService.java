@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -78,5 +80,9 @@ public class ContractInfoService {
     public Contract updateContractInfo(ContractDto.UpdateReq contractDto) {
         Contract contract = contractInfoDao.getContractById(contractDto.getId());
         return contract.updateContractInfo(contractDto);
+    }
+
+    public List<Contract> getUserContractList(long id) {
+        return userInfoDao.getUserById(id).getContractList();
     }
 }

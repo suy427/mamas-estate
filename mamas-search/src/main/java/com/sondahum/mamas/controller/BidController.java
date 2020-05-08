@@ -39,6 +39,13 @@ public class BidController {
         return bidSearchService.search(query, pageRequest.of(query.getSortOrders())).map(BidDto.DetailForm::new);
     }
 
+    @GetMapping
+    public List<BidDto.DetailForm> getUserBidList(long id) {
+        return bidInfoService.getUserBidList(id).stream()
+                .map(BidDto.DetailForm::new)
+                .collect(Collectors.toList());
+    }
+
     @GetMapping(value = "/{id}")
     public BidDto.DetailForm getBidDetail(@PathVariable final long id) {
         return new BidDto.DetailForm(bidInfoService.getBidById(id));

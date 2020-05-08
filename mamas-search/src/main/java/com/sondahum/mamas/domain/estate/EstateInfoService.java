@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -59,4 +62,7 @@ public class EstateInfoService {
         estateInfoDao.deleteEstateHard(id);
     }
 
+    public List<Estate> getUserEstateList(long id) {
+        return userInfoDao.getUserById(id).getEstateList();
+    }
 }

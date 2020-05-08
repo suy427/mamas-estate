@@ -13,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -84,4 +87,7 @@ public class BidInfoService {
         bidInfoDao.hardDeleteBid(id);
     }
 
+    public List<Bid> getUserBidList(long id) {
+        return userInfoDao.getUserById(id).getBidList();
+    }
 }

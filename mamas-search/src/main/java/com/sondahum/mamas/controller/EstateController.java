@@ -52,6 +52,13 @@ public class EstateController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping
+    public List<EstateDto.SimpleForm> getUserEstateList(long id) {
+        return estateInfoService.getUserEstateList(id).stream()
+                .map(EstateDto.SimpleForm::new)
+                .collect(Collectors.toList());
+    }
+
     @GetMapping(value = "/{id}")
     public EstateDto.DetailForm getEstateDetail(@PathVariable final long id) {
         return new EstateDto.DetailForm(estateInfoService.getEstateById(id));

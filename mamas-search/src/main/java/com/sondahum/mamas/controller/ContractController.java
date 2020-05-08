@@ -40,6 +40,13 @@ public class ContractController {
         return contractSearchService.search(query, pageRequest.of(query.getSortOrders())).map(ContractDto.DetailForm::new);
     }
 
+    @GetMapping
+    public List<ContractDto.DetailForm> getUserContractList(long id) {
+        return contractInfoService.getUserContractList(id).stream()
+                .map(ContractDto.DetailForm::new)
+                .collect(Collectors.toList());
+    }
+
     @PutMapping
     public ContractDto.DetailForm updateContractInfo(@RequestBody final ContractDto.UpdateReq dto) {
         return new ContractDto.DetailForm(contractInfoService.updateContractInfo(dto));
