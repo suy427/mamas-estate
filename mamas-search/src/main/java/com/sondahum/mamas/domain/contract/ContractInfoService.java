@@ -44,6 +44,7 @@ public class ContractInfoService {
 
         buyer.addContractHistory(contract);
         seller.addContractHistory(contract);
+        estate.addContractHistory(contract);
 
         seller.getEstateList().removeIf(property -> property.getId().equals(estate.getId()));
         buyer.addEstate(estate);

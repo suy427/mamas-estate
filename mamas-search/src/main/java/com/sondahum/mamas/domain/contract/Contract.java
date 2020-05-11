@@ -32,7 +32,7 @@ public class Contract extends BaseEntity implements Comparable<Contract> {
     private Long price;
 
     @ManyToOne//(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "estate_id", nullable = false)
+    @JoinColumn(name = "estate", nullable = false)
     private Estate estate;
 
     @Enumerated(EnumType.STRING)

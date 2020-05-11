@@ -1,6 +1,7 @@
 package com.sondahum.mamas.domain.bid;
 
 
+import com.sondahum.mamas.domain.bid.exception.BidAlreadyExistException;
 import com.sondahum.mamas.domain.bid.exception.InvalidActionException;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.domain.estate.Estate;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -35,14 +37,23 @@ public class BidInfoService {
             throw new InvalidActionException("자신의 땅은 살 수 없습니다.");
         }
 
-        Bid bid = bidDto.toEntity();
+        Bid bid;
+
+        Optional<Bid> duplicatedBid =
+                bidInfoDao.getDuplicatedBid(bidDto.getUserName(), bidDto.getEstateName(), bidDto.getAction());
+
+        if (duplicatedBid.isPresent()) {
+            return duplicatedBid.get();
+        } else
+            bid = bidDto.toEntity();
+
         bid.setUser(user);
         bid.setEstate(estate);
 
         user.addBidHistory(bid);
         estate.addBidHistory(bid);
 
-        return bidInfoDao.createBid(bid);
+        return bid;
     }
 
     // 땅 고정. (유저, 가격)

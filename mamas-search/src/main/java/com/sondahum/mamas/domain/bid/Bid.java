@@ -23,10 +23,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "bid")
-@AttributeOverride(name = "id", column = @Column(name = "estate_id"))
+@AttributeOverride(name = "id", column = @Column(name = "bid_id"))
 public class Bid extends BaseEntity implements Comparable<Bid> {
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne//(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -34,8 +34,8 @@ public class Bid extends BaseEntity implements Comparable<Bid> {
     @Enumerated(EnumType.STRING)
     private Action action;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "estate_id", nullable = false)
+    @ManyToOne//(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "estate", nullable = false)
     private Estate estate;
 
     @Embedded
