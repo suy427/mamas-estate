@@ -2,11 +2,6 @@ package com.sondahum.mamas.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sondahum.mamas.MamasEstateApplicationStarter;
-import com.sondahum.mamas.domain.bid.BidInfoService;
-import com.sondahum.mamas.domain.contract.ContractInfoService;
-import com.sondahum.mamas.domain.estate.EstateInfoService;
-import com.sondahum.mamas.domain.estate.EstateSearchService;
 import com.sondahum.mamas.domain.user.User;
 import com.sondahum.mamas.domain.user.UserInfoService;
 import com.sondahum.mamas.domain.user.UserSearchService;

@@ -10,10 +10,13 @@ import com.sondahum.mamas.domain.user.UserSearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -40,7 +43,7 @@ class UserController {
 
     @GetMapping(value = "/search")
     public Page<UserDto.SimpleForm> searchUsers(UserDto.SearchReq query, PageRequest pageRequest) {
-        return userSearchService.search(query, pageRequest.of(query.getSortOrders())).map(UserDto.SimpleForm::new);
+        return userSearchService.search(query, pageRequest.of()).map(UserDto.SimpleForm::new);
     }
 
     @GetMapping(value = "/{id}")

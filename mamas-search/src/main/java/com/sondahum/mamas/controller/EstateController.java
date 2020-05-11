@@ -32,8 +32,11 @@ public class EstateController {
     }
 
     @GetMapping(value = "/search")
-    public Page<EstateDto.SimpleForm> searchEstates(EstateDto.SearchReq query, final PageRequest pageRequest) {
-        return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(EstateDto.SimpleForm::new);
+    public Page<EstateDto.SimpleForm> searchEstates(
+            @RequestParam("query") EstateDto.SearchReq query
+            , final PageRequest pageRequest)
+    {
+        return estateSearchService.search(query, pageRequest.of()).map(EstateDto.SimpleForm::new);
     }
 
     // bidding할 때, bidding할 땅 찾을때.. --> contract할 때도 똑같이 쓴다.

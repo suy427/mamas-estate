@@ -1,5 +1,6 @@
 package com.sondahum.mamas.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.domain.estate.Estate;
@@ -7,6 +8,7 @@ import com.sondahum.mamas.domain.estate.model.ContractType;
 import com.sondahum.mamas.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Sort;
 
 import javax.validation.constraints.NotEmpty;
@@ -47,13 +49,14 @@ public class ContractDto {
     }
 
     @Getter
+    @Builder
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     public static class SearchReq {
         private String estate;
         private String buyer;
         private String seller;
         private Range.Price contractedPrice;
         private Range.Date contractedDate;
-        private List<Sort.Order> sortOrders;
     }
 
 
@@ -74,9 +77,5 @@ public class ContractDto {
             this.price = contract.getPrice();
             this.contractedDate = contract.getCreatedDate();
         }
-    }
-
-    enum SearchOrder {
-
     }
 }

@@ -16,7 +16,7 @@ spring:
 
   http:
     encoding:
-      charset: euc-kr
+      charset: utf-8
       enabled: true
       force: true
 

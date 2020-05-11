@@ -37,7 +37,7 @@ public class ContractController {
 
     @GetMapping(value = "/search")
     public Page<ContractDto.DetailForm> searchContracts(ContractDto.SearchReq query, PageRequest pageRequest) {
-        return contractSearchService.search(query, pageRequest.of(query.getSortOrders())).map(ContractDto.DetailForm::new);
+        return contractSearchService.search(query, pageRequest.of()).map(ContractDto.DetailForm::new);
     }
 
     @GetMapping(value = "/user/{userId}")

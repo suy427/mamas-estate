@@ -1,5 +1,6 @@
 package com.sondahum.mamas.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sondahum.mamas.domain.estate.model.Address;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.estate.model.ContractType;
@@ -62,6 +63,7 @@ public class EstateDto {
 
     @Getter
     @Builder
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     public static class SearchReq {
         private String name;
         private String address;
@@ -72,7 +74,6 @@ public class EstateDto {
         private ContractType contractType;
         private EstateType estateType;
         private String owner;
-        private List<Sort.Order> sortOrders;
     }
 
     @Getter

@@ -1,5 +1,6 @@
 package com.sondahum.mamas.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sondahum.mamas.common.model.Range;
 //import com.sondahum.mamas.domain.user.model.Phone;
 import com.sondahum.mamas.domain.user.model.Role;
@@ -47,13 +48,14 @@ public class UserDto {
     }
 
     @Getter
+    @Builder
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     public static class SearchReq {
         private String name;
         private String phone;
         private Role role;
         private Range.Date bidDate;
         private Range.Date contractDate;
-        private List<Sort.Order> sortOrders;
     }
 
     @Getter
@@ -96,9 +98,5 @@ public class UserDto {
             this.onTradingList = user.getBidList().stream().map(BidDto.DetailForm::new).collect(Collectors.toList());        // bid
             this.contractHistoryList = user.getContractList().stream().map(ContractDto.DetailForm::new).collect(Collectors.toList());   // contract
         }
-    }
-
-    enum SearchOrder {
-        NAME,
     }
 }

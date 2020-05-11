@@ -59,6 +59,9 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
         if (valuesHandler.getRequestParameters() != null)
             request = request.params(valuesHandler.getRequestParameters());
 
+        if (valuesHandler.getRequestBody() != null)
+            request = request.content(valuesHandler.getRequestBody());
+
         if (valuesHandler.getHeaders() != null)
             request = request.headers(new HttpHeaders(valuesHandler.getHeaders()));
 

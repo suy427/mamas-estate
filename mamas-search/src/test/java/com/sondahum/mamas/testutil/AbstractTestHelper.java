@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -18,15 +19,26 @@ public class AbstractTestHelper {
     protected final ObjectMapper mapper = new ObjectMapper();
 
     // todo
-    protected MockRequestParameter requestParameters(Object requestParameterBean) throws Exception { // todo type safe하게 바꾸기
+    protected MockRequestParameter requestParameters(Object requestParameterBean) throws Exception {
         MockRequestParameter parameterValues = new MockRequestParameter();
-        parameterValues.parameterValueMap = new MultiValueMapConverter(requestParameterBean).convert();
+        parameterValues.parameterValueMap = new MultiValueMapConverter().convert(requestParameterBean);
+        return parameterValues;
+    }
+    protected MockRequestParameter requestParameters(Map<String, Object> requestParameterMap) throws Exception {
+        MockRequestParameter parameterValues = new MockRequestParameter();
+        parameterValues.parameterValueMap = new MultiValueMapConverter().convert(requestParameterMap);
+        return parameterValues;
+    }
+
+    protected MockRequestParameter requestParameters(List<Object> requestParameterList) throws Exception {
+        MockRequestParameter parameterValues = new MockRequestParameter();
+        parameterValues.parameterValueMap = new MultiValueMapConverter().convert(requestParameterList);
         return parameterValues;
     }
 
     protected MockHeader headers(Object headerBean) throws Exception { // todo type safe하게 바꾸기
         MockHeader headerValues = new MockHeader();
-        headerValues.headerValueMap = new MultiValueMapConverter(headerBean).convert();
+        headerValues.headerValueMap = new MultiValueMapConverter().convert(headerBean);
         return headerValues;
     }
 

@@ -1,6 +1,7 @@
 package com.sondahum.mamas.integration;
 
 import com.sondahum.mamas.common.error.ErrorController;
+import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.controller.BidController;
 import com.sondahum.mamas.domain.bid.Bid;
@@ -13,11 +14,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -138,8 +142,6 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
     @Test
     public void 호가정보_조회() throws Exception {
         MockHttpServletResponse result = requestGet("/bids/3");
-
-        System.out.println(result.getContentAsString());
         MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
     }
 
@@ -149,17 +151,17 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
      *********************************/
     @Test
     public void 유저로_검색() throws Exception {
-        BidDto.SearchReq query = BidDto.SearchReq.builder()
-                .user("김철수").build();
+        BidDto.SearchReq query = new BidDto.SearchReq();
+        query.setUser("박숙자");
 
-       Map<String, String> pageRequest =
-               pageRequestBuilder("1", "5", "ASC");
+       PageRequest pageRequest =
+               pageRequestBuilder(1, 5);
 
        MockHttpServletResponse result =
                 requestGet(
-                        "/bids",
+                        "/bids/search",
                         requestParameters(query),
-                        requestParameters(pageRequest)
+                        requestBody(pageRequest)
                 );
 
         System.out.println(result.getContentAsString());
@@ -168,17 +170,17 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
 
     @Test
     public void 매물로_검색() throws Exception {
-        BidDto.SearchReq query = BidDto.SearchReq.builder()
-                .estate("행복아파트").build();
+        BidDto.SearchReq query = new BidDto.SearchReq();
+        query.setEstate("세운상가");
 
-        Map<String, String> pageRequest =
-                pageRequestBuilder("1", "5", "ASC");
+        PageRequest pageRequest =
+                pageRequestBuilder(1, 5);
 
         MockHttpServletResponse result =
                 requestGet(
-                        "/bids",
+                        "/bids/search",
                         requestParameters(query),
-                        requestParameters(pageRequest)
+                        requestBody(pageRequest)
                 );
 
         System.out.println(result.getContentAsString());
@@ -187,17 +189,17 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
 
     @Test
     public void 액션으로_검색() throws Exception {
-        BidDto.SearchReq query = BidDto.SearchReq.builder()
-                .action(Action.BUY).build();
+        BidDto.SearchReq query = new BidDto.SearchReq();
+        query.setAction(Action.SELL);
 
-        Map<String, String> pageRequest =
-                pageRequestBuilder("1", "5", "ASC");
+        PageRequest pageRequest =
+                pageRequestBuilder(1, 5);
 
         MockHttpServletResponse result =
                 requestGet(
-                        "/bids",
+                        "/bids/search",
                         requestParameters(query),
-                        requestParameters(pageRequest)
+                        requestBody(pageRequest)
                 );
 
         System.out.println(result.getContentAsString());
@@ -206,17 +208,17 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
 
     @Test
     public void 가격으로_검색() throws Exception {
-        BidDto.SearchReq query = BidDto.SearchReq.builder()
-                .price(buildPrice(100L, 1000L)).build();
+        BidDto.SearchReq query = new BidDto.SearchReq();
+        query.setPrice(Range.Price.builder().minimum(100L).maximum(1000L).build());
 
-        Map<String, String> pageRequest =
-                pageRequestBuilder("1", "5", "ASC");
+        PageRequest pageRequest =
+                pageRequestBuilder(1, 5);
 
         MockHttpServletResponse result =
                 requestGet(
-                        "/bids",
+                        "/bids/search",
                         requestParameters(query),
-                        requestParameters(pageRequest)
+                        requestBody(pageRequest)
                 );
 
         System.out.println(result.getContentAsString());
@@ -227,12 +229,22 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
         return Range.Price.builder().minimum(min).maximum(max).build();
     }
 
-    private Map<String, String> pageRequestBuilder(String page, String size, String direction) {
-        Map<String, String> pageRequest= new LinkedHashMap<>();
-        pageRequest.put("page", page);
-        pageRequest.put("size", size);
-        pageRequest.put("direction", direction);
+    private PageRequest pageRequestBuilder(int page, int size) {
+        PageRequest pageRequest = new PageRequest();
+
+        pageRequest.setSize(size);
+        pageRequest.setPage(page);
+        pageRequest.setOrderList(orderBuilder()); // todo orderList....
 
         return pageRequest;
+    }
+
+    private List<Sort.Order> orderBuilder() {
+        List<Sort.Order> list = new LinkedList<>();
+
+        list.add(new Sort.Order(Sort.Direction.DESC, "name"));
+        list.add(new Sort.Order(Sort.Direction.ASC, "min_price"));
+
+        return list;
     }
 }

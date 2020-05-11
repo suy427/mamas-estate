@@ -17,8 +17,7 @@ public class RequestValueContainer {
     protected MockHeader header;
     protected ResponseHandler responseHandler;
 
-    public RequestValueContainer() {
-    }
+    public RequestValueContainer() {}
 
     public RequestValueContainer(RequestValues... values) {
         for (RequestValues valueObject : values) {

@@ -44,7 +44,6 @@ public class Bid extends BaseEntity implements Comparable<Bid> {
             , @AttributeOverride(name = "maximum", column = @Column(name = "max_price"))})
     private Range.Price priceRange;
 
-
     private BidStatus status;
 
     public Bid updateBidInfo(BidDto.UpdateReq bidDto) {

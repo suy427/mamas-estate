@@ -13,9 +13,11 @@ import com.sondahum.mamas.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,8 +37,8 @@ public class BidController {
     }
 
     @GetMapping(value = "/search")
-    public Page<BidDto.DetailForm> searchBids(@RequestParam(name = "query", required = false) final BidDto.SearchReq query, final PageRequest pageRequest) {
-        return bidSearchService.search(query, pageRequest.of(query.getSortOrders())).map(BidDto.DetailForm::new);
+    public Page<BidDto.DetailForm> searchBids(@RequestParam(value = "query", required = false) final BidDto.SearchReq query, @RequestBody final PageRequest pageRequest) {
+        return bidSearchService.search(query, pageRequest.of()).map(BidDto.DetailForm::new);
     }
 
     @GetMapping(value = "/user/{userId}")
