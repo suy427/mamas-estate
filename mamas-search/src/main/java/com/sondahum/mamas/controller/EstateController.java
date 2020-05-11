@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/estate")
+@RequestMapping("/estates")
 @RequiredArgsConstructor
 @Slf4j
 public class EstateController {
@@ -26,17 +26,12 @@ public class EstateController {
     private final EstateSearchService estateSearchService;
 
 
-    @PostMapping
+    @PostMapping(value = "/estate")
     public EstateDto.DetailForm createEstate(@RequestBody @Valid EstateDto.CreateReq estateDto) {
         return new EstateDto.DetailForm(estateInfoService.createEstateInfo(estateDto));
     }
 
-    @PostMapping
-    public EstateDto.SimpleForm setEstate(@RequestBody @Valid EstateDto.CreateReq estateDto) {
-        return new EstateDto.SimpleForm(estateInfoService.createEstateInfo(estateDto));
-    }
-
-    @GetMapping
+    @GetMapping(value = "/search")
     public Page<EstateDto.SimpleForm> searchEstates(EstateDto.SearchReq query, final PageRequest pageRequest) {
         return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(EstateDto.SimpleForm::new);
     }
@@ -52,9 +47,9 @@ public class EstateController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping
-    public List<EstateDto.SimpleForm> getUserEstateList(long id) {
-        return estateInfoService.getUserEstateList(id).stream()
+    @GetMapping(value = "/user/{userId}")
+    public List<EstateDto.SimpleForm> getUserEstateList(@PathVariable final long userId) {
+        return estateInfoService.getUserEstateList(userId).stream()
                 .map(EstateDto.SimpleForm::new)
                 .collect(Collectors.toList());
     }
@@ -64,17 +59,12 @@ public class EstateController {
         return new EstateDto.DetailForm(estateInfoService.getEstateById(id));
     }
 
-    @PutMapping
-    public EstateDto.DetailForm updateEstateInfo(@RequestBody final EstateDto.UpdateReq dto) {
-        return new EstateDto.DetailForm(estateInfoService.updateEstateInfo(dto));
-    }
-
-    @PutMapping
-    public EstateDto.SimpleForm updateEstate(EstateDto.UpdateReq estateDto) {
-        return new EstateDto.SimpleForm(estateInfoService.updateEstateInfo(estateDto));
-    }
-
     @PutMapping(value = "/{id}")
+    public EstateDto.DetailForm updateEstateInfo(@PathVariable final long id, @RequestBody final EstateDto.UpdateReq dto) {
+        return new EstateDto.DetailForm(estateInfoService.updateEstateInfo(id, dto));
+    }
+
+    @PutMapping(value = "/delete/{id}")
     public EstateDto.SimpleForm deleteEstateSoft(@PathVariable final long id) {
         return new EstateDto.SimpleForm(estateInfoService.deleteEstateSoft(id));
     }

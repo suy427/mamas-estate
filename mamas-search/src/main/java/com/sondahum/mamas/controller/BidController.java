@@ -22,26 +22,26 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/bid")
+@RequestMapping("/bids")
 public class BidController {
 
     private final BidInfoService bidInfoService;
     private final BidSearchService bidSearchService;
 
 
-    @PostMapping
+    @PostMapping(value = "/bid")
     public BidDto.DetailForm createBid(@RequestBody @Valid BidDto.CreateReq bidDto) {
         return new BidDto.DetailForm(bidInfoService.createBid(bidDto));
     }
 
-    @GetMapping
+    @GetMapping(value = "/search")
     public Page<BidDto.DetailForm> searchBids(@RequestParam(name = "query", required = false) final BidDto.SearchReq query, final PageRequest pageRequest) {
         return bidSearchService.search(query, pageRequest.of(query.getSortOrders())).map(BidDto.DetailForm::new);
     }
 
-    @GetMapping
-    public List<BidDto.DetailForm> getUserBidList(long id) {
-        return bidInfoService.getUserBidList(id).stream()
+    @GetMapping(value = "/user/{userId}")
+    public List<BidDto.DetailForm> getUserBidList(@PathVariable long userId) {
+        return bidInfoService.getUserBidList(userId).stream()
                 .map(BidDto.DetailForm::new)
                 .collect(Collectors.toList());
     }
@@ -51,13 +51,13 @@ public class BidController {
         return new BidDto.DetailForm(bidInfoService.getBidById(id));
     }
 
-    @PutMapping
-    public BidDto.DetailForm updateBidInfo(@RequestBody final BidDto.UpdateReq dto) {
-        return new BidDto.DetailForm(bidInfoService.updateBid(dto));
+    @PutMapping(value = "/{id}")
+    public BidDto.DetailForm updateBidInfo(@PathVariable final long id, @RequestBody final BidDto.UpdateReq dto) {
+        return new BidDto.DetailForm(bidInfoService.updateBid(id, dto));
     }
 
-    @DeleteMapping(value = "/{id}")
-    public BidDto.DetailForm revertContract(@PathVariable final long id) {
+    @PutMapping(value = "/revert/{id}")
+    public BidDto.DetailForm revertBid(@PathVariable final long id) {
         return new BidDto.DetailForm(bidInfoService.revertBid(id));
     }
 

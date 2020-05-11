@@ -2,14 +2,12 @@ package com.sondahum.mamas.domain.user;
 
 
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
-import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.user.exception.NotEnoughInfoException;
 import com.sondahum.mamas.domain.user.exception.UserAlreadyExistException;
 import com.sondahum.mamas.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -42,7 +40,7 @@ public class UserInfoDao {
     }
 
     public User findUserByName(String name) {
-        return userRepository.findByName_AndActive(name, true)
+        return userRepository.findByName_AndActiveTrue(name)
                 .orElseThrow(() -> new NoSuchEntityException(1L)); // todo exception 정의하기
     }
 
@@ -55,13 +53,11 @@ public class UserInfoDao {
         return optionalUser.get();
     }
 
-    public User updateUserInfo(UserDto.UpdateReq dto) {
-        Optional<User> optional = userRepository.findById(dto.getId());
-        User user = optional.orElseThrow(() -> new NoSuchEntityException(dto.getId()));
+    public User updateUserInfo(long id, UserDto.UpdateReq dto) {
+        Optional<User> optional = userRepository.findById(id);
+        User user = optional.orElseThrow(() -> new NoSuchEntityException(id));
 
-        user.updateUserInfo(dto);// 예제에 보면 따로 repository에 변경된 entity를 save하지 않는다.
-
-        return user;
+        return user.updateUserInfo(dto);// 예제에 보면 따로 repository에 변경된 entity를 save하지 않는다.
     }
 
     public User deleteUserSoft(Long id) {
@@ -87,11 +83,11 @@ public class UserInfoDao {
         Optional<User> optionalUser;
 
         if (name == null) { // 폰번호만 입력한 경우
-            optionalUser = userRepository.findByPhone_AndActive(phone, true);
+            optionalUser = userRepository.findByPhone_AndActiveTrue(phone);
         } else if (phone == null) { // 이름만 입력한 경우
-            optionalUser = userRepository.findByName_AndActive(name, true);
+            optionalUser = userRepository.findByName_AndActiveTrue(name);
         } else { // 둘 다 입력한 경우
-            optionalUser = userRepository.findByName_AndPhone_AndActive(name, phone, true);
+            optionalUser = userRepository.findByName_AndPhone_AndActiveTrue(name, phone);
         }
         return  optionalUser;
     }

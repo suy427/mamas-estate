@@ -50,7 +50,6 @@ public class EstateDto {
     @Getter
     @Setter
     public static class UpdateReq {
-        private Long id;
         private String name;
         private Address address;
         private Double area;

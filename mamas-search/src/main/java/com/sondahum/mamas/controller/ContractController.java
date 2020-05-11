@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/contract")
+@RequestMapping("/contracts")
 @Slf4j
 @RequiredArgsConstructor
 public class ContractController {
@@ -30,26 +30,26 @@ public class ContractController {
     private final ContractSearchService contractSearchService;
 
 
-    @PostMapping
+    @PostMapping(value = "/contract")
     public ContractDto.DetailForm createContract(@RequestBody @Valid ContractDto.CreateReq userDto) {
         return new ContractDto.DetailForm(contractInfoService.createContractInfo(userDto));
     }
 
-    @GetMapping
+    @GetMapping(value = "/search")
     public Page<ContractDto.DetailForm> searchContracts(ContractDto.SearchReq query, PageRequest pageRequest) {
         return contractSearchService.search(query, pageRequest.of(query.getSortOrders())).map(ContractDto.DetailForm::new);
     }
 
-    @GetMapping
-    public List<ContractDto.DetailForm> getUserContractList(long id) {
-        return contractInfoService.getUserContractList(id).stream()
+    @GetMapping(value = "/user/{userId}")
+    public List<ContractDto.DetailForm> getUserContractList(@PathVariable long userId) {
+        return contractInfoService.getUserContractList(userId).stream()
                 .map(ContractDto.DetailForm::new)
                 .collect(Collectors.toList());
     }
 
-    @PutMapping
-    public ContractDto.DetailForm updateContractInfo(@RequestBody final ContractDto.UpdateReq dto) {
-        return new ContractDto.DetailForm(contractInfoService.updateContractInfo(dto));
+    @PutMapping(value = "/{id}")
+    public ContractDto.DetailForm updateContractInfo(@PathVariable final long id, @RequestBody final ContractDto.UpdateReq dto) {
+        return new ContractDto.DetailForm(contractInfoService.updateContractInfo(id, dto));
     }
 
     @GetMapping(value = "/{id}")
@@ -57,7 +57,7 @@ public class ContractController {
         return new ContractDto.DetailForm(contractInfoService.getContractById(id));
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/revert/{id}")
     public ContractDto.DetailForm revertContract(@PathVariable final long id) {
         return new ContractDto.DetailForm(contractInfoService.revertContract(id));
     }

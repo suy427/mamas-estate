@@ -13,6 +13,6 @@ import java.util.Optional;
 
 @Repository
 public interface EstateRepository extends JpaRepository<Estate, Long> {
-    Optional<Estate> findByNameAndAddress_AndActive(String name, Address address, boolean validity);
-    Optional<Estate> findByName_AndActive(String name, boolean validity);
+    Optional<Estate> findByNameAndAddress_AndActiveTrue(String name, Address address);
+    Optional<Estate> findByName_AndActiveTrue(String name);
 }

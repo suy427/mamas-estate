@@ -23,12 +23,14 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
     public void 등록성공() throws Exception {
         BidDto.CreateReq dto =
                 BidDto.CreateReq.builder()
-                        .userName("김철수")
-                        .estateName("로열팰리스 1003호")
-                        .action(Action.SELL).build();
+                        .userName("박숙자")
+                        .estateName("세운상가")
+                        .action(Action.BUY)
+                        .price(Range.Price.builder().minimum(10L).maximum(20L).build())
+                        .build();
 
         MockHttpServletResponse result = requestPost(
-                "/bid",
+                "/bids/bid",
                 requestBody(dto)
         );
 

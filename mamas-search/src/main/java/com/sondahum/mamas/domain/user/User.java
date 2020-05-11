@@ -65,10 +65,12 @@ public class User extends BaseEntity {
         estateList.add(estate);
     }
 
-    public void updateUserInfo(UserDto.UpdateReq userDto) {
+    public User updateUserInfo(UserDto.UpdateReq userDto) {
         this.name = userDto.getName();
         this.phone = userDto.getPhone();
-        this.role = Role.findByName(userDto.getRole());
+        this.role = userDto.getRole();
+
+        return this;
     }
 
 

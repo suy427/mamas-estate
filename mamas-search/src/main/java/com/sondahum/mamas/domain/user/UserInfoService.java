@@ -27,8 +27,8 @@ public class UserInfoService {
         return userInfoDao.getUserById(id);
     }
 
-    public User updateUserInfo(UserDto.UpdateReq dto) {
-        return userInfoDao.updateUserInfo(dto);
+    public User updateUserInfo(long id, UserDto.UpdateReq dto) {
+        return userInfoDao.updateUserInfo(id, dto);
     }
 
     // 지울때 연관관계까지 지우게되면 있던 정보들이 엉망이된다.

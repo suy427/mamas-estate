@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 public enum ContractType {
     RENT(1, "RENT")
     , SALE(2, "SALE")
-    , MONTHLY(3, "MONTH");
+    , MONTH(3, "MONTH");
 
 
     private final int value;

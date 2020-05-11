@@ -4,10 +4,7 @@ import com.sondahum.mamas.common.model.Range;
 //import com.sondahum.mamas.domain.user.model.Phone;
 import com.sondahum.mamas.domain.user.model.Role;
 import com.sondahum.mamas.domain.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
@@ -22,25 +19,31 @@ public class UserDto {
     public static class CreateReq {
         private String name;
         private String phone;
-        private String role;
+        private Role role;
 
         public User toEntity() {
             return User.builder()
                     .name(name)
                     .phone(phone)
-                    .role(Role.findByName(role))
+                    .role(role)
                     .build();
         }
 
     }
 
     @Getter
-    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UpdateReq {
-        private Long id;
         private String name;
         private String phone;
-        private String role;
+        private Role role;
+
+        @Builder
+        public UpdateReq(String name, String phone, Role role) {
+            this.name = name;
+            this.phone = phone;
+            this.role = role;
+        }
     }
 
     @Getter
@@ -53,6 +56,7 @@ public class UserDto {
         private List<Sort.Order> sortOrders;
     }
 
+    @Getter
     public static class SimpleForm { // list에 나올 기본정보
         private Long id;
         private String name;

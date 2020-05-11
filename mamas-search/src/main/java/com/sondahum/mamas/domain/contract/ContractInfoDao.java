@@ -1,6 +1,5 @@
 package com.sondahum.mamas.domain.contract;
 
-import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
 import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
 import com.sondahum.mamas.domain.contract.exception.ContractAlreadyExistException;
 import com.sondahum.mamas.dto.ContractDto;
@@ -20,22 +19,22 @@ public class ContractInfoDao {
 
 
     // contract의 duplicate는 expire만
-    public Contract createContractInfo(ContractDto.CreateReq contractDto) {
-        Optional<Contract> optionalContract = isDuplicated(contractDto);
-        Contract contract;
+    public Contract createContractInfo(Contract contract) {
+        Optional<Contract> optionalContract = isDuplicated(contract);
+        Contract result;
 
         if (optionalContract.isPresent()) { // 있던거
-            contract = optionalContract.get();
-            if (contract.isValidAt(contractDto.getExpireDate())) { // 기한 내면 중복 불가
+            result = optionalContract.get();
+            if (contract.isValidAt(contract.getExpireDate())) { // 기한 내면 중복 불가
                 throw new ContractAlreadyExistException(contract);
             } else {
-                contract = contractRepository.save(contractDto.toEntity()); // 기한 지나면 중복 가능
+                result = contractRepository.save(contract); // 기한 지나면 중복 가능
             }
         } else {
-            contract = contractRepository.save(contractDto.toEntity()); // 없던거면 저장
+            result = contractRepository.save(contract); // 없던거면 저장
         }
 
-        return contract;
+        return result;
     }
 
     public Contract getContractById(long id) {
@@ -46,21 +45,18 @@ public class ContractInfoDao {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Contract> isDuplicated(ContractDto.CreateReq contractDto) {
-        return contractRepository.findBySeller_NameAndBuyer_NameAndEstate_Name_AndActive(
-                contractDto.getSeller()
-                , contractDto.getBuyer()
-                , contractDto.getEstate()
-                , true);
+    public Optional<Contract> isDuplicated(Contract contract) {
+        return contractRepository.findBySeller_NameAndBuyer_NameAndEstate_Name_AndActiveTrue(
+                contract.getSeller().getName()
+                , contract.getBuyer().getName()
+                , contract.getEstate().getName());
     }
 
-    public Contract updateContractInfo(ContractDto.UpdateReq dto) {
-        Optional<Contract> optionalContract = contractRepository.findById(dto.getId());
-        Contract contract = optionalContract.orElseThrow(() -> new NoSuchEntityException(dto.getId()));
+    public Contract updateContractInfo(long id, ContractDto.UpdateReq dto) {
+        Optional<Contract> optionalContract = contractRepository.findById(id);
+        Contract contract = optionalContract.orElseThrow(() -> new NoSuchEntityException(id));
 
-        contract.updateContractInfo(dto);
-
-        return contract;
+        return contract.updateContractInfo(dto);
     }
 
     public Contract softDeleteContract(Long id) {

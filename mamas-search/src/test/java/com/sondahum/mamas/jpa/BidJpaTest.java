@@ -51,8 +51,8 @@ public class BidJpaTest {
 
         Bid savedBid = bidRepository.save(bid1);
 
-        Optional<User> optionalUser = userRepository.findByName_AndActive(user1.getName(), true);
-        Optional<Estate> optionalEstate = estateRepository.findByName_AndActive(estate1.getName(), true);
+        Optional<User> optionalUser = userRepository.findByName_AndActiveTrue(user1.getName());
+        Optional<Estate> optionalEstate = estateRepository.findByName_AndActiveTrue(estate1.getName());
 
         User savedUser = null;
         Estate savedEstate = null;

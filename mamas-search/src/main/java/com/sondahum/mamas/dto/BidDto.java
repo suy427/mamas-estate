@@ -40,12 +40,10 @@ public class BidDto {
     }
 
     @Getter
-    @Setter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class UpdateReq {
-        private Long id;
         private Range.Price price;
         private BidStatus status;
         @NotNull(message = "변경할 매매 종류를 입력해주세요..")

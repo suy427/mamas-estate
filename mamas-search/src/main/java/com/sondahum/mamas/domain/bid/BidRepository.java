@@ -13,5 +13,5 @@ import java.util.Optional;
 @Repository
 public interface BidRepository extends JpaRepository<Bid, Long> {
 
-    Optional<Bid> findByUser_NameAndEstate_NameAndAction_AndActive(String user, String estate, Action action, boolean active);
+    Optional<Bid> findByUser_NameAndEstate_NameAndActionAndActiveTrue(String userName, String estateName, Action action);
 }

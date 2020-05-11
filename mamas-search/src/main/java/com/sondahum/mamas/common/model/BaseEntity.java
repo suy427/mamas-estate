@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter
 @Setter
-@Where(clause = "is_active = true")
+@Where(clause = "is_active = true;")
 public abstract class BaseEntity implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)

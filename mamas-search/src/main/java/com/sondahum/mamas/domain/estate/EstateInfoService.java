@@ -22,29 +22,31 @@ public class EstateInfoService {
 
 
     public Estate createEstateInfo(EstateDto.CreateReq estateDto) {
-        Estate estate;
+        User owner = userInfoDao.findUserByName(estateDto.getOwnerName());
+        Estate returned;
+
+        Estate estate = estateDto.toEntity();
+
+        estate.setOwner(owner);
+        owner.addEstate(estate);
 
         try {
-            estate = estateInfoDao.createEstateInfo(estateDto);
+            returned = estateInfoDao.createEstateInfo(estate);
         } catch (EstateAlreadyExistException e) {
-            estate = e.getEstate();
+            returned = e.getEstate();
             e.setMessage(estateDto.getName() + " 은(는) 이미 등록된 매물입니다.");
             throw e;
         }
 
-        User owner = userInfoDao.findUserByName(estateDto.getOwnerName());
-        estate.setOwner(owner);
-        owner.addEstate(estate);
-
-        return estate;
+        return returned;
     }
 
     public Estate getEstateById(long id) {
         return estateInfoDao.getEstateById(id);
     }
 
-    public Estate updateEstateInfo(EstateDto.UpdateReq dto) {
-        return estateInfoDao.updateEstateInfo(dto);
+    public Estate updateEstateInfo(long id, EstateDto.UpdateReq dto) {
+        return estateInfoDao.updateEstateInfo(id, dto);
     }
 
     public Estate deleteEstateSoft(long id) {

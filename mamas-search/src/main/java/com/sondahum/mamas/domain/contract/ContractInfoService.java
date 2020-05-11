@@ -36,7 +36,8 @@ public class ContractInfoService {
             throw new InvalidActionException("매도자 소유의 매물이 아닙니다. [ " +estate.getOwner().getName()+" ]");
         }
 
-        Contract contract = contractInfoDao.createContractInfo(contractDto);
+        Contract contract = contractDto.toEntity();
+
         contract.setSeller(seller);
         contract.setBuyer(buyer);
         contract.setEstate(estate);
@@ -47,7 +48,7 @@ public class ContractInfoService {
         seller.getEstateList().removeIf(property -> property.getId().equals(estate.getId()));
         buyer.addEstate(estate);
 
-        return contract;
+        return contractInfoDao.createContractInfo(contract);
     }
 
     public Contract getContractById(long id) {
@@ -77,12 +78,11 @@ public class ContractInfoService {
     }
 
     // 계약 내용은 바뀔 수 있다 + estate의 명칭까지..! --> 계약 내용만 바뀌도록..!
-    public Contract updateContractInfo(ContractDto.UpdateReq contractDto) {
-        Contract contract = contractInfoDao.getContractById(contractDto.getId());
-        return contract.updateContractInfo(contractDto);
+    public Contract updateContractInfo(long id, ContractDto.UpdateReq contractDto) {
+        return contractInfoDao.updateContractInfo(id, contractDto);
     }
 
-    public List<Contract> getUserContractList(long id) {
-        return userInfoDao.getUserById(id).getContractList();
+    public List<Contract> getUserContractList(long userId) {
+        return userInfoDao.getUserById(userId).getContractList();
     }
 }

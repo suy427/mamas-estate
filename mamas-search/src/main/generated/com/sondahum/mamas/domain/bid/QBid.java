@@ -34,7 +34,8 @@ public class QBid extends EntityPathBase<Bid> {
 
     public final com.sondahum.mamas.domain.estate.QEstate estate;
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
+    //inherited
+    public final NumberPath<Long> id = _super.id;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;

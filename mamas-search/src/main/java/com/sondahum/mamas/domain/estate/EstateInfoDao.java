@@ -19,24 +19,23 @@ public class EstateInfoDao {
     private final EstateRepository estateRepository;
 
 
-
-    public Estate createEstateInfo(EstateDto.CreateReq estateDto) {
-        Optional<Estate> duplicatedEstate = getDuplicatedEstate(estateDto.getName(), estateDto.getAddress());
+    public Estate createEstateInfo(Estate estate) {
+        Optional<Estate> duplicatedEstate = getDuplicatedEstate(estate.getName(), estate.getAddress());
 
         if (duplicatedEstate.isPresent())
             throw new EstateAlreadyExistException(duplicatedEstate.get());
 
-        return estateRepository.save(estateDto.toEntity());
+        return estateRepository.save(estate);
     }
 
     public Estate findEstateByName(String name) {
-        return estateRepository.findByName_AndActive(name, true)
+        return estateRepository.findByName_AndActiveTrue(name)
                 .orElseThrow(() -> new NoSuchEntityException(1L));
     }
 
     @Transactional(readOnly = true)
     public Optional<Estate> getDuplicatedEstate(String name, Address address) {
-        return estateRepository.findByNameAndAddress_AndActive(name, address, true);
+        return estateRepository.findByNameAndAddress_AndActiveTrue(name, address);
     }
 
 
@@ -47,13 +46,11 @@ public class EstateInfoDao {
         return optionalEstate.get();
     }
 
-    public Estate updateEstateInfo(EstateDto.UpdateReq dto) { // User를 update할때는...?
-        Optional<Estate> optionalEstate = estateRepository.findById(dto.getId());
-        Estate estate = optionalEstate.orElseThrow(() -> new NoSuchEntityException(dto.getId()));
+    public Estate updateEstateInfo(long id, EstateDto.UpdateReq dto) { // User를 update할때는...?
+        Optional<Estate> optionalEstate = estateRepository.findById(id);
+        Estate estate = optionalEstate.orElseThrow(() -> new NoSuchEntityException(id));
 
-        estate.updateEstateInfo(dto); // 영속상태의 entity는 수정사항이 자동 반영된다.
-
-        return estate;
+        return estate.updateEstateInfo(dto); // 영속상태의 entity는 수정사항이 자동 반영된다.
     }
 
     public Estate deleteEstateSoft(Long id) {

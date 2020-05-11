@@ -35,39 +35,21 @@ public class BidInfoService {
             throw new InvalidActionException("자신의 땅은 살 수 없습니다.");
         }
 
-        Bid bid = bidInfoDao.createBid(bidDto);
+        Bid bid = bidDto.toEntity();
         bid.setUser(user);
         bid.setEstate(estate);
 
         user.addBidHistory(bid);
         estate.addBidHistory(bid);
 
-        return bid;
-    }
-
-    private void bidValidation(Estate estate, User user, Action action) {
-        if (estate.getOwner().equals(user)) {
-            if (action.equals(Action.LEASE) || action.equals(Action.BUY))
-                throw new InvalidActionException("자신의 땅은 사거나 임대할  없습니다.");
-        } else {
-            if (action.equals(Action.SELL) || action.equals(Action.LEND))
-                throw new InvalidActionException("본인 명의의 매물만 매도/임대 할 수 있습니다.");
-        }
+        return bidInfoDao.createBid(bid);
     }
 
     // 땅 고정. (유저, 가격)
     // bid는 내용이 바뀌면 체크해줘야할게 있다.
     @Transactional(rollbackFor = Exception.class)
-    public Bid updateBid(BidDto.UpdateReq bidDto) {
-        Bid originalBid = bidInfoDao.getBidById(bidDto.getId());
-        Estate estate = originalBid.getEstate();
-        User user = originalBid.getUser();
-
-        bidValidation(estate, user, bidDto.getAction());
-
-        // 연관관계는 못바꾸고 내용만 바꿀 수 있음.
-
-        return originalBid.updateBidInfo(bidDto);
+    public Bid updateBid(long id, BidDto.UpdateReq bidDto) {
+        return bidInfoDao.updateBidInfo(id, bidDto);
     }
 
     public Bid revertBid(Long id) {
@@ -87,7 +69,7 @@ public class BidInfoService {
         bidInfoDao.hardDeleteBid(id);
     }
 
-    public List<Bid> getUserBidList(long id) {
-        return userInfoDao.getUserById(id).getBidList();
+    public List<Bid> getUserBidList(long userId) {
+        return userInfoDao.getUserById(userId).getBidList();
     }
 }

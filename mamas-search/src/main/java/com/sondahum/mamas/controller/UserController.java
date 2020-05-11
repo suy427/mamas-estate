@@ -31,19 +31,14 @@ class UserController {
         return new UserDto.DetailForm(userInfoService.createUserInfo(userDto));
     }
 
-    @PostMapping
-    public List<UserDto.SimpleForm> specifyUser(String query) {
+    @GetMapping(value = "/specify")
+    public List<UserDto.SimpleForm> specifyUser(@RequestParam(value = "query") final String query) {
         return userSearchService.specify(query).stream()
                 .map(UserDto.SimpleForm::new)
                 .collect(Collectors.toList());
     }
 
-    @PostMapping // 정보가 없는 새로운 유저일 경우 입력 form채워서 만듦.
-    public UserDto.SimpleForm setUser(@RequestBody @Valid UserDto.CreateReq userDto) {
-        return new UserDto.SimpleForm(userInfoService.createUserInfo(userDto));
-    }
-
-    @GetMapping
+    @GetMapping(value = "/search")
     public Page<UserDto.SimpleForm> searchUsers(UserDto.SearchReq query, PageRequest pageRequest) {
         return userSearchService.search(query, pageRequest.of(query.getSortOrders())).map(UserDto.SimpleForm::new);
     }
@@ -53,12 +48,12 @@ class UserController {
         return new UserDto.DetailForm(userInfoService.getUserById(id));
     }
 
-    @PutMapping
-    public UserDto.DetailForm updateUserInfo(@RequestBody final UserDto.UpdateReq dto) {
-        return new UserDto.DetailForm(userInfoService.updateUserInfo(dto));
+    @PutMapping(value = "/{id}")
+    public UserDto.DetailForm updateUserInfo(@PathVariable final long id, @RequestBody final UserDto.UpdateReq dto) {
+        return new UserDto.DetailForm(userInfoService.updateUserInfo(id, dto));
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/delete/{id}")
     public UserDto.DetailForm deleteUserSoft(@PathVariable final long id) {
         return new UserDto.DetailForm(userInfoService.deleteUserSoft(id));
     }
