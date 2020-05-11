@@ -1,14 +1,22 @@
 package com.sondahum.mamas.integration;
 
+import com.sondahum.mamas.common.error.ErrorController;
 import com.sondahum.mamas.common.model.Range;
+import com.sondahum.mamas.controller.BidController;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.dto.BidDto;
 import com.sondahum.mamas.testutil.AbstractMockRequestHelper;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -23,6 +31,24 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
     public void 등록성공() throws Exception {
         BidDto.CreateReq dto =
                 BidDto.CreateReq.builder()
+                        .userName("황성욱")
+                        .estateName("세운상가")
+                        .action(Action.BUY)
+                       .price(Range.Price.builder().minimum(10L).maximum(20L).build())
+                        .build();
+
+        MockHttpServletResponse result = requestPost(
+                "/bids/bid",
+                requestBody(dto)
+        );
+
+        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
+    }
+
+    @Test
+    public void 중복호가() throws Exception {
+        BidDto.CreateReq dto =
+                BidDto.CreateReq.builder()
                         .userName("박숙자")
                         .estateName("세운상가")
                         .action(Action.BUY)
@@ -34,7 +60,7 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
                 requestBody(dto)
         );
 
-        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
+        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(400));
     }
 
     @Test
@@ -97,12 +123,12 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
 
         Bid bid = Bid.builder().action(dto.getAction()).priceRange(dto.getPrice()).build();
 
-        MockHttpServletResponse result = requestPost(
-                "/bids",
+        MockHttpServletResponse result = requestPut(
+                "/bids/3",
                 requestBody(dto)
         );
 
-        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(400));
+        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
     }
 
 
@@ -111,7 +137,7 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
      *********************************/
     @Test
     public void 호가정보_조회() throws Exception {
-        MockHttpServletResponse result = requestGet("/bids/"+1);
+        MockHttpServletResponse result = requestGet("/bids/3");
 
         System.out.println(result.getContentAsString());
         MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
