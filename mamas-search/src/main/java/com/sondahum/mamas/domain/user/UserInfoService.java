@@ -14,13 +14,7 @@ public class UserInfoService {
     private final UserInfoDao userInfoDao;
 
     public User createUserInfo(UserDto.CreateReq userDto) { // 기본정보 생성 --> 있으면 할필요 없다.
-        User user;
-        try {
-            user = userInfoDao.createUserInfo(userDto);
-        } catch (UserAlreadyExistException e) {
-            user = e.getUser();
-        }
-        return user;
+        return userInfoDao.createUserInfo(userDto.toEntity());
     }
 
     public User getUserById(long id) {

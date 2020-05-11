@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = MamasEstateApplicationStarter.class)
 @AutoConfigureMockMvc
-//@Transactional
+@Transactional
 public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
 
     @Autowired

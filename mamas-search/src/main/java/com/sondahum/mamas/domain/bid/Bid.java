@@ -26,15 +26,15 @@ import java.time.LocalDateTime;
 @AttributeOverride(name = "id", column = @Column(name = "bid_id"))
 public class Bid extends BaseEntity implements Comparable<Bid> {
 
-    @ManyToOne//(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "user", nullable = false)
     private User user;
 
     @Column(name = "action", nullable = false)
     @Enumerated(EnumType.STRING)
     private Action action;
 
-    @ManyToOne//(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "estate", nullable = false)
     private Estate estate;
 

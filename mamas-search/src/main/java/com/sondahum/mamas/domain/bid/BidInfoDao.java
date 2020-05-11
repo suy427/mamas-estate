@@ -23,15 +23,8 @@ public class BidInfoDao {
     public final BidRepository bidRepository;
 
     // todo 호가는 똑같은걸 여러번 할 수도 있는거 아닐까..? --> 알려만 주자.
-    public Bid createBid(BidDto.CreateReq bidDto) {
-        Optional<Bid> duplicatedBid =
-                getDuplicatedBid(bidDto.getUserName(), bidDto.getEstateName(), bidDto.getAction());
-
-        if (duplicatedBid.isPresent()) {
-            throw new BidAlreadyExistException(duplicatedBid.get());
-        }
-
-        return bidRepository.save(bidDto.toEntity());
+    public Bid createBid(Bid bid) {
+        return bidRepository.save(bid);
     }
 
     public Bid getBidById(long id) {

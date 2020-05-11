@@ -27,16 +27,16 @@ public class UserInfoDao {
      * 2) estate를 등록하지 않고 User정보만 등록
      * --> '그냥 그대로 name, phone, role만 등록시킴'
      */
-    public User createUserInfo(UserDto.CreateReq userDto) {
-        if (userDto.getName() == null && userDto.getPhone() == null)
-            throw new NotEnoughInfoException(userDto.getName(), userDto.getPhone());
+    public User createUserInfo(User user) {
+        if (user.getName() == null && user.getPhone() == null)
+            throw new NotEnoughInfoException(user.getName(), user.getPhone());
 
-        Optional<User> duplicatedUser = getDuplicatedUser(userDto.getName(), userDto.getPhone());
+        Optional<User> duplicatedUser = getDuplicatedUser(user.getName(), user.getPhone());
 
         if (duplicatedUser.isPresent())
             throw new UserAlreadyExistException(duplicatedUser.get());// TODO 이름이 같으면 A,B표시 등등 생각해보기
 
-        return userRepository.save(userDto.toEntity());
+        return userRepository.save(user);
     }
 
     public User findUserByName(String name) {

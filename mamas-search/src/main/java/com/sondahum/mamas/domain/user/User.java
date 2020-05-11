@@ -42,15 +42,15 @@ public class User extends BaseEntity {
     // todo 이게 없으면 list가 null로 초기화된다... new ArrayList<>()가 안되구나...
     // todo bid를 못만들어서 그런가...?
     @Builder.Default
-    @OneToMany(mappedBy = "user")//, cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Bid> bidList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "owner")//, cascade = CascadeType.PERSIST)
+    @OneToMany
     private List<Estate> estateList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany//(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Contract> contractList = new ArrayList<>();
 
     public void addContractHistory(Contract contract) {

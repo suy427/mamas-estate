@@ -30,22 +30,22 @@ public class BidInfoService {
 
     @Transactional(rollbackFor = Exception.class)
     public Bid createBid(BidDto.CreateReq bidDto) {
-       User user = userInfoDao.findUserByName(bidDto.getUserName());
-       Estate estate = estateInfoDao.findEstateByName(bidDto.getEstateName());
+        User user = userInfoDao.findUserByName(bidDto.getUserName());
+        Estate estate = estateInfoDao.findEstateByName(bidDto.getEstateName());
 
         if (estate.getOwner().equals(user) && bidDto.getAction().equals(Action.BUY)) {
             throw new InvalidActionException("자신의 땅은 살 수 없습니다.");
         }
 
-        Bid bid;
+        Optional<Bid> duplicated =
+        bidInfoDao.getDuplicatedBid(bidDto.getUserName(),bidDto.getEstateName(),bidDto.getAction());
 
-        Optional<Bid> duplicatedBid =
-                bidInfoDao.getDuplicatedBid(bidDto.getUserName(), bidDto.getEstateName(), bidDto.getAction());
+        if (duplicated.isPresent()) {
+            throw new BidAlreadyExistException(duplicated.get()
+            ,"같은 매물에 호가한 적이 있습니다.");
+        }
 
-        if (duplicatedBid.isPresent()) {
-            return duplicatedBid.get();
-        } else
-            bid = bidDto.toEntity();
+        Bid bid = bidDto.toEntity();
 
         bid.setUser(user);
         bid.setEstate(estate);
@@ -53,7 +53,7 @@ public class BidInfoService {
         user.addBidHistory(bid);
         estate.addBidHistory(bid);
 
-        return bid;
+        return bidInfoDao.createBid(bid);
     }
 
     // 땅 고정. (유저, 가격)
