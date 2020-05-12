@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sondahum.mamas.testutil.parameters.*;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.util.MultiValueMap;
 
 import java.io.File;
 import java.io.FileOutputStream;

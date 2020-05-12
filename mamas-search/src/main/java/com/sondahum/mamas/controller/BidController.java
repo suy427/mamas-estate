@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,9 +37,14 @@ public class BidController {
         return new BidDto.DetailForm(bidInfoService.createBid(bidDto));
     }
 
-    @GetMapping(value = "/search")
-    public Page<BidDto.DetailForm> searchBids(@RequestParam(value = "query", required = false) final BidDto.SearchReq query, @RequestBody final PageRequest pageRequest) {
-        return bidSearchService.search(query, pageRequest.of()).map(BidDto.DetailForm::new);
+    @GetMapping
+    public Page<BidDto.DetailForm> searchBids(@RequestAttribute(value = "query", required = false) BidDto.SearchReq query) {
+        if (query.getSize() == 0)
+            query.setSize(10);
+        if (query.getPage() == 0)
+            query.setPage(1);
+
+        return bidSearchService.search(query).map(BidDto.DetailForm::new);
     }
 
     @GetMapping(value = "/user/{userId}")

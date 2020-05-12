@@ -5,18 +5,18 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.dto.BidDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
 import static com.sondahum.mamas.domain.bid.QBid.bid;
-import static com.sondahum.mamas.domain.estate.QEstate.estate;
 
 
 @Service
@@ -29,10 +29,16 @@ public class BidSearchService extends QuerydslRepositorySupport {
         this.bidRepository = bidRepository;
     }
 
-    public Page<Bid> search(final BidDto.SearchReq query, final Pageable pageable) {
-        if (query == null) {
-            bidRepository.findAll(pageable);
+    public Page<Bid> search(final BidDto.SearchReq query) {
+        if (query == null)
+            return null;
+
+        List<Sort.Order> orders = new ArrayList<>();
+        for (BidDto.SortOrder order : query.getOrders()) {
+            orders.add(new Sort.Order(Sort.Direction.valueOf(order.getDirection()), order.getProperty()));
         }
+
+        Pageable pageable =  PageRequest.of(query.getPage(), query.getSize(), Sort.by(orders));
 
         List<Bid> bids = from(bid).where(
                 validity()
@@ -42,6 +48,8 @@ public class BidSearchService extends QuerydslRepositorySupport {
                 , date(query.getDate())
                 , price(query.getPrice())
         ).fetch();
+
+
 
         return new PageImpl<>(bids, pageable, bids.size());
     }

@@ -1,6 +1,10 @@
 package com.sondahum.mamas.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.sondahum.mamas.common.config.SortDeserializer;
+import com.sondahum.mamas.common.config.SortSerializer;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.common.model.Range;
@@ -11,10 +15,12 @@ import com.sondahum.mamas.domain.user.User;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class BidDto {
@@ -55,13 +61,19 @@ public class BidDto {
 
     @Getter
     @Setter
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class SearchReq {
         private String user;
         private String estate;
         private Action action;
         private Range.Date date;
         private Range.Price price;
+
+        private Integer page;
+        private Integer size;
+        private List<SortOrder> orders = new ArrayList<>();
     }
 
     @Getter //todo ResponseBody로 반환할 객체에 Getter/Setter가 없으면 binding이 안되는거같다... 이유를 알아보자
@@ -80,5 +92,13 @@ public class BidDto {
             this.price = bid.getPriceRange();
             this.action = bid.getAction().name();
         }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class SortOrder {
+        String property;
+        String direction;
     }
 }

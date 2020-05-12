@@ -1,26 +1,22 @@
 package com.sondahum.mamas.common.model;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sondahum.mamas.common.config.SortDeserializer;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.sondahum.mamas.common.config.SortSerializer;
 import org.springframework.data.domain.Sort;
 
-import java.util.LinkedList;
-import java.util.List;
 
 public final class PageRequest {
 
     private int page;
     private int size;
-    private List<Sort.Order> orderList;
+    @JsonSerialize(using = SortSerializer.class)
+    private Sort sort;
 
     public PageRequest() {
-        orderList = new LinkedList<>();
+        Sort.Order defaultOrder = new Sort.Order(Sort.Direction.DESC, "created_date");
+        sort = Sort.by(defaultOrder);
     }
 
     public void setPage(int page) {
@@ -34,12 +30,8 @@ public final class PageRequest {
     }
 
     @JsonDeserialize(using = SortDeserializer.class)
-    public void setOrderList(List<Sort.Order> orderList) {
-        this.orderList = orderList;
-    }
-
-    public void addOrder(Sort.Order order) {
-        this.orderList.add(order);
+    public void setSort(Sort sort) {
+        this.sort = sort;
     }
 
     public int getPage() {
@@ -50,14 +42,11 @@ public final class PageRequest {
         return size;
     }
 
-    public List<Sort.Order> getOrderList() {
-        return orderList;
+    public Sort getSort() {
+        return sort;
     }
 
     public org.springframework.data.domain.PageRequest of() {
-        if (orderList.isEmpty())
-            return org.springframework.data.domain.PageRequest.of(page, size, Sort.Direction.DESC, "created_date");
-
-        return org.springframework.data.domain.PageRequest.of(page, size, Sort.by(orderList));
+        return org.springframework.data.domain.PageRequest.of(page, size, sort);
     }
 }
