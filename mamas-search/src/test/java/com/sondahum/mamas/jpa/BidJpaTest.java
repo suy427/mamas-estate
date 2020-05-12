@@ -18,8 +18,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.Optional;
 
 
-@DataJpaTest
 @Slf4j
+@DataJpaTest
 public class BidJpaTest {
 
     @Autowired
@@ -33,24 +33,19 @@ public class BidJpaTest {
     /**
      *  [CONDITION]
      *      사람 생성 --> 이 사람이 주인인 땅 생성 --> 이 땅의 판매 호가 생성 --> 호가 정보만 저장.
-     *
-     *  [EXPECTATION]
-     *      1. 사람도 같이 저장될까 ? -> O
-     *      2. 땅도 같이 저장될까 ? -> O
-     *      3. 저장이 된다면 그 사람의 estateList에 저장한 땅이 나올까 ?
-     *      4. 저장이 된다면 그 사람의 bidList에 저장한 bid가 나올까 ?
-     *      5. 저장이 된다면 그 땅의 bidList에 저장한 bid가 나올까 ?
      */
     @Test
     void 호가정보_생성() {
         User user1 = TestValueGenerator.userInfoGenerator();
         Estate estate1 = TestValueGenerator.estateInfoGenerator(user1);
-        Bid bid1 = TestValueGenerator.bidInfoGenerator(user1, estate1);
-        bid1.setAction(Action.SELL);
+
+        Bid bid = TestValueGenerator.bidInfoGenerator(user1, estate1);
+        bid.setAction(Action.SELL);
 
 
-        Bid savedBid = bidRepository.save(bid1);
+        Bid savedBid = bidRepository.save(bid);
 
+        // persisted by cascade by bid
         Optional<User> optionalUser = userRepository.findByName_AndActiveTrue(user1.getName());
         Optional<Estate> optionalEstate = estateRepository.findByName_AndActiveTrue(estate1.getName());
 
@@ -63,14 +58,12 @@ public class BidJpaTest {
         if (optionalEstate.isPresent())
             savedEstate = optionalEstate.get();
 
-        MatcherAssert.assertThat(savedBid, CoreMatchers.is(bid1));
+        MatcherAssert.assertThat(savedBid, CoreMatchers.is(bid));
         MatcherAssert.assertThat(savedEstate, CoreMatchers.is(estate1));
         MatcherAssert.assertThat(savedUser, CoreMatchers.is(user1));
 
         MatcherAssert.assertThat(savedBid.getUser(), CoreMatchers.is(savedUser));
         MatcherAssert.assertThat(savedBid.getEstate(), CoreMatchers.is(savedEstate));
-
-        MatcherAssert.assertThat(savedUser.getEstateList().size(), CoreMatchers.is(0));
 
         MatcherAssert.assertThat(savedEstate.getOwner(), CoreMatchers.is(savedUser));
     }
