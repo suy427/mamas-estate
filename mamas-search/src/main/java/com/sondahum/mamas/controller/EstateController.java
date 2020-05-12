@@ -1,22 +1,23 @@
 package com.sondahum.mamas.controller;
 
 import com.sondahum.mamas.common.model.PageRequest;
-import com.sondahum.mamas.dto.EstateDto;
+import com.sondahum.mamas.domain.bid.BidInfoService;
 import com.sondahum.mamas.domain.estate.EstateInfoService;
+import com.sondahum.mamas.dto.BidDto;
+import com.sondahum.mamas.dto.EstateDto;
 import com.sondahum.mamas.domain.estate.EstateSearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/estate")
+@RequestMapping("/estates")
 @RequiredArgsConstructor
 @Slf4j
 public class EstateController {
@@ -25,33 +26,51 @@ public class EstateController {
     private final EstateSearchService estateSearchService;
 
 
-    @PostMapping
-    public EstateDto.DetailResponse createEstate(@RequestBody @Valid EstateDto.CreateReq estateDto) {
-        return new EstateDto.DetailResponse(estateInfoService.createEstateInfo(estateDto));
+    @PostMapping(value = "/estate")
+    public EstateDto.DetailForm createEstate(@RequestBody @Valid EstateDto.CreateReq estateDto) {
+        return new EstateDto.DetailForm(estateInfoService.createEstateInfo(estateDto));
     }
 
     @GetMapping
-    public Page<EstateDto.SearchResponse> searchEstates( // 이걸로 검색과 전체 유저 불러오기 가능
-                                                         @RequestParam(name = "query", required = false) final EstateDto.SearchReq query,
-                                                         final PageRequest pageRequest
-    ) {
-        return estateSearchService.search(query, pageRequest.of(query.getSortOrders())).map(EstateDto.SearchResponse::new);
+    public Page<EstateDto.SimpleForm> searchEstates(
+            @RequestParam("query") EstateDto.SearchReq query
+            , final PageRequest pageRequest)
+    {
+        return estateSearchService.search(query, pageRequest.of()).map(EstateDto.SimpleForm::new);
+    }
+
+    @GetMapping(value = "/estate")
+    public List<EstateDto.SimpleForm> specifyEstate(@RequestParam(name = "query") String query) {
+        return estateSearchService.specify(query).stream()
+                .map(EstateDto.SimpleForm::new)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping(value = "/user/{userId}")
+    public List<EstateDto.SimpleForm> getUserEstateList(@PathVariable final long userId) {
+        return estateInfoService.getUserEstateList(userId).stream()
+                .map(EstateDto.SimpleForm::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping(value = "/{id}")
-    public EstateDto.DetailResponse getEstateDetail(@PathVariable final long id) {
-        return new EstateDto.DetailResponse(estateInfoService.getEstateById(id));
+    public EstateDto.DetailForm getEstateDetail(@PathVariable final long id) {
+        return new EstateDto.DetailForm(estateInfoService.getEstateById(id));
     }
 
     @PutMapping(value = "/{id}")
-    public EstateDto.DetailResponse updateEstateInfo(@PathVariable final long id, @RequestBody final EstateDto.UpdateReq dto) {
-        return new EstateDto.DetailResponse(estateInfoService.updateEstateInfo(id, dto));
+    public EstateDto.DetailForm updateEstateInfo(@PathVariable final long id, @RequestBody final EstateDto.UpdateReq dto) {
+        return new EstateDto.DetailForm(estateInfoService.updateEstateInfo(id, dto));
+    }
+
+    @PutMapping(value = "/delete/{id}")
+    public EstateDto.SimpleForm deleteEstateSoft(@PathVariable final long id) {
+        return new EstateDto.SimpleForm(estateInfoService.deleteEstateSoft(id));
     }
 
     @DeleteMapping(value = "/{id}")
-    public EstateDto.DetailResponse deleteContract(@PathVariable final long id) {
-        return new EstateDto.DetailResponse(estateInfoService.deleteEstateInfo(id));
+    public void deleteEstateHard(@PathVariable final long id) {
+        estateInfoService.deleteEstateHard(id);
     }
-
 
 }

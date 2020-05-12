@@ -5,13 +5,14 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.dto.BidDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -28,13 +29,13 @@ public class BidSearchService extends QuerydslRepositorySupport {
         this.bidRepository = bidRepository;
     }
 
-    public Page<Bid> search(final BidDto.SearchReq query, final Pageable pageable) {
-        if (query == null) {
-            bidRepository.findAll(pageable);
-        }
+    public Page<Bid> search(final BidDto.SearchReq query, Pageable pageable) {
+        if (query == null)
+            return null;
 
         List<Bid> bids = from(bid).where(
-                user(query.getUser())       // todo 얘 왜이러지... 다른덴 안이런데.. null 들어오면 안되는건가.. method내에서 check하긴하는데;;
+                validity()
+                , user(query.getUser())
                 , estate(query.getEstate())
                 , action(query.getAction())
                 , date(query.getDate())
@@ -42,6 +43,10 @@ public class BidSearchService extends QuerydslRepositorySupport {
         ).fetch();
 
         return new PageImpl<>(bids, pageable, bids.size());
+    }
+
+    private BooleanExpression validity() {
+        return bid.active.eq(true);
     }
 
     private BooleanExpression user(String user) {

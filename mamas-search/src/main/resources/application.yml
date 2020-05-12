@@ -5,26 +5,18 @@ server:
 
 spring:
   profiles:
-    active: [local, test]
-
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/mamasdb
-#    username: sondahum
-#    password: sondahum
+    active: [test]
 
   jpa:
-    open-in-view: false
     hibernate:
       ddl-auto: create
     show-sql: true
     properties:
-      hibernate.enable_lazy_load_no_trans: true
       hibernate.format_sql: true
 
   http:
     encoding:
-      charset: UTF-8
+      charset: utf-8
       enabled: true
       force: true
 

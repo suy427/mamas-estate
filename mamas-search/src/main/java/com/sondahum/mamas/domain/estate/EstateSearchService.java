@@ -27,6 +27,16 @@ public class EstateSearchService extends QuerydslRepositorySupport {
         this.estateRepository = estateRepository;
     }
 
+    public List<Estate> specify(String query) {
+        if (query == null)  return null;
+
+        return from(estate).where(
+                validity()
+                , name(query)
+                , address(query)
+                , owner(query)
+        ).fetch();
+    }
 
     public Page<Estate> search(final EstateDto.SearchReq query, final Pageable pageable) {
         if (query == null) {
@@ -34,7 +44,8 @@ public class EstateSearchService extends QuerydslRepositorySupport {
         }
 
         List<Estate> estates = from(estate).where(
-                name(query.getName())
+                validity()
+                , name(query.getName())
                 , address(query.getAddress())
                 , area(query.getArea())
                 , status(query.getStatus())
@@ -45,6 +56,10 @@ public class EstateSearchService extends QuerydslRepositorySupport {
 
 
         return new PageImpl<>(estates, pageable, estates.size());
+    }
+
+    private BooleanExpression validity() {
+        return estate.active.eq(true);
     }
 
     private BooleanExpression name(String name) {

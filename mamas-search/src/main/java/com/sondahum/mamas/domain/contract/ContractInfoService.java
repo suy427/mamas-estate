@@ -1,66 +1,89 @@
 package com.sondahum.mamas.domain.contract;
 
-import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
-import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
+
+import com.sondahum.mamas.domain.bid.exception.InvalidActionException;
+import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.estate.EstateInfoDao;
+import com.sondahum.mamas.domain.estate.model.EstateStatus;
+import com.sondahum.mamas.domain.user.User;
+import com.sondahum.mamas.domain.user.UserInfoDao;
 import com.sondahum.mamas.dto.ContractDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.Optional;
+import java.util.List;
 
-@Slf4j
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ContractInfoService {
 
-    private final ContractRepository contractRepository;
+    private final UserInfoDao userInfoDao;
+    private final EstateInfoDao estateInfoDao;
+    private final ContractInfoDao contractInfoDao;
 
+    public Contract createContractInfo(ContractDto.CreateReq contractDto) { // 맨 마지막
+        User seller = userInfoDao.findUserByName(contractDto.getSeller());
+        User buyer = userInfoDao.findUserByName(contractDto.getBuyer());;
+        Estate estate = estateInfoDao.findEstateByName(contractDto.getEstate());
 
-    public Contract createContractInfo(ContractDto.CreateReq contractDto) {
-        if (!isSameContract(contractDto))
-            throw new EntityAlreadyExistException(contractDto.getEstate());
+        if (seller.equals(buyer)) {
+            throw new InvalidActionException("자가 계약은 불가능합니다.");
+        }
 
-        Contract contract = contractRepository.save(contractDto.toEntity());
+        if (!estate.getOwner().equals(seller)) {
+            throw new InvalidActionException("매도자 소유의 매물이 아닙니다. [ " +estate.getOwner().getName()+" ]");
+        }
 
-        return contract;
+        Contract contract = contractDto.toEntity();
+
+        contract.setSeller(seller);
+        contract.setBuyer(buyer);
+        contract.setEstate(estate);
+
+        buyer.addContractHistory(contract);
+        seller.addContractHistory(contract);
+        estate.addContractHistory(contract);
+
+        seller.getEstateList().removeIf(property -> property.getId().equals(estate.getId()));
+        buyer.addEstate(estate);
+
+        return contractInfoDao.createContractInfo(contract);
     }
 
     public Contract getContractById(long id) {
-        Optional<Contract> optionalContract = contractRepository.findById(id);
-        optionalContract.orElseThrow(() -> new NoSuchEntityException(id));
-
-        return optionalContract.get();
+        return contractInfoDao.getContractById(id);
     }
 
-    @Transactional(readOnly = true)
-    boolean isSameContract(ContractDto.CreateReq contractDto) {
-        Optional<Contract> optionalContract =
-                contractRepository.findBySeller_NameAndBuyer_NameAndEstate_Name(
-                        contractDto.getSeller(), contractDto.getBuyer(), contractDto.getEstate());
+    public Contract revertContract(long id) {
+        Contract target = contractInfoDao.softDeleteContract(id);
 
-        return optionalContract.isPresent();
+        target.getBuyer().getEstateList() // 산거 무효
+                .removeIf(estate -> estate.equals(target.getEstate()));
+        target.getSeller().addEstate(target.getEstate()); // 판거 무효
+        target.getBuyer().getContractList() // 계약 무효
+                .removeIf(contract -> contract.equals(target));
+        target.getSeller().getContractList() // 계약 무효
+                .removeIf(contract -> contract.equals(target));
+        target.getEstate().getContractHistoryList() // 계약 무효
+                .removeIf(contract -> contract.getId().equals(target.getId()));
+
+        target.getEstate().setStatus(EstateStatus.ONSALE); // 땅 상태 판매중.
+
+        return target;
     }
 
-    public Contract updateContractInfo(long id, ContractDto.UpdateReq dto) {
-        Optional<Contract> optionalContract = contractRepository.findById(id);
-        Contract contract = optionalContract.orElseThrow(() -> new NoSuchEntityException(id));
-
-        contract.updateContractInfo(dto);
-
-        return contract;
+    public void deleteContract(long id) {
+        contractInfoDao.hardDeleteContract(id);
     }
 
-    public Contract deleteContractInfo(Long id) {
-        Optional<Contract> optional = contractRepository.findById(id);
-        Contract contract = optional.orElseThrow(() -> new NoSuchEntityException(id)); // todo exception 정리
-
-        contractRepository.deleteById(id);
-
-        return contract;
+    // 계약 내용은 바뀔 수 있다 + estate의 명칭까지..! --> 계약 내용만 바뀌도록..!
+    public Contract updateContractInfo(long id, ContractDto.UpdateReq contractDto) {
+        return contractInfoDao.updateContractInfo(id, contractDto);
     }
 
+    public List<Contract> getUserContractList(long userId) {
+        return userInfoDao.getUserById(userId).getContractList();
+    }
 }

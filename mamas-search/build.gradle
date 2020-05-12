@@ -14,16 +14,12 @@ dependencies {
     // spring boot test
     compile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
-
-    // mockito
-    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
+        exclude module: 'junit'
+    }
     // jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
 
-    compile 'org.postgresql:postgresql:9.2-1004-jdbc41'
-
-    // spring boot test... 위에거랑 뭐가 다르지..?ㅎㅎ
-    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
     // spring configuration processor
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
     // spring rest doc
@@ -42,9 +38,9 @@ dependencies {
     compile group:"com.querydsl", name:"querydsl-collections", version: "4.2.2"
 
     // h2 database
-    testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
+    testCompile group: 'com.h2database', name: 'h2', version: '1.4.199'
     // mysql-connector
-//    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
 
     // random string generator (for test)
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
@@ -96,9 +92,6 @@ configurations {
     querydsl.extendsFrom compileClasspath
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-    }
+test {
+    useJUnitPlatform()
 }

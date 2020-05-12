@@ -1,5 +1,6 @@
 package com.sondahum.mamas.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sondahum.mamas.domain.estate.model.Address;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.estate.model.ContractType;
@@ -7,6 +8,7 @@ import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.domain.estate.model.EstateType;
 import com.sondahum.mamas.domain.estate.model.EstateStatus;
 import com.sondahum.mamas.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Sort;
@@ -17,12 +19,15 @@ import java.util.List;
 public class EstateDto {
 
     @Getter
+    @Builder
     public static class CreateReq {
         @NotEmpty(message = "등록할 부동산 이름을 입력해주세요.")
         private String name;
-        private Address address;
-        private String area;
+        @NotEmpty(message = "소유자 이름을 입력해주세요.")
         private String ownerName;
+        @NotEmpty(message = "등록할 부동산 주소를 입력해주세요.")
+        private Address address;
+        private Double area;
         private EstateStatus status;
         private EstateType estateType;
         private ContractType contractType;
@@ -30,30 +35,25 @@ public class EstateDto {
         private Range.Price marketPriceRange;
 
         public Estate toEntity() {
-            User owner = User.builder().name(ownerName).build();
-
             return Estate.builder()
                     .name(name)
                     .address(address)
-                    .area(Double.parseDouble(area))
+                    .area(area)
                     .marketPriceRange(marketPriceRange)
                     .contractType(contractType)
                     .estateType(estateType)
                     .status(status)
                     .ownerRequirePriceRange(ownerRequirePriceRange)
-                    .owner(owner).build();
+                    .build();
         }
     }
 
     @Getter
     @Setter
     public static class UpdateReq {
-        private Long id;
-        @NotEmpty(message = "변경할 부동산 이름을 입력해주세요.")
         private String name;
         private Address address;
         private Double area;
-//        private String ownerName;
         private EstateStatus status;
         private EstateType estateType;
         private ContractType contractType;
@@ -62,6 +62,8 @@ public class EstateDto {
     }
 
     @Getter
+    @Builder
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     public static class SearchReq {
         private String name;
         private String address;
@@ -72,20 +74,22 @@ public class EstateDto {
         private ContractType contractType;
         private EstateType estateType;
         private String owner;
-        private List<Sort.Order> sortOrders;
     }
 
-    public static class SearchResponse {
+    @Getter
+    public static class SimpleForm {
         private Long id;
         private String name;
+        private String ownerName;
         private String address3; // most detailed address
         private EstateStatus status;
         private EstateType estateType;
         private ContractType contractType;
 
-        public SearchResponse(Estate estate) {
+        public SimpleForm(Estate estate) {
             this.id = estate.getId();
             this.name = estate.getName();
+            this.ownerName = estate.getOwner().getName();
             this.address3 = estate.getAddress().getAddress3();
             this.status = estate.getStatus();
             this.contractType = estate.getContractType();
@@ -96,7 +100,7 @@ public class EstateDto {
 
 
     @Getter
-    public static class DetailResponse {
+    public static class DetailForm {
         private Long id;
         private String name;
         private Address address;
@@ -108,7 +112,7 @@ public class EstateDto {
         private Range.Price ownerRequirePriceRange;
         private Range.Price marketPriceRange;
 
-        public DetailResponse(Estate estate) {
+        public DetailForm(Estate estate) {
             this.id = estate.getId();
             this.name = estate.getName();
             this.address = estate.getAddress();

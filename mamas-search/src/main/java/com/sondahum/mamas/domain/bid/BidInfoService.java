@@ -1,77 +1,86 @@
 package com.sondahum.mamas.domain.bid;
 
-import com.sondahum.mamas.common.error.exception.EntityAlreadyExistException;
-import com.sondahum.mamas.common.error.exception.NoSuchEntityException;
+
+import com.sondahum.mamas.domain.bid.exception.BidAlreadyExistException;
+import com.sondahum.mamas.domain.bid.exception.InvalidActionException;
 import com.sondahum.mamas.domain.bid.model.Action;
-import com.sondahum.mamas.domain.estate.EstateRepository;
-import com.sondahum.mamas.domain.user.UserRepository;
+import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.estate.EstateInfoDao;
+import com.sondahum.mamas.domain.user.User;
+import com.sondahum.mamas.domain.user.UserInfoDao;
 import com.sondahum.mamas.dto.BidDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
-
-@Slf4j
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class BidInfoService {
 
-    private final BidRepository bidRepository;
+    private final BidInfoDao bidInfoDao;
+    private final UserInfoDao userInfoDao;
+    private final EstateInfoDao estateInfoDao;
 
+
+    @Transactional(rollbackFor = Exception.class)
     public Bid createBid(BidDto.CreateReq bidDto) {
-        if (isSameBidExist(bidDto))
-            throw new EntityAlreadyExistException(bidDto.getUser());
+        User user = userInfoDao.findUserByName(bidDto.getUserName());
+        Estate estate = estateInfoDao.findEstateByName(bidDto.getEstateName());
 
-        Bid bid = bidRepository.save(bidDto.toEntity());
+        if (estate.getOwner().equals(user) && bidDto.getAction().equals(Action.BUY)) {
+            throw new InvalidActionException("자신의 땅은 살 수 없습니다.");
+        }
 
-        return bid;
+        Optional<Bid> duplicated =
+        bidInfoDao.getDuplicatedBid(bidDto.getUserName(),bidDto.getEstateName(),bidDto.getAction());
+
+        if (duplicated.isPresent()) {
+            throw new BidAlreadyExistException(duplicated.get()
+            ,"같은 매물에 호가한 적이 있습니다.");
+        }
+
+        Bid bid = bidDto.toEntity();
+
+        bid.setUser(user);
+        bid.setEstate(estate);
+
+        user.addBidHistory(bid);
+        estate.addBidHistory(bid);
+
+        return bidInfoDao.createBid(bid);
+    }
+
+    // 땅 고정. (유저, 가격)
+    // bid는 내용이 바뀌면 체크해줘야할게 있다.
+    @Transactional(rollbackFor = Exception.class)
+    public Bid updateBid(long id, BidDto.UpdateReq bidDto) {
+        return bidInfoDao.updateBidInfo(id, bidDto);
+    }
+
+    public Bid revertBid(Long id) {
+        Bid target = bidInfoDao.softDeleteBid(id);
+
+        target.getEstate().getBidList().removeIf(bid -> bid.equals(target));
+        target.getUser().getBidList().removeIf(bid -> bid.equals(target));
+
+        return target;
     }
 
     public Bid getBidById(long id) {
-        Optional<Bid> optionalBid = bidRepository.findById(id);
-        optionalBid.orElseThrow(() -> new NoSuchEntityException(id));
-
-        return optionalBid.get();
+        return bidInfoDao.getBidById(id);
     }
 
-    @Transactional(readOnly = true)
-    public boolean isSameBidExist(BidDto.CreateReq bidDto) {
-        Optional<Bid> optionalBid = bidRepository.findByUser_NameAndEstate_NameAndAction(
-                bidDto.getUser(),bidDto.getEstate(), bidDto.getAction());
-
-        return optionalBid.isPresent();
+    public void deleteBidInfo(long id) {
+        bidInfoDao.hardDeleteBid(id);
     }
 
-    public Bid updateBidInfo(long id, BidDto.UpdateReq dto) {
-        // 여기서 찾아올 때 이미 user, estate는 수정이 되어있다.
-        // 왜?? 수정 다 하고 저장할 때 이 메소드가 호출이 되니깐.
-        Optional<Bid> optionalContract = bidRepository.findById(id);
-        Bid bid = optionalContract.orElseThrow(() -> new NoSuchEntityException(id));
-
-        /* todo
-         update와 contract는 update할 때, 자신의 정보 뿐 아니라 user, estate 등의 다른
-         entity의 정보 변경도 일어날 수 있다. updateBidInfo()는 변경할 정보를 다 입력받고
-         확정될 때 호출되는 메소드인데, 여기서는 bid고유의 정보만 update된다.
-         나머지 user, estate는 따로 수정되어야한다.
-        * */
-
-        bid.updateBidInfo(dto);
-
-        return bid;
+    public List<Bid> getUserBidList(long userId) {
+        return userInfoDao.getUserById(userId).getBidList();
     }
-
-    public Bid deleteBidInfo(Long id) {
-        Optional<Bid> optional = bidRepository.findById(id);
-        Bid bid = optional.orElseThrow(() -> new NoSuchEntityException(id)); // todo exception 정리
-
-        bidRepository.deleteById(id);
-
-        return bid;
-    }
-
 }

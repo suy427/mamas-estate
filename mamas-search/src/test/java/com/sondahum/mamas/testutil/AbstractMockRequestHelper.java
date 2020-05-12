@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.*;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = MamasEstateApplicationStarter.class)
 @AutoConfigureMockMvc
+@Transactional
 public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
 
     @Autowired
@@ -46,7 +48,8 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
     }
 
     private MockHttpServletResponse requestGet(
-            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception {
+            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception
+    {
         MockHttpServletRequestBuilder request;
         if (valuesHandler.getPathArray() != null)
             request = RestDocumentationRequestBuilders.get(url, valuesHandler.getPathArray());
@@ -55,6 +58,9 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
 
         if (valuesHandler.getRequestParameters() != null)
             request = request.params(valuesHandler.getRequestParameters());
+
+        if (valuesHandler.getRequestBody() != null)
+            request = request.content(valuesHandler.getRequestBody());
 
         if (valuesHandler.getHeaders() != null)
             request = request.headers(new HttpHeaders(valuesHandler.getHeaders()));
@@ -100,7 +106,8 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
     }
 
     private MockHttpServletResponse requestPost(
-            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception {
+            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception
+    {
         MockHttpServletRequestBuilder request;
         if (valuesHandler.getPathArray() != null)
             request = post(url, valuesHandler.getPathArray());
@@ -136,8 +143,8 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
      * [ MultiPart ]
      */
     private MockHttpServletResponse requestMultipartPost(
-            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception {
-
+            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception
+    {
         //Request
         ResultActions resultActions = mockMvc
                 .perform(
@@ -159,7 +166,8 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
     }
 
     private MockMultipartHttpServletRequestBuilder fileUpload(
-            String url, List<MockMultipartFile> multipartFileList, List<Object> pathArray) {
+            String url, List<MockMultipartFile> multipartFileList, List<Object> pathArray)
+    {
         MockMultipartHttpServletRequestBuilder mockBuilder = RestDocumentationRequestBuilders.fileUpload(url, pathArray);
         multipartFileList.forEach(mockBuilder::file);
 
@@ -180,8 +188,8 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
     }
 
     private MockHttpServletResponse requestPut(
-            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception {
-
+            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception
+    {
         MockHttpServletRequestBuilder request;
         if (valuesHandler.getPathArray() != null)
             request = put(url, valuesHandler.getPathArray());
@@ -224,8 +232,8 @@ public abstract class AbstractMockRequestHelper extends AbstractTestHelper {
     }
 
     private MockHttpServletResponse requestDelete(
-            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception {
-
+            String url, ResultHandler resultHandlerForDocument, RequestValueContainer valuesHandler) throws Exception
+    {
         MockHttpServletRequestBuilder request;
         if (valuesHandler.getPathArray() != null)
             request = delete(url, valuesHandler.getPathArray());

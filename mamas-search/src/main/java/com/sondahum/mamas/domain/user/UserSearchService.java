@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sondahum.mamas.common.model.Range;
+import com.sondahum.mamas.domain.estate.Estate;
 import com.sondahum.mamas.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static com.sondahum.mamas.domain.bid.QBid.bid;
 import static com.sondahum.mamas.domain.contract.QContract.contract;
+import static com.sondahum.mamas.domain.estate.QEstate.estate;
 import static com.sondahum.mamas.domain.user.QUser.user;
 
 
@@ -34,6 +36,16 @@ public class UserSearchService extends QuerydslRepositorySupport {
     public UserSearchService(UserRepository userRepository) {
         super(User.class);
         this.userRepository = userRepository;
+    }
+
+    public List<User> specify(String query) {
+        if (query == null)  return null;
+
+        return from(user).where(
+                validity()
+                , name(query)
+                , phone(query)
+        ).fetch();
     }
 
     public Page<User> search(final UserDto.SearchReq query, final Pageable pageable) {
@@ -53,9 +65,10 @@ public class UserSearchService extends QuerydslRepositorySupport {
                                 .between(query.getContractDate().getMinimum(), query.getContractDate().getMaximum())
                 )
                 .where(
-                  name(query.getName())
-                , phone(query.getPhone())
-                , role(query.getRole().name())
+                    validity()
+                    , name(query.getName())
+                    , phone(query.getPhone())
+                    , role(query.getRole().name())
                 )
                 .fetchJoin().fetch();
 
@@ -63,6 +76,10 @@ public class UserSearchService extends QuerydslRepositorySupport {
 //        contractDate(users, query.getContractDate()); // todo 이 두 method 반드시 refactoring 할 것!!!!
 
         return new PageImpl<>(users, pageable, users.size());
+    }
+
+    private BooleanExpression validity() {
+        return user.active.eq(true);
     }
 
     private BooleanExpression name(String name) {

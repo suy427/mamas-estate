@@ -2,13 +2,18 @@ package com.sondahum.mamas.common.model;
 
 import org.springframework.data.domain.Sort;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 public final class PageRequest {
 
     private int page;
     private int size;
-    private Sort.Direction direction;
+    private List<SortOrder> sort;
+
+    public PageRequest() {
+    }
 
     public void setPage(int page) {
         this.page = page <= 0 ? 1 : page;
@@ -20,8 +25,8 @@ public final class PageRequest {
         this.size = size > MAX_SIZE ? DEFAULT_SIZE : size;
     }
 
-    public void setDirection(Sort.Direction direction) {
-        this.direction = direction;
+    public void setSort(List<SortOrder> sort) {
+        this.sort = sort;
     }
 
     public int getPage() {
@@ -32,13 +37,21 @@ public final class PageRequest {
         return size;
     }
 
-    public Sort.Direction getDirection() {
-        return direction;
+    public List<SortOrder> getSort() {
+        return sort;
     }
 
-    public org.springframework.data.domain.PageRequest of(List<Sort.Order> orders) {
-        if (orders == null)
-            return org.springframework.data.domain.PageRequest.of(page - 1, size, direction, "createdAt");
-        return org.springframework.data.domain.PageRequest.of(page - 1, size, Sort.by(orders));
+    private Sort parseSort() {
+        List<Sort.Order> orders = new ArrayList<>();
+
+        sort.forEach((order) ->
+                orders.add(new Sort.Order(Sort.Direction.fromString(order.direction), order.property))
+        );
+
+        return Sort.by(orders);
+    }
+
+    public org.springframework.data.domain.PageRequest of() {
+        return org.springframework.data.domain.PageRequest.of(page, size, parseSort());
     }
 }

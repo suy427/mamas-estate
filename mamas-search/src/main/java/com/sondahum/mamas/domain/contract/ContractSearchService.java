@@ -14,7 +14,7 @@ import java.util.List;
 
 
 import static com.sondahum.mamas.domain.contract.QContract.contract;
-
+import static com.sondahum.mamas.domain.estate.QEstate.estate;
 
 
 @Service
@@ -33,7 +33,8 @@ public class ContractSearchService extends QuerydslRepositorySupport {
         }
 
         List<Contract> contracts = from(contract).where( // todo 얘는 전부다 join이다...
-                estate(query.getEstate())
+                validity()
+                , estate(query.getEstate())
                 , buyer(query.getBuyer())
                 , seller(query.getSeller())
                 , contractedDate(query.getContractedDate())
@@ -42,6 +43,10 @@ public class ContractSearchService extends QuerydslRepositorySupport {
 
 
         return new PageImpl<>(contracts, pageable, contracts.size());
+    }
+
+    private BooleanExpression validity() {
+        return contract.active.eq(true);
     }
 
     private BooleanExpression estate(String estate) {

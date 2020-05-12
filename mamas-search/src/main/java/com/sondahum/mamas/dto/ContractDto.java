@@ -1,10 +1,14 @@
 package com.sondahum.mamas.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sondahum.mamas.common.model.Range;
 import com.sondahum.mamas.domain.contract.Contract;
 import com.sondahum.mamas.domain.estate.Estate;
+import com.sondahum.mamas.domain.estate.model.ContractType;
 import com.sondahum.mamas.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Sort;
 
 import javax.validation.constraints.NotEmpty;
@@ -15,6 +19,7 @@ import java.util.List;
 public class ContractDto {
 
     @Getter
+    @Builder
     public static class CreateReq {
         @NotEmpty(message = "매도자 이름을 입력해주세요.")
         private String seller;
@@ -22,21 +27,13 @@ public class ContractDto {
         private String buyer;
         @NotEmpty(message = "계약한 부동산 이름을 입력해주세요.")
         private String estate;
+        private ContractType contractType;
         private Long price;
         private LocalDateTime contractedDate;
         private LocalDateTime expireDate;
 
         public Contract toEntity() {
-            User seller = User.builder()
-                    .name(this.seller).build();
-            User buyer = User.builder()
-                    .name(this.buyer).build();
-            Estate estate = Estate.builder().name(this.estate).build();
-
             return Contract.builder()
-                    .seller(seller)
-                    .buyer(buyer)
-                    .estate(estate)
                     .price(price)
                     .contractedDate(contractedDate)
                     .expireDate(expireDate).build();
@@ -45,30 +42,26 @@ public class ContractDto {
 
     @Getter
     public static class UpdateReq {
-        private Long id;
-//        @NotEmpty(message = "변경할 매도자 이름을 입력해주세요.")
-//        private String seller;
-//        @NotEmpty(message = "변경할 매수자 이름을 입력해주세요.")
-//        private String buyer;
-//        @NotEmpty(message = "변경할 부동산 이름을 입력해주세요.")
-//        private String estate;
         private Long price;
+        private ContractType contractType;
+        private LocalDateTime expireDate;
         private LocalDateTime contractedDate;
     }
 
     @Getter
+    @Builder
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     public static class SearchReq {
         private String estate;
         private String buyer;
         private String seller;
         private Range.Price contractedPrice;
         private Range.Date contractedDate;
-        private List<Sort.Order> sortOrders;
     }
 
 
     @Getter
-    public static class DetailResponse {
+    public static class DetailForm {
         private Long id;
         private String seller;
         private String buyer;
@@ -76,7 +69,7 @@ public class ContractDto {
         private Long price;
         private LocalDateTime contractedDate;
 
-        public DetailResponse(Contract contract) {
+        public DetailForm(Contract contract) {
             this.id = contract.getId();
             this.seller = contract.getSeller().getName();
             this.buyer = contract.getBuyer().getName();
@@ -84,9 +77,5 @@ public class ContractDto {
             this.price = contract.getPrice();
             this.contractedDate = contract.getCreatedDate();
         }
-    }
-
-    enum SearchOrder {
-
     }
 }

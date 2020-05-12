@@ -23,23 +23,19 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "bid")
+@AttributeOverride(name = "id", column = @Column(name = "bid_id"))
 public class Bid extends BaseEntity implements Comparable<Bid> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "bid_id")
-    private Long id;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "user", nullable = false)
     private User user;
 
     @Column(name = "action", nullable = false)
     @Enumerated(EnumType.STRING)
     private Action action;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "estate_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "estate", nullable = false)
     private Estate estate;
 
     @Embedded
@@ -48,12 +44,14 @@ public class Bid extends BaseEntity implements Comparable<Bid> {
             , @AttributeOverride(name = "maximum", column = @Column(name = "max_price"))})
     private Range.Price priceRange;
 
-
     private BidStatus status;
 
-    public void updateBidInfo(BidDto.UpdateReq bidDto) {
+    public Bid updateBidInfo(BidDto.UpdateReq bidDto) {
         this.action = bidDto.getAction();
         this.priceRange = bidDto.getPrice();
+        this.status = bidDto.getStatus();
+
+        return this;
     }
 
 
