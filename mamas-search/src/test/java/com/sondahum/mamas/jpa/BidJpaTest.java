@@ -70,10 +70,8 @@ public class BidJpaTest {
         MatcherAssert.assertThat(savedBid.getUser(), CoreMatchers.is(savedUser));
         MatcherAssert.assertThat(savedBid.getEstate(), CoreMatchers.is(savedEstate));
 
-//        MatcherAssert.assertThat(savedUser.getBidList().size(), CoreMatchers.is(0));
         MatcherAssert.assertThat(savedUser.getEstateList().size(), CoreMatchers.is(0));
 
         MatcherAssert.assertThat(savedEstate.getOwner(), CoreMatchers.is(savedUser));
-//        MatcherAssert.assertThat(savedEstate.getBidList().size(), CoreMatchers.is(0));
     }
 }
