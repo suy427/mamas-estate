@@ -35,7 +35,7 @@ public class ContractController {
         return new ContractDto.DetailForm(contractInfoService.createContractInfo(userDto));
     }
 
-    @GetMapping(value = "/search")
+    @GetMapping
     public Page<ContractDto.DetailForm> searchContracts(ContractDto.SearchReq query, PageRequest pageRequest) {
         return contractSearchService.search(query, pageRequest.of()).map(ContractDto.DetailForm::new);
     }

@@ -38,13 +38,8 @@ public class BidController {
     }
 
     @GetMapping
-    public Page<BidDto.DetailForm> searchBids(@RequestAttribute(value = "query", required = false) BidDto.SearchReq query) {
-        if (query.getSize() == 0)
-            query.setSize(10);
-        if (query.getPage() == 0)
-            query.setPage(1);
-
-        return bidSearchService.search(query).map(BidDto.DetailForm::new);
+    public Page<BidDto.DetailForm> searchBids(BidDto.SearchReq query, PageRequest pageRequest) {
+        return bidSearchService.search(query, pageRequest.of()).map(BidDto.DetailForm::new);
     }
 
     @GetMapping(value = "/user/{userId}")

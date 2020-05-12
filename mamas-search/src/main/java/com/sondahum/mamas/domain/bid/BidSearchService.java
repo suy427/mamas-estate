@@ -29,27 +29,18 @@ public class BidSearchService extends QuerydslRepositorySupport {
         this.bidRepository = bidRepository;
     }
 
-    public Page<Bid> search(final BidDto.SearchReq query) {
+    public Page<Bid> search(final BidDto.SearchReq query, Pageable pageable) {
         if (query == null)
             return null;
 
-        List<Sort.Order> orders = new ArrayList<>();
-        for (BidDto.SortOrder order : query.getOrders()) {
-            orders.add(new Sort.Order(Sort.Direction.valueOf(order.getDirection()), order.getProperty()));
-        }
-
-        Pageable pageable =  PageRequest.of(query.getPage(), query.getSize(), Sort.by(orders));
-
         List<Bid> bids = from(bid).where(
                 validity()
-                , user(query.getUser())       // todo 얘 왜이러지... 다른덴 안이런데.. null 들어오면 안되는건가.. method내에서 check하긴하는데;;
+                , user(query.getUser())
                 , estate(query.getEstate())
                 , action(query.getAction())
                 , date(query.getDate())
                 , price(query.getPrice())
         ).fetch();
-
-
 
         return new PageImpl<>(bids, pageable, bids.size());
     }

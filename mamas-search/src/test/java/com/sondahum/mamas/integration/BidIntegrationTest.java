@@ -2,6 +2,7 @@ package com.sondahum.mamas.integration;
 
 import com.sondahum.mamas.common.model.PageRequest;
 import com.sondahum.mamas.common.model.Range;
+import com.sondahum.mamas.common.model.SortOrder;
 import com.sondahum.mamas.domain.bid.Bid;
 import com.sondahum.mamas.domain.bid.model.Action;
 import com.sondahum.mamas.dto.BidDto;
@@ -45,7 +46,7 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
     public void 중복호가() throws Exception {
         BidDto.CreateReq dto =
                 BidDto.CreateReq.builder()
-                        .userName("황성욱")
+                        .userName("박숙자")
                         .estateName("세운상가")
                         .action(Action.BUY)
                         .price(Range.Price.builder().minimum(10L).maximum(20L).build())
@@ -120,7 +121,7 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
         Bid bid = Bid.builder().action(dto.getAction()).priceRange(dto.getPrice()).build();
 
         MockHttpServletResponse result = requestPut(
-                "/bids/1",
+                "/bids/3",
                 requestBody(dto)
         );
 
@@ -133,7 +134,7 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
      *********************************/
     @Test
     public void 호가정보_조회() throws Exception {
-        MockHttpServletResponse result = requestGet("/bids/1");
+        MockHttpServletResponse result = requestGet("/bids/3");
         MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
     }
 
@@ -160,15 +161,19 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
     public void 액션으로_검색() throws Exception {
         BidDto.SearchReq query = BidDto.SearchReq.builder()
                 .action(Action.BUY)
-                .page(1)
-                .size(10)
-                .orders(orderBuilder())
                 .build();
+
+        PageRequest pageRequest = new PageRequest();
+        pageRequest.setPage(1);
+        pageRequest.setSize(10);
+        pageRequest.setSort(orderBuilder());
+
 
         MockHttpServletResponse result =
                 requestGet(
                         "/bids",
-                        requestParameters(query)
+                        requestParameters(query),
+                        requestParameters(pageRequest)
                 );
 
         System.out.println(result.getContentAsString());
@@ -180,12 +185,40 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
         BidDto.SearchReq query = BidDto.SearchReq.builder()
                 .price(Range.Price.builder().minimum(1L).maximum(100L).build()).build();
 
+        PageRequest pageRequest = new PageRequest();
+        pageRequest.setPage(1);
+        pageRequest.setSize(10);
+        pageRequest.setSort(orderBuilder());
 
+
+        MockHttpServletResponse result =
+                requestGet(
+                        "/bids",
+                        requestParameters(query),
+                        requestParameters(pageRequest)
+                );
+
+        System.out.println(result.getContentAsString());
+        MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
     }
 
     @Test
     public void 다중_조건_검색() throws Exception {
-        MockHttpServletResponse result = requestSearch();
+        BidDto.SearchReq query = BidDto.SearchReq.builder()
+                .user("박숙자").action(Action.BUY).estate("세운상가").build();
+
+        PageRequest pageRequest = new PageRequest();
+        pageRequest.setPage(1);
+        pageRequest.setSize(10);
+        pageRequest.setSort(orderBuilder());
+
+
+        MockHttpServletResponse result =
+                requestGet(
+                        "/bids",
+                        requestParameters(query),
+                        requestParameters(pageRequest)
+                );
 
         System.out.println(result.getContentAsString());
         MatcherAssert.assertThat(result.getStatus(), CoreMatchers.is(200));
@@ -195,29 +228,32 @@ public class BidIntegrationTest extends AbstractMockRequestHelper {
         return Range.Price.builder().minimum(min).maximum(max).build();
     }
 
-    private List<BidDto.SortOrder> orderBuilder() {
-        List<BidDto.SortOrder> list = new LinkedList<>();
+    private List<SortOrder> orderBuilder() {
+        List<SortOrder> list = new LinkedList<>();
 
-        list.add(BidDto.SortOrder.builder().direction("ASC").property("min_price").build());
-        list.add(BidDto.SortOrder.builder().direction("DESC").property("user").build());
-        list.add(BidDto.SortOrder.builder().direction("ASC").property("estate").build());
+        list.add(SortOrder.builder().direction("ASC").property("min_price").build());
+        list.add(SortOrder.builder().direction("DESC").property("user").build());
+        list.add(SortOrder.builder().direction("ASC").property("estate").build());
 
         return list;
     }
 
-    private MockHttpServletResponse requestSearch() throws Exception {
-        return mockMvc.perform(
-                get("/bids")
-                        .requestAttr("user", "황성욱")
-                        .requestAttr("estate", "세운상가")
-                        .requestAttr("action", Action.BUY.name())
-                        .requestAttr("page", "1")
-                        .requestAttr("size", "10")
-                        .requestAttr("orders[0]", "ACS, name")
-                        .requestAttr("orders[1]", "ACS, min_price")
-                        .requestAttr("orders[2]", "DESC, estate")
-        )
-                .andDo(print())
-                .andReturn().getResponse();
-    }
+//    private MockHttpServletResponse requestSearch() throws Exception {
+//        return mockMvc.perform(
+//                get("/bids")
+//                        .param("user", "박숙자")
+//                        .param("estate", "세운상가")
+//                        .param("action", Action.BUY.name())
+//                        .param("page", "1")
+//                        .param("size", "10")
+//                        .param("sort[0].direction", "DESC")
+//                        .param("sort[0].property", "name")
+//                        .param("sort[1].direction", "ASC")
+//                        .param("sort[1].property", "min_price")
+//                        .param("sort[2].direction", "ASC")
+//                        .param("sort[2].property", "estate")
+//        )
+//                .andDo(print())
+//                .andReturn().getResponse();
+//    }
 }

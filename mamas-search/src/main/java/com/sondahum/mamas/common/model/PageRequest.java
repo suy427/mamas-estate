@@ -1,22 +1,18 @@
 package com.sondahum.mamas.common.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.sondahum.mamas.common.config.SortDeserializer;
-import com.sondahum.mamas.common.config.SortSerializer;
 import org.springframework.data.domain.Sort;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public final class PageRequest {
 
     private int page;
     private int size;
-    @JsonSerialize(using = SortSerializer.class)
-    private Sort sort;
+    private List<SortOrder> sort;
 
     public PageRequest() {
-        Sort.Order defaultOrder = new Sort.Order(Sort.Direction.DESC, "created_date");
-        sort = Sort.by(defaultOrder);
     }
 
     public void setPage(int page) {
@@ -29,8 +25,7 @@ public final class PageRequest {
         this.size = size > MAX_SIZE ? DEFAULT_SIZE : size;
     }
 
-    @JsonDeserialize(using = SortDeserializer.class)
-    public void setSort(Sort sort) {
+    public void setSort(List<SortOrder> sort) {
         this.sort = sort;
     }
 
@@ -42,11 +37,21 @@ public final class PageRequest {
         return size;
     }
 
-    public Sort getSort() {
+    public List<SortOrder> getSort() {
         return sort;
     }
 
+    private Sort parseSort() {
+        List<Sort.Order> orders = new ArrayList<>();
+
+        sort.forEach((order) ->
+                orders.add(new Sort.Order(Sort.Direction.fromString(order.direction), order.property))
+        );
+
+        return Sort.by(orders);
+    }
+
     public org.springframework.data.domain.PageRequest of() {
-        return org.springframework.data.domain.PageRequest.of(page, size, sort);
+        return org.springframework.data.domain.PageRequest.of(page, size, parseSort());
     }
 }

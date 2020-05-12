@@ -31,7 +31,7 @@ public class EstateController {
         return new EstateDto.DetailForm(estateInfoService.createEstateInfo(estateDto));
     }
 
-    @GetMapping(value = "/search")
+    @GetMapping
     public Page<EstateDto.SimpleForm> searchEstates(
             @RequestParam("query") EstateDto.SearchReq query
             , final PageRequest pageRequest)
@@ -39,10 +39,6 @@ public class EstateController {
         return estateSearchService.search(query, pageRequest.of()).map(EstateDto.SimpleForm::new);
     }
 
-    // bidding할 때, bidding할 땅 찾을때.. --> contract할 때도 똑같이 쓴다.
-    // 없으면 클라이언트에서 등록 폼 주고 addNewEstate를 한다. --> 없는건 못한다.
-    // 결과로 나온 땅을 골라서 누르면 bid 입력폼으로 간다. --> contract입력폼도 가능. --> 이건 둘 다 클라에서..
-    // 얘는 그냥 estatecontroller에 가고 팝업을 estateController를 통해서 띄워야하나..?
     @GetMapping(value = "/estate")
     public List<EstateDto.SimpleForm> specifyEstate(@RequestParam(name = "query") String query) {
         return estateSearchService.specify(query).stream()

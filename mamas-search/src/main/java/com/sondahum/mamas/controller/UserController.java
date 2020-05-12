@@ -41,7 +41,7 @@ class UserController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(value = "/search")
+    @GetMapping
     public Page<UserDto.SimpleForm> searchUsers(UserDto.SearchReq query, PageRequest pageRequest) {
         return userSearchService.search(query, pageRequest.of()).map(UserDto.SimpleForm::new);
     }

@@ -5,6 +5,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.MultiValueMap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -24,7 +25,12 @@ public class RequestValueContainer {
             if (valueObject instanceof PathValues)
                 this.pathValues = (PathValues) valueObject;
             else if (valueObject instanceof MockRequestParameter)
-                this.requestParameter = (MockRequestParameter) valueObject;
+                if (this.requestParameter != null) {
+                    this.requestParameter.parameterValueMap
+                            .addAll(((MockRequestParameter) valueObject).parameterValueMap);
+                } else {
+                    this.requestParameter = (MockRequestParameter) valueObject;
+                }
             else if (valueObject instanceof MockMultipartFiles)
                 this.multipartValues = (MockMultipartFiles) valueObject;
             else if (valueObject instanceof MockRequestBody)

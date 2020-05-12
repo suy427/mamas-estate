@@ -71,9 +71,11 @@ public class BidDto {
         private Range.Date date;
         private Range.Price price;
 
-        private Integer page;
-        private Integer size;
-        private List<SortOrder> orders = new ArrayList<>();
+//        private Integer page;
+//        private Integer size;
+//        @JsonDeserialize(using = SortDeserializer.class)
+//        @JsonSerialize(using = SortSerializer.class)
+//        private List<Sort.Order> orders = new ArrayList<>();
     }
 
     @Getter //todo ResponseBody로 반환할 객체에 Getter/Setter가 없으면 binding이 안되는거같다... 이유를 알아보자
@@ -92,13 +94,5 @@ public class BidDto {
             this.price = bid.getPriceRange();
             this.action = bid.getAction().name();
         }
-    }
-
-    @Getter
-    @Setter
-    @Builder
-    public static class SortOrder {
-        String property;
-        String direction;
     }
 }

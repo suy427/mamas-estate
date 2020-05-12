@@ -67,17 +67,6 @@ public class MultiValueMapConverter {
                 (object instanceof Action);
     }
 
-//    private MultiValueMap handleSort(MultiValueMap multiValueMap, Sort sort) throws JsonProcessingException, NoSuchMethodException, IntrospectionException, IllegalAccessException, InvocationTargetException {
-//        MultiValueMap mvm = multiValueMap;
-//        String sortAsString = mapper.writeValueAsString(sort);
-//        Map tmp = mapper.readValue(sortAsString, Map.class);
-//
-//        List<Map<String, String>> list = (List<Map<String, String>>) tmp.get("sort");
-//
-//
-//        return mvm;
-//    }
-
     private MultiValueMap addMultiValueFromBean(MultiValueMap multiValueMap, String name, Object object)
             throws IntrospectionException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, JsonProcessingException {
         MultiValueMap mvm = multiValueMap;
@@ -85,21 +74,21 @@ public class MultiValueMapConverter {
         Field[] fields = object.getClass().getDeclaredFields();
 
         for (Field field : fields) {
+            if (field.isSynthetic()) continue;
+
             String _name = (name.equals("")) ? field.getName() : name + "." + field.getName();
-            Object value = new PropertyDescriptor(field.getName(), object.getClass()).getReadMethod().invoke(object);
+            Object value = new PropertyDescriptor((String)field.getName(), object.getClass()).getReadMethod().invoke(object);
 
             if (value == null) {
 
             } else {
                 if (isPrimitiveType(value)) { // 기본 자료형 + 순서가 오는 경우
-                    value = new PropertyDescriptor(field.getName(), object.getClass()).getReadMethod().invoke(object);
+                    value = new PropertyDescriptor((String)field.getName(), object.getClass()).getReadMethod().invoke(object);
                     mvm.add(_name, value.toString());
                 } else {
                     if (value instanceof Map) {
                         mvm = this.addMultiValueFromMap(multiValueMap, _name, (Map) value);
-                    } /*else if(value instanceof Sort) {
-                        mvm = handleSort(mvm, (Sort)value);
-                    } */else if (value instanceof Iterable) {
+                    } else if (value instanceof Iterable) {
                         mvm = this.addMultiValueFromIterable(multiValueMap, _name, (Iterable) value);
                     } else if (value instanceof MultipartFile) {
                         MultipartFile multipartFile = (MultipartFile) value;
