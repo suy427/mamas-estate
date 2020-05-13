@@ -6,11 +6,10 @@ simple management service for real-estate
 ## Tech Stack
 * Java (1.8)
 * Spring boot (2.2.2 RELEASE)
-* JPA (Hibernate)
 * QueryDSL
-* Spring Data Jpa (2.2.4 RELEASE)  
-* Elasticsearch
-* Logstash
+* JPA(Hibernate) - Spring Data Jpa (2.2.4 RELEASE)  
+* Elasticsearch (future)
+* Logstash (future)
 
 
 ## Modules  
