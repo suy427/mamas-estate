@@ -96,20 +96,20 @@ GET users
 ```
 * get user info
 ```http
-GET users/{id} 
+GET users/user_id 
 ```
 * update user info
 ```http
-PUT users/{id}
+PUT users/user_id
 ```
 * delete user info (soft delete)
 ```http
-PUT users/{id}
+PUT users/user_id
 ```
 
 * delete user info (hard delete)
 ```http
-DELETE users/{id}
+DELETE users/user_id
 ```
 
 * The rest(estates, contracts, bids) is the same way
