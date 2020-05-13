@@ -49,16 +49,16 @@ simple management service for real-estate
 
 * estate data
   - bid tendency, local tendency, distance tendency etc..
-  ---------------------------
+---------------------------
 ## EndPoint
 * base-url ```/mamas```  
   
-### REST API  
+#### REST API  
   
-#### ```/users```, ```/estates```, ```/contracts```, ```/bids```
+##### ```/users```, ```/estates```, ```/contracts```, ```/bids```
 * create user info   
 ```http
-POST users/user 
+POST /users/user 
 ```
 ```json
 {
@@ -69,7 +69,7 @@ POST users/user
 ```
 * search user info   
 ```http
-GET users 
+GET /users 
 ```
 ```json
 {
@@ -96,20 +96,20 @@ GET users
 ```
 * get user info
 ```http
-GET users/user_id 
+GET /users/user_id 
 ```
 * update user info
 ```http
-PUT users/user_id
+PUT /users/user_id
 ```
 * delete user info (soft delete)
 ```http
-PUT users/user_id
+PUT /users/user_id
 ```
 
 * delete user info (hard delete)
 ```http
-DELETE users/user_id
+DELETE /users/user_id
 ```
 
 * The rest(estates, contracts, bids) is the same way
