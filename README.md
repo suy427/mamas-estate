@@ -18,7 +18,7 @@ simple management service for real-estate
   * basic client, estate CRUD service
   * REST API with Spring Boot
     
-- #### mamas-insight
+- #### mamas-insight (future)
   * aggregation and visualization with ELK
 ---------------------------
 ## Features
@@ -30,17 +30,86 @@ simple management service for real-estate
 
 #### estate management
 * basic estate information CRUD
-  - include actual picture of estate
-  - linked with actual map
-    
+  - include actual picture of estate (future)
+  - linked with actual map (future)
+  
 * estate search
   - with basic estate information (name, address, area, type, owner, price etc..)
   - with trade tendency (local tendency, price tendency etc..)
 
-#### aggregations
+#### history management (bid, contract)
+* basic history data CRUD
+* history search
+  - with specified estate, user information
+    
+
+#### aggregations (future)
 * client data
   - sailing tendency, purchase tendency, trade success tendency etc..
 
 * estate data
   - bid tendency, local tendency, distance tendency etc..
- 
+  ---------------------------
+  ## EndPoint
+  * base-url ```/mamas```  
+  
+  ### REST API  
+  
+  #### ```/users```, ```/estates```, ```/contracts```, ```/bids```
+  * create user info   
+  ```http
+  POST users/user 
+  ```
+  ```json
+  {
+    "name" : "user name",
+    "phone" : "phone number",
+    "role" : "user role"
+  }
+  ```
+  * search user info   
+  ```http
+  GET users 
+  ```
+  ```json
+  {
+    "name" : "user name",
+    "phone" : "phone number",
+    "role" : "role",
+    "bidDate" : {
+      "minimum" : "bid date start",
+      "maximum" : "bid date end"
+    },
+    "page" : "1",
+    "size" : "10",
+    "sort" : [
+      {
+        "property" : "name", 
+        "direction" : "ASC or DESC"
+      },
+      {
+        "property" : "bidDate.mimimum",
+        "direction" : "ASC or DESC"
+      }
+    ]
+  }
+  ```
+* get user info
+  ```http
+  GET users/{id} 
+  ```
+  * update user info
+  ```http
+  PUT users/{id}
+  ```
+  * delete user info (soft delete)
+  ```http
+  PUT users/{id}
+  ```
+  
+  * delete user info (hard delete)
+  ```http
+  DELETE users/{id}
+  ```
+  
+  * The rest(estates, contracts, bids) is the same way
