@@ -50,66 +50,66 @@ simple management service for real-estate
 * estate data
   - bid tendency, local tendency, distance tendency etc..
   ---------------------------
-  ## EndPoint
-  * base-url ```/mamas```  
+## EndPoint
+* base-url ```/mamas```  
   
-  ### REST API  
+### REST API  
   
-  #### ```/users```, ```/estates```, ```/contracts```, ```/bids```
-  * create user info   
-  ```http
-  POST users/user 
-  ```
-  ```json
-  {
-    "name" : "user name",
-    "phone" : "phone number",
-    "role" : "user role"
-  }
-  ```
-  * search user info   
-  ```http
-  GET users 
-  ```
-  ```json
-  {
-    "name" : "user name",
-    "phone" : "phone number",
-    "role" : "role",
-    "bidDate" : {
-      "minimum" : "bid date start",
-      "maximum" : "bid date end"
+#### ```/users```, ```/estates```, ```/contracts```, ```/bids```
+* create user info   
+```http
+POST users/user 
+```
+```json
+{
+  "name" : "user name",
+  "phone" : "phone number",
+  "role" : "user role"
+}
+```
+* search user info   
+```http
+GET users 
+```
+```json
+{
+  "name" : "user name",
+  "phone" : "phone number",
+  "role" : "role",
+  "bidDate" : {
+    "minimum" : "bid date start",
+    "maximum" : "bid date end"
+  },
+  "page" : "1",
+  "size" : "10",
+  "sort" : [
+    {
+      "property" : "name", 
+      "direction" : "ASC or DESC"
     },
-    "page" : "1",
-    "size" : "10",
-    "sort" : [
-      {
-        "property" : "name", 
-        "direction" : "ASC or DESC"
-      },
-      {
-        "property" : "bidDate.mimimum",
-        "direction" : "ASC or DESC"
-      }
-    ]
-  }
-  ```
+    {
+      "property" : "bidDate.mimimum",
+      "direction" : "ASC or DESC"
+    }
+  ]
+}
+```
 * get user info
-  ```http
-  GET users/{id} 
-  ```
-  * update user info
-  ```http
-  PUT users/{id}
-  ```
-  * delete user info (soft delete)
-  ```http
-  PUT users/{id}
-  ```
-  
-  * delete user info (hard delete)
-  ```http
-  DELETE users/{id}
-  ```
-  
-  * The rest(estates, contracts, bids) is the same way
+```http
+GET users/{id} 
+```
+* update user info
+```http
+PUT users/{id}
+```
+* delete user info (soft delete)
+```http
+PUT users/{id}
+```
+
+* delete user info (hard delete)
+```http
+DELETE users/{id}
+```
+
+* The rest(estates, contracts, bids) is the same way
