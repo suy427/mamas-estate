@@ -102,6 +102,13 @@ GET /users/user_id
 ```http
 PUT /users/user_id
 ```
+```json
+  {
+    "name" : "user name",
+    "phone" : "phone",
+    "role" : "user role"
+  }
+```
 * delete user info (soft delete)
 ```http
 PUT /users/user_id
