@@ -29,10 +29,11 @@ script:
 
 # 8. after_script (if succeed)
 after_success:
-  - ./gradlew jscocoTestReport coveralls
+  - ./gradlew jacocoTestReport coveralls
 
 branches:
   only:
+    - master
     - feature/search
     - trash/rebaser
 

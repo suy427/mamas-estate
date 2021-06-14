@@ -1,5 +1,5 @@
 # mamas estate  
-[![Build Status](https://travis-ci.org/suy427/mamas-estate.svg?branch=master)](https://travis-ci.org/suy427/mamas-estate) [![Coverage Status](https://coveralls.io/repos/github/suy427/mamas-estate/badge.svg?branch=master)](https://coveralls.io/github/suy427/mamas-estate?branch=master)  
+[![Build Status](https://travis-ci.org/suy427/mamas-estate.svg?branch=master)](https://travis-ci.org/suy427/mamas-estate) [![Coverage Status](https://coveralls.io/repos/github/suy427/mamas-estate/badge.svg?branch=feature/search&service=github)](https://coveralls.io/github/suy427/mamas-estate?branch=feature/search)  
     
 simple management service for real-estate
 
