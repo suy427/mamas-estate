@@ -1,0 +1,39 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /mamas
+
+spring:
+  profiles:
+    active: [dev]
+
+  datasource:
+    data: classpath:data.sql
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+  http:
+    encoding:
+      charset: utf-8
+      enabled: true
+      force: true
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        session: ERROR
+#        boot: ERROR
+#        web: ERROR
+#      apache: ERROR
+#
+#
+#    com:
+#      sondahum:
+#        mamas: DEBUG
+#

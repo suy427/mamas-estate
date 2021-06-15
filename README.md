@@ -6,7 +6,6 @@ simple management service for real-estate
 ## Tech Stack
 * Java (1.8)
 * Spring boot (2.2.2 RELEASE)
-* QueryDSL
 * JPA(Hibernate) - Spring Data Jpa (2.2.4 RELEASE)  
 * Elasticsearch (future)
 * Logstash (future)
@@ -29,7 +28,7 @@ simple management service for real-estate
 
 #### estate management
 * basic estate information CRUD
-  - include actual picture of estate (future)
+  - include actual pictures of estate (future)
   - linked with actual map (future)
   
 * estate search
@@ -39,12 +38,12 @@ simple management service for real-estate
 #### history management (bid, contract)
 * basic history data CRUD
 * history search
-  - with specified estate, user information
+  - with specified estate, client information
     
 
 #### aggregations (future)
 * client data
-  - sailing tendency, purchase tendency, trade success tendency etc..
+  - sailing trends, purchase tendency, trade success tendency etc..
 
 * estate data
   - bid tendency, local tendency, distance tendency etc..
@@ -55,24 +54,24 @@ simple management service for real-estate
 #### REST API  
   
 ##### ```/users```, ```/estates```, ```/contracts```, ```/bids```
-* create user info   
+* create client info   
 ```http
-POST /users/user 
+POST /users/client 
 ```
 ```json
 {
-  "name" : "user name",
+  "name" : "client name",
   "phone" : "phone number",
-  "role" : "user role"
+  "role" : "client role"
 }
 ```
-* search user info   
+* search client info   
 ```http
 GET /users 
 ```
 ```json
 {
-  "name" : "user name",
+  "name" : "client name",
   "phone" : "phone number",
   "role" : "role",
   "bidDate" : {
@@ -93,27 +92,27 @@ GET /users
   ]
 }
 ```
-* get user info
+* get client info
 ```http
 GET /users/user_id 
 ```
-* update user info
+* update client info
 ```http
 PUT /users/user_id
 ```
 ```json
   {
-    "name" : "user name",
+    "name" : "client name",
     "phone" : "phone",
-    "role" : "user role"
+    "role" : "client role"
   }
 ```
-* delete user info (soft delete)
+* delete client info (soft delete)
 ```http
 PUT /users/user_id
 ```
 
-* delete user info (hard delete)
+* delete client info (hard delete)
 ```http
 DELETE /users/user_id
 ```

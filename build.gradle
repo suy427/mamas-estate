@@ -1,94 +1,134 @@
-
 buildscript {
     ext {
-        springBootVersion = '2.2.2.RELEASE'
-        springRestDocVersion = '2.0.4.RELEASE'
-        springDataJpaVersion = '2.2.4.RELEASE'
-        springRestDocsVersion = '2.0.4.RELEASE'
+        spring_version = '5.2.8.RELEASE'
+        spring_restdoc_version = '2.0.4.RELEASE'
+        spring_security_version = '5.4.0'
+
+        embeded_tomcat_version = '9.0.37'
+        handlebars_version = '4.2.0'
+        logback_version = '1.2.3'
+        slf4j_version = '1.7.30'
+        jackson_version = '2.12.0'
+        guava_version = '30.1.1-jre'
+
+        //test
+        junit_jupiter_version = '5.6.2'
+        junit_platform_launcher_version = '1.6.2'
+        mockito_version = '3.5.13'
+        mockito_kotlin_version = '2.2.0'
     }
 
     repositories {
         mavenCentral()
         mavenLocal()
-        maven { url 'http://repo.spring.io/milestone' }
-        maven { url 'https://repo.spring.io/snapshot' }
-        maven { url "https://jitpack.io" }
-    }
-
-    dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-        classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
-    }
-}
-
-
-wrapper {
-    gradleVersion = '4.10.3'
-}
-
-allprojects {
-    apply plugin: 'com.github.kt3k.coveralls'
-    apply plugin: 'jacoco'
-}
-
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
-    apply plugin: 'maven'
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'com.github.kt3k.coveralls'
-    apply plugin: 'jacoco'
-
-    group 'com.sondahum.mamas'
-    version '1.0-SNAPSHOT'
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-
-    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-    repositories {
-        // Use jcenter for resolving your dependencies.
-        // You can declare any Maven/Ivy/file repository here.
-        jcenter()
-        mavenCentral()
-        maven { url 'http://repo.spring.io/milestone' }
-        maven { url "https://jitpack.io" }
-    }
-
-
-    dependencies {
-
-        //todo junit5 부터는 테스트 코드 작성을 위한 api모듈과 돌리기 위한 engine모듈이 별도로 존재한다.
-
-        // junit vintage
-        testCompileOnly 'junit:junit:4.12'
-        // junit vintage engine
-        testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.6.0'
-
-    }
-
-
-    jacocoTestReport {
-        reports {
-            xml.enabled = true
-            html.enabled = true
+        maven {
+            url "https://plugins.gradle.org/m2/"
         }
     }
 }
 
-task jacocoRootReport(type: JacocoReport) {
-    description = 'Generates an aggregate report from all subprojects'
-    dependsOn = subprojects.test
-    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
-    classDirectories =  files(subprojects.sourceSets.main.output)
-    executionData = files(subprojects.jacocoTestReport.executionData)
+plugins {
+    id 'application'
+    id 'jacoco'
+    id 'java'
+    id 'idea'
+    id 'maven'
+    id 'com.github.kt3k.coveralls' version '2.8.2'
+}
+
+group 'com.sondahum.mamas'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    // spring
+    implementation "org.springframework:spring-webmvc:$spring_version"
+    implementation group: "org.springframework.restdocs", name: "spring-restdocs-mockmvc", version: spring_restdoc_version
+
+    //security
+    implementation "org.springframework.security:spring-security-web:$spring_security_version"
+    implementation "org.springframework.security:spring-security-config:$spring_security_version"
+
+    //email
+    implementation "org.springframework:spring-context-support:$spring_version"
+    implementation "javax.mail:javax.mail-api:1.6.2"
+    implementation "com.sun.mail:javax.mail:1.6.2"
+
+    //validation
+    implementation "javax.validation:validation-api:2.0.1.Final"
+    implementation "org.hibernate.validator:hibernate-validator:6.1.6.Final"
+    implementation 'org.glassfish:javax.el:3.0.0'
+
+    //tomcat
+    implementation "org.apache.tomcat.embed:tomcat-embed-core:$embeded_tomcat_version"
+    implementation "org.apache.tomcat.embed:tomcat-embed-jasper:$embeded_tomcat_version"
+
+    //utils
+    implementation "com.google.guava:guava:$guava_version"
+
+    //handle bars
+    implementation "com.github.jknack:handlebars-springmvc:$handlebars_version"
+    implementation "com.github.jknack:handlebars:$handlebars_version"
+
+    // jackson
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jackson_version
+
+    //logger
+    implementation "ch.qos.logback:logback-core:$logback_version"
+    implementation "ch.qos.logback:logback-classic:$logback_version"
+    implementation "org.slf4j:slf4j-api:$slf4j_version"
+
+    // datasource & jpa
+    implementation "org.springframework.data:spring-data-jpa:2.3.4.RELEASE"
+    implementation "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final"
+    testImplementation group: 'com.h2database', name: 'h2', version: '1.4.199'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    testImplementation "org.junit.jupiter:junit-jupiter:$junit_jupiter_version"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:$junit_platform_launcher_version"
+    testImplementation "org.mockito:mockito-junit-jupiter:$mockito_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "org.mockito:mockito-inline:$mockito_version"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
+    testImplementation 'com.jayway.jsonpath:json-path-assert:2.4.0'
+}
+
+jacocoTestReport {
     reports {
-        html.enabled = true // 개발자 확인용
-        xml.enabled = true // coveralls 전송용
+        xml.enabled = true
+        html.enabled = true
     }
 }
 
 coveralls {
-    sourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()
-    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+    jacocoReportPath 'build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml'
+}
+
+application {
+    mainClass = 'com.sondahum.mamas.MamasEstate'
+    applicationDefaultJvmArgs = ['-Dapp.profile=dev']
 }
