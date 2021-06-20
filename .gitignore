@@ -9,10 +9,6 @@ HELP.md
 
 !gradle/wrapper/gradle-wrapper.jar
 
-data.sql
-init.sql
-
-
 #gradlew
 #gradlew.bat
 
@@ -21,7 +17,7 @@ init.sql
 *.iws
 *.iml
 *.ipr
-out/
+#out/
 
 ### MAC OS  ###
 .DS_Store
